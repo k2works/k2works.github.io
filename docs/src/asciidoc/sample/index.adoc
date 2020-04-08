@@ -1,0 +1,8 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+
+= 仕様
+
+== link:./fizz_buzz.html[FizzBuzz^]
+== link:./template.html[テンプレート^]

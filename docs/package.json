@@ -1,0 +1,51 @@
+{
+  "name": "tdd_rb",
+  "engines": {
+    "node": "10.x"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nf start -j Procfile",
+    "docs:asciidocs:proxy": "browser-sync start --config src/asciidoc/bs-config.js",
+    "docs:asciidocs:build": "gradle asciidoctor",
+    "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./src",
+    "docs:asciidocs:local": "gradle livereload",
+    "docs:slide:build": "marp ./slides/PITCHME.md -o slides/index.html",
+    "docs:slide:deploy": "cpx './slide/PITCHME.md' ./",
+    "docs:slide:proxy": "browser-sync start --config slides/bs-config.js",
+    "docs:slide:watch": "marp -s ./slides",
+    "docs:slide:preview": "marp -p -w ./slides",
+    "docs:markdown:build": "./convert_markdown.sh",
+    "jupyter": "docker-compose up jupyter",
+    "docs:sphinx:start": "nf start -j src/jupyter/Procfile",
+    "docs:sphinx:proxy": "browser-sync start --config src/jupyter/bs-config.js",
+    "docs:sphinx:local": "docker-compose up sphinx",
+    "docs:sphinx:deploy": "docker-compose run sphinx make ph-pages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiroshima-arc/tdd_rb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hiroshima-arc/tdd_rb/issues"
+  },
+  "homepage": "https://github.com/hiroshima-arc/tdd_rb#readme",
+  "devDependencies": {
+    "@marp-team/marp-cli": "^0.16.2",
+    "browser-sync": "^2.26.7",
+    "connect-browser-sync": "^2.1.0",
+    "cpx": "^1.5.0",
+    "cross-env": "^6.0.3",
+    "foreman": "^3.0.1",
+    "markdown-to-html": "0.0.13",
+    "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.0",
+    "watch": "^1.0.2"
+  }
+}

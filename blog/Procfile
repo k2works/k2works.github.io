@@ -1,0 +1,2 @@
+blog_server: npm run server
+blog_proxy: npm run proxy

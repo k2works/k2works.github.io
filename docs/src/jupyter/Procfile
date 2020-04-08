@@ -1,0 +1,3 @@
+jupyter: npm run jupyter
+shinnx_local: npm run docs:sphinx:local
+shinnx_proxy: npm run docs:sphinx:proxy

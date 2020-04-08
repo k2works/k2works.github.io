@@ -1,0 +1,30 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:stem:
+
+= サンプル
+
+== 目的
+
+== 前提
+|===
+|ソフトウェア |バージョン |備考
+|AsciiDoc    |     |
+|===
+
+== 構成
+
+=== サンプル
+
+* <<anchor-1-1,Asciidoc:>>
+
+== 詳細
+
+=== link:./asciidoc/index.html[asciidoc^]
+
+== 参照
+* http://asciidoctor.org/[Asciidoctor^]
+* http://www.plantuml.com[PlantUML^]
+* https://about.draw.io/[draw.io^]
+* https://takumon.github.io/asciidoc-syntax-quick-reference-japanese-translation/[Asciidoctor 文法クイックリファレンス(日本語訳)^]
