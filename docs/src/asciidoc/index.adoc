@@ -1,0 +1,19 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+
+= Asciidoc
+
+== 目的
+
+== 前提
+
+
+== 構成
+* <<anchor-1,サンプル>>
+
+== 詳細
+=== link:./sample/index.html[サンプル^][[anchor-1]]
+
+== 参照
+

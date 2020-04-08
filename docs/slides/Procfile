@@ -1,0 +1,2 @@
+docs_slide_watch: npm run docs:slide:watch
+docs_slide_proxy: npm run docs:slide:proxy

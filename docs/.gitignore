@@ -1,0 +1,12 @@
+.DS_Store
+node_modules
+.asciidoctor
+.ipynb_checkpoints
+build
+.gradle
+.settings
+.project
+.idea
+gradle/wrapper
+asciidoc/*
+jupyter/*

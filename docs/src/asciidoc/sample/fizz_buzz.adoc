@@ -1,0 +1,242 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:stem:
+:source-highlighter: coderay
+
+= FizzBuzz
+
+== 仕様
+
+1 から 100 までの数をプリントするプログラムを書け。
+
+ただし 3 の倍数のときは数の代わりに｢Fizz｣と、5 の倍数のときは｢Buzz｣とプリントし、
+
+3 と 5 両方の倍数の場合には｢FizzBuzz｣とプリントすること
+
+タイプごとに出力を切り替えることができる。
+
+タイプ１は通常、タイプ２は数字のみ、タイプ３は FizzBuzzの場合のみをプリントする。
+== 設計
+
+=== TODOリスト
+* [x] 数を文字列にして返す
+** [x] 1を渡したら文字列"1"を返す
+** [x] 2を渡したら文字列"2"を返す
+* [x] 3の倍数の時は数の変わりに「Fizz」と返す
+* [x] 5の倍数の時は数の変わりに「Buzz」と返す
+* [x] 3と5両方の倍数の場合には「FizzBuzz」と返す
+* [x] 1から100までの数を返す
+** [x] 配列の始めは文字列の1を返す
+** [x] 配列の最後は文字列の100を返す
+** [x] 配列の2番目は文字列のFizzを返す
+** [x] 配列の4番目は文字列のBuzzを返す
+** [x] 配列の14番目は文字列のBuzzを返す
+* [x] プリントする
+* [x] タイプ 1 の場合
+** [x] 3の倍数のときは数の代わりに｢Fizz｣をプリントできるようにする。
+** [x] 5 の倍数のときは｢Buzz｣とプリントできるようにする。
+** [x] 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+* [x] タイプ 2 の場合
+** [x] 3 の倍数のときは数をプリントできるようにする。
+** [x] 5 の倍数のときは数をプリントできるようにする。
+** [x] 3 と 5 両方の倍数の場合には値をプリントできるようにする。
+* [x] タイプ 3 の場合
+** [x] 3 の倍数のときは数をプリントできるようにする。
+** [x] 5 の倍数のときは数をプリントできるようにする。
+** [x] 3 と 5両方の倍数の場合には｢FizzBuzz｣とプリントできるようにする。
+
+=== ユースケース図
+
+=== クラス図
+
+==== パッケージ構成
+[plantuml]
+----
+package Presentaion {
+    package View {
+    }
+}
+
+
+package Application {
+    package Service {
+    }
+}
+
+package Domain {
+    package Model {
+    }
+
+    package Type {
+    }
+}
+
+Presentaion -> Application
+Application --> Domain
+----
+
+==== Presentaion
+===== View
+
+[plantuml]
+----
+class View {
+  props: FizzBuzzProps
+  render(): String
+}
+class Container {
+  props: FizzBuzzProps
+  render(): String
+}
+class MessageComponent {
+  props: FizzBuzzProps
+  rendert(): String
+}
+class CounterComponent {
+  props: FizzBuzzProps
+  render(): String
+}
+class TableComponent {
+  props: FizzBuzzProps
+  render(): String
+}
+View -> Container
+View *-l FizzBuzzService
+Container *-- MessageComponent
+Container *-- CounterComponent
+Container *-- TableComponent
+----
+
+==== Application
+
+===== Service
+[plantuml]
+----
+class FizzBuzzCommand
+class FizzBuzzListCommand
+class FizzBuzzValueCommand
+class FizzBuzzService
+
+FizzBuzzCommand <|-- FizzBuzzValueCommand
+FizzBuzzCommand <|-- FizzBuzzListCommand
+FizzBuzzService -> FizzBuzzCommand
+----
+
+==== Domain
+===== Model
+[plantuml]
+----
+class FizzBuzzEntity
+class FizzBuzzList
+class FizzBuzzValue
+----
+
+===== Type
+[plantuml]
+----
+class FizzBuzzType
+class FizzBuzzType01
+class FizzBuzzType02
+class FizzBuzzType03
+class FizzBuzzTypeEnum
+
+FizzBuzzType <|-- FizzBuzzType01
+FizzBuzzType <|-- FizzBuzzType02
+FizzBuzzType <|-- FizzBuzzType03
+FizzBuzzTypeEnum -> FizzBuzzType
+----
+
+=== シーケンス図
+
+== 開発
+=== Application
+==== Service
+[source, javascript]
+----
+include::../../../../src/application/service/fizz_buzz/FizzBuzzCommand.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/application/service/fizz_buzz/FizzBuzzListCommand.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/application/service/fizz_buzz/FizzBuzzService.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/application/service/fizz_buzz/FizzBuzzValueCommand.ts[]
+----
+
+=== Domain
+==== Model
+[source, javascript]
+----
+include::../../../../src/domain/model/fizz_buzz/FizzBuzzValue.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/domain/model/fizz_buzz/FizzBuzzList.ts[]
+----
+
+==== Type
+[source, javascript]
+----
+include::../../../../src/domain/type/fizz_buzz/FizzBuzzType.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/domain/type/fizz_buzz/FizzBuzzType01.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/domain/type/fizz_buzz/FizzBuzzType02.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/domain/type/fizz_buzz/FizzBuzzType03.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/domain/type/fizz_buzz/fizzBuzzTypeEnum.ts[]
+----
+
+=== Presentation
+==== View
+[source, javascript]
+----
+include::../../../../src/presentation/view/fizz_buzz/View.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/presentation/view/fizz_buzz/Container.ts[]
+----
+
+==== Component
+[source, javascript]
+----
+include::../../../../src/presentation/view/fizz_buzz/component/CounterComponent.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/presentation/view/fizz_buzz/component/MessageComponent.ts[]
+----
+
+[source, javascript]
+----
+include::../../../../src/presentation/view/fizz_buzz/component/TableComponent.ts[]
+----
+
+
+== 参照
