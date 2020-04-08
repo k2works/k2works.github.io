@@ -53,6 +53,9 @@ hexo server
 
 ```
 npm install
+npm run blog:setup
+git submodule init
+git submodule update
 ```
 
 #### ブログのデプロイ
