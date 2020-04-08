@@ -9,7 +9,7 @@
   "scripts": {
     "blog:new": "cd blog && hexo new $(date \"+%F\")",
     "blog:local": "cd blog && npm start",
-    "blog:deploy": "cd blog && hexo deploy",
+    "blog:deploy": "cd blog && hexo build && hexo deploy && hexo clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
