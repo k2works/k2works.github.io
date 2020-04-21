@@ -10,10 +10,11 @@
 
 
 == 構成
-* <<anchor-1,サンプル>>
+* <<anchor-1,テスト駆動開発からはじめるドメイン駆動設計入門>>
+* <<anchor-2,サンプル>>
 
 == 詳細
-=== link:./sample/index.html[サンプル^][[anchor-1]]
+=== link:./tdd_itddd/index.html[テスト駆動開発からはじめるドメイン駆動設計入門^][[anchor-1]]
+=== link:./sample/index.html[サンプル^][[anchor-2]]
 
 == 参照
-

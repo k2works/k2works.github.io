@@ -1,0 +1,62 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:source-highlighter: coderay
+
+= テスト駆動開発からはじめるドメイン駆動設計入門
+
+== はじめに
+
+== 値オブジェクト
+include::01_value_object.adoc[]
+
+== エンティティ
+
+== ドメインサービス
+
+== リポジトリ
+
+== アプリケーションサービス
+
+== 依存関係のコントロール
+
+== ソフトウェアシステムを組み立てる
+
+== ファクトリ
+
+== データの整合性
+
+== アプリケーションを1から組み立てる
+
+== 集約
+
+== 仕様
+
+== アーキテクチャ
+
+== 参照
+
+=== 参考サイト
+
+- https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player[50 分でわかるテスト駆動開発^]
+
+=== 参考図書
+
+++++
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=4274217884&linkId=568f25b974af5645e862928a12c354e1&bc1=ffffff&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=427405019X&linkId=08e705a5969e20f5129b4d3cefbcdb15&bc1=000000&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4274224546&linkId=5f857b58e988073ce92e0adcf1dd3ebb"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=479815072X&linkId=7ce522a40e7b96f30b414d57d10c98ee"></iframe>
+++++
+
+[bibliography]
+== References
+
+- [[[tdd, 1]]] テスト駆動開発 Kent Beck (著), 和田 卓人 (翻訳):
+  オーム社; 新訳版 (2017/10/14)
+- [[[rft, 2]]] 新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章  (翻訳), その他:
+  オーム社; 新装版 (2014/7/26)
+- [[[rft2, 3]]] リファクタリング(第2版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他:
+  オーム社; 第2版 (2019/12/1)
+- [[[itddd, 4]]] ドメイン駆動設計入門 ボトムアップでわかる! ドメイン駆動設計の基本 (日本語) 単行本（ソフトカバー） 成瀬 允宣  (著)
+翔泳社 (2020/2/13)
