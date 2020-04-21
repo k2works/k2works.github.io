@@ -1,0 +1,71 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:source-highlighter: coderay
+
+= テスト駆動開発から始めるRuby入門
+
+これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。
+
+== エピソード1
+include::episode_1.adoc[]
+
+== エピソード2
+include::episode_2.adoc[]
+
+== エピソード3
+include::episode_3.adoc[]
+
+== エピソードx
+include::episode_x.adoc[]
+
+== 参照
+
+=== 参考サイト
+
+- https://channel9.msdn.com/Events/de-code/2017/DO03?ocid=player[50 分でわかるテスト駆動開発^]
+- https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門〜バージョン管理を使いこなそう〜^]
+- https://docs.ruby-lang.org/ja/[プログラミング言語 Ruby リファレンスマニュアル^]
+- https://qiita.com/jnchito/items/2dc760ee0716ea12bbf0[検索結果を要チェック！Rubyの公式リファレンスは docs.ruby-lang.org です 〜公式な情報源を調べるクセを付けよう〜^]
+- https://t-wada.hatenablog.jp/entry/clean-code-that-works[動作するきれいなコード: SeleniumConf Tokyo 2019 基調講演文字起こし+α]
+
+- https://github.com/rubocop-hq/rubocop[RuboCop]
+- https://qiita.com/tomohiii/items/1a17018b5a48b8284a8b[RuboCop is 何？]
+- https://qiita.com/abcb2/items/9905449ab3fcf5d27ace[ruby rake の使い方]
+- https://qiita.com/tbpgr/items/443fe45f0dbe02aa768a[RuboCopのrake taskを使う]
+- https://qiita.com/nrslib/items/73bf176147192c402049[オブジェクト指向のいろは]
+
+=== 参考図書
+
+++++
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=4274217884&linkId=568f25b974af5645e862928a12c354e1&bc1=ffffff&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://rcm-fe.amazon-adsystem.com/e/cm?ref=qf_sp_asin_til&t=k2works0c-22&m=amazon&o=9&p=8&l=as1&IS1=1&detail=1&asins=427405019X&linkId=08e705a5969e20f5129b4d3cefbcdb15&bc1=000000&lt1=_top&fc1=333333&lc1=0066c0&bg1=ffffff&f=ifr"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4274224546&linkId=5f857b58e988073ce92e0adcf1dd3ebb"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4873115655&linkId=82416afd8e4042cbfd2dc6d4b80653f1"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B078HYWY5X&linkId=920b3fce45a79c528e5be0b2140cce9c"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B073GSDBGT&linkId=84e5b25b776d7583da1d5addf2e24fa7"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4774198617&linkId=7858ddef815d9a093fcacb3a1208b774"></iframe>
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=k2works0c-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4774193976&linkId=fee0d915272172c2e25393dd52537bdc"></iframe>
+++++
+
+[bibliography]
+== References
+
+- [[[tdd, 1]]] テスト駆動開発 Kent Beck (著), 和田 卓人 (翻訳):
+  オーム社; 新訳版 (2017/10/14)
+- [[[rft, 2]]] 新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章  (翻訳), その他:
+  オーム社; 新装版 (2014/7/26)
+- [[[rft2, 3]]] リファクタリング(第2版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他:
+  オーム社; 第2版 (2019/12/1)
+- [[[rcd, 4]]] リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice) Dustin Boswell (著), Trevor Foucher (著), 須藤 功平 (解説), 角 征典  (翻訳):
+  オライリージャパン; 初版八刷版 (2012/6/23)
+- [[[clcd, 5]]] Clean Code　アジャイルソフトウェア達人の技 (アスキードワンゴ) Ｒｏｂｅｒｔ Ｃ．Ｍａｒｔｉｎ (著), 花井 志生  (著)
+  ドワンゴ (2017/12/28)
+- [[[genba, 6]]] 現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法 増田 亨  (著)
+  技術評論社 (2017/7/5)
+- [[[kruby, 7]]] かんたん Ruby (プログラミングの教科書) すがわらまさのり  (著)
+  技術評論社 (2018/6/21)
+- [[[pruby, 8]]] プロを目指す人のためのRuby入門 言語仕様からテスト駆動開発・デバッグ技法まで (Software Design plusシリーズ) 伊藤 淳一  (著):
+  技術評論社 (2017/11/25)
+- [[[ppg,9]]] The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition David Thomas (著), Andrew Hunt (著):
+  Addison-Wesley Professional; 2版 (2019/7/30)
