@@ -3,7 +3,7 @@
 :sectnums:
 :source-highlighter: coderay
 
-= テスト駆動開発からはじめるドメイン駆動設計入門
+= テスト駆動開発から始めるドメイン駆動設計入門
 
 == はじめに
 

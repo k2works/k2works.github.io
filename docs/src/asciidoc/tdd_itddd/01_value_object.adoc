@@ -166,7 +166,7 @@ end
 
 [source, bash]
 ----
-$ ruby test/hello_test.rb 
+$ ruby test/hello_test.rb
 Started with run options --seed 6402
 
 UserTest
@@ -1100,7 +1100,7 @@ Inspecting 5 files
 
 ==== コードカバレッジ
 
-まず、テストコードからコードカバレッジを実行できるようにします。 
+まず、テストコードからコードカバレッジを実行できるようにします。
 
 `user_test.rb` の先頭を以下に更新します。
 
@@ -1122,7 +1122,7 @@ require './lib/sns.rb'
 
 [source, bash]
 ----
-$ ruby test/user_test.rb 
+$ ruby test/user_test.rb
 Started with run options --seed 24571
 
 ユーザーを登録する
@@ -1139,7 +1139,7 @@ Coverage report generated for Unit Tests to /Users/k2works/Projects/sandbox/tdd_
 
 テストカバレッジは100%です。
 
-image::images/20200222.png[]
+image::../../images/asciidoc/tdd_itddd/20200222.png[]
 
 === ふりかえり
 
