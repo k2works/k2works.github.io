@@ -1,0 +1,25 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:source-highlighter: coderay
+
+= 環境構築から始めるテスト駆動開発
+
+この記事はソフトウェア開発者を目指す入門者を対象に、IT リテラシの基本とプログラミング学習とソフトウェア開発の基盤となる環境構築の手順を解説しています。以下の構成の Windows マシンで作業を進めていきます。
+
+image::../../images/asciidoc/tdd_env/os-version.png[]
+
+== プログラミング環境の共通基盤を構築する
+include::chapter_1.adoc[]
+
+== Ruby開発環境を構築する
+include::chapter_2_win.adoc[]
+
+== Ruby開発環境を構築する(WSL版)
+include::chapter_2_wsl.adoc[]
+
+== 参照
+
+=== 参考サイト
+
+=== 参考図書

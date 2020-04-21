@@ -8,13 +8,14 @@
 
 == 前提
 
-
 == 構成
-* <<anchor-1,テスト駆動開発からはじめるドメイン駆動設計入門>>
-* <<anchor-2,サンプル>>
+* <<anchor-1,環境構築から始めるテスト駆動開発>>
+* <<anchor-2,テスト駆動開発からはじめるドメイン駆動設計入門>>
+* <<anchor-3,サンプル>>
 
 == 詳細
-=== link:./tdd_itddd/index.html[テスト駆動開発からはじめるドメイン駆動設計入門^][[anchor-1]]
+=== link:./tdd_env/index.html[環境構築から始めるテスト駆動開発^][[anchor-1]]
+=== link:./tdd_itddd/index.html[テスト駆動開発からはじめるドメイン駆動設計入門^][[anchor-2]]
 === link:./sample/index.html[サンプル^][[anchor-2]]
 
 == 参照
