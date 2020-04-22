@@ -11,6 +11,7 @@
 include::01_value_object.adoc[]
 
 == エンティティ
+include::02_entity.adoc[]
 
 == ドメインサービス
 

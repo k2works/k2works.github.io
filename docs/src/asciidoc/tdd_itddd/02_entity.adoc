@@ -1,0 +1,171 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:source-highlighter: coderay
+
+=== ユーザーストーリー
+
+  利用者として
+  ユーザーを管理できるようにしたい
+  なぜならユーザーはシステムを利用するために必要だから
+
+
+=== TODOリスト
+
+* [ ] ユーザーを管理できるようにする
+** [x] ユーザーを登録する
+*** [x] IDと名前を持ったユーザーを作成する
+*** [x] ユーザー名が３文字未満の場合はエラー
+*** [x] ユーザー名を指定しない場合はエラー
+*** [x] ユーザー名が４文字の場合は登録される
+*** [x] IDを指定しない場合はエラー
+** [ ] ユーザー名を変更できるようにする
+** [ ] ユーザーの同一性を判断できるようにする
+*** [ ] 識別子を追加する
+*** [ ] エンティティの比較のを行う
+
+=== 明白な実装実装
+
+
+[source, ruby]
+----
+...
+  describe 'ユーザーを更新する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.name = 'Alice'
+      assert_equal 'alice', @user.name
+    end
+  end
+end
+----
+
+[source, bash]
+----
+----
+
+[source, ruby]
+----
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+end
+----
+
+[source, bash]
+----
+----
+
+[source, ruby]
+----
+...
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      id = UserId.new('2')
+      name = UserName.new('Bob')
+      @user2 = User.new(user_id: id, user_name: name)
+
+      refute_equal @user, @user2
+    end
+
+    def test_同じ名前の同じユーザー
+      assert_equal @user, @user
+    end
+  end
+end
+----
+
+[source, bash]
+----
+----
+
+[source, ruby]
+----
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    @id == other.id && @name == other.name
+  end
+
+  alias == eql?
+end
+----
+
+[source, bash]
+----
+----
+
+=== リファクタリング
+
+[source, ruby]
+----
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    self == other
+  end
+
+  def ==(other)
+    other.equal?(self) ||
+      (other.instance_of?(self.class) && other.id == id && other.name == name)
+  end
+
+  def hash
+    id.hash
+  end
+end
+----
+
+[source, bash]
+----
+----
+
+
+=== リリース
+
+=== ふりかえり
