@@ -26,7 +26,6 @@
 
 === 明白な実装実装
 
-
 [source, ruby]
 ----
 ...
@@ -38,8 +37,8 @@
     end
 
     def test_ユーザー名を更新する
-      @user.name = 'Alice'
-      assert_equal 'alice', @user.name
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
     end
   end
 end
@@ -47,6 +46,24 @@ end
 
 [source, bash]
 ----
+$ ruby test/user_test.rb
+Started with run options --seed 16647
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                ERROR (0.00s)
+Minitest::UnexpectedError:         NoMethodError: undefined method change_name' for #<User:0x00007fdc9101e850>
+            test/user_test.rb:61:in `test_ユーザー名を更新する'
+
+
+Finished in 0.00382s
+6 tests, 7 assertions, 0 failures, 1 errors, 0 skips
 ----
 
 [source, ruby]
@@ -69,6 +86,21 @@ end
 
 [source, bash]
 ----
+$ ruby test/user_test.rb
+Started with run options --seed 6624
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.00127s
+6 tests, 8 assertions, 0 failures, 0 errors, 0 skips
 ----
 
 [source, ruby]
@@ -86,11 +118,17 @@ end
       name = UserName.new('Bob')
       @user2 = User.new(user_id: id, user_name: name)
 
-      refute_equal @user, @user2
+      refute @user.eql?(@user2)
     end
 
     def test_同じ名前の同じユーザー
-      assert_equal @user, @user
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
     end
   end
 end
@@ -98,6 +136,26 @@ end
 
 [source, bash]
 ----
+$ ruby test/user_test.rb
+Started with run options --seed 20456
+
+ユーザーの同一性を判断する
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+ユーザーを登録する
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00166s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips
 ----
 
 [source, ruby]
@@ -119,13 +177,31 @@ class User
   def eql?(other)
     @id == other.id && @name == other.name
   end
-
-  alias == eql?
 end
 ----
 
 [source, bash]
 ----
+ $ ruby test/user_test.rb
+Started with run options --seed 1326
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+ユーザーの同一性を判断する
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.00226s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips
 ----
 
 === リファクタリング
@@ -163,9 +239,112 @@ end
 
 [source, bash]
 ----
+$ ruby test/user_test.rb
+Started with run options --seed 37624
+
+ユーザーの同一性を判断する
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+ユーザーを登録する
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+
+Finished in 0.00164s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips
 ----
 
+=== モジュール分割
+
+==== ファイル構成
+
+ /main.rb
+   |--lib/
+       |
+        -- sns.rb
+        -- user_id.rb
+        -- user_name.rb
+        -- user.rb
+   |--test/
+       |
+        -- test_helper.rb
+        -- user_test.rb
+
+./main.rb
+[source, ruby]
+----
+include::./code/02_entity/main.rb[]
+----
+
+./lib/sns.rb
+[source, ruby]
+----
+include::./code/02_entity/lib/sns.rb[]
+----
+
+./lib/user_id.rb
+[source, ruby]
+----
+include::./code/02_entity/lib/user_id.rb[]
+----
+
+./lib/user_name.rb
+[source, ruby]
+----
+include::./code/02_entity/lib/user_name.rb[]
+----
+
+./lib/user.rb
+[source, ruby]
+----
+include::./code/02_entity/lib/user.rb[]
+----
+
+./test/test_helper.rb
+[source, ruby]
+----
+include::./code/02_entity/test/test_helper.rb[]
+----
+
+./test/user_test.rb
+[source, ruby]
+----
+include::./code/02_entity/test/user_test.rb[]
+----
 
 === リリース
+
+[source, bash]
+----
+$ rubocop
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+----
+
+image::../../images/asciidoc/tdd_itddd/2020042201.png[]
+image::../../images/asciidoc/tdd_itddd/2020042202.png[]
 
 === ふりかえり
