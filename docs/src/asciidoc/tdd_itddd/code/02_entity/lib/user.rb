@@ -16,12 +16,11 @@ class User
   end
 
   def eql?(other)
-    self == other
+    @id == other.id
   end
 
   def ==(other)
-    other.equal?(self) ||
-      (other.instance_of?(self.class) && other.id == id && other.name == name)
+    other.equal?(self) || other.instance_of?(self.class) && other.id == id
   end
 
   def hash

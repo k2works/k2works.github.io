@@ -193,7 +193,7 @@ class User
   end
 
   def eql?(other)
-    @id == other.id && @name == other.name
+    @id == other.id
   end
 end
 ----
@@ -249,8 +249,7 @@ class User
   end
 
   def ==(other)
-    other.equal?(self) ||
-      (other.instance_of?(self.class) && other.id == id && other.name == name)
+    other.equal?(self) || (other.instance_of?(self.class) && other.id == id
   end
 
   def hash
@@ -285,9 +284,77 @@ Finished in 0.00164s
 9 tests, 11 assertions, 0 failures, 0 errors, 0 skips
 ----
 
-=== モジュール分割
+==== モジュール分割
 
 テストコードの基本部分をヘルパーとして分割して共通利用できるようにしておきます。
+
+`test_helper.rb` を作成します。
+
+[source, ruby]
+----
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'
+----
+
+`user_test.rb` の先頭部部を変更します。
+
+[source, ruby]
+----
+require './test/test_helper'
+require './lib/sns.rb'
+
+class UserTest < Minitest::Test
+...
+----
+
+=== リリース
+
+==== 静的コード解析
+
+[source, bash]
+----
+$ rubocop
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+----
+
+==== コードカバレッジ
+
+image::../../images/asciidoc/tdd_itddd/2020042201.png[]
+image::../../images/asciidoc/tdd_itddd/2020042202.png[]
+
+==== TODOリスト
+
+* [ ] ユーザーを管理できるようにする
+** [x] ユーザーを登録する
+*** [x] IDと名前を持ったユーザーを作成する
+*** [x] ユーザー名が３文字未満の場合はエラー
+*** [x] ユーザー名を指定しない場合はエラー
+*** [x] ユーザー名が４文字の場合は登録される
+*** [x] IDを指定しない場合はエラー
+** [x] ユーザー名を変更できるようにする
+** [x] ユーザーの同一性を判断できるようにする
+*** [x] 識別子を追加する
+*** [x] エンティティの比較のを行う
 
 ==== ファイル構成
 
@@ -344,52 +411,6 @@ include::./code/02_entity/test/test_helper.rb[]
 ----
 include::./code/02_entity/test/user_test.rb[]
 ----
-
-=== リリース
-
-==== 静的コード解析
-
-[source, bash]
-----
-$ rubocop
-The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
- - Lint/RaiseException (0.81)
- - Lint/StructNewOverride (0.81)
- - Style/HashEachMethods (0.80)
- - Style/HashTransformKeys (0.80)
- - Style/HashTransformValues (0.80)
-For more information: https://docs.rubocop.org/en/latest/versioning/
-The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
- - Lint/RaiseException (0.81)
- - Lint/StructNewOverride (0.81)
- - Style/HashEachMethods (0.80)
- - Style/HashTransformKeys (0.80)
- - Style/HashTransformValues (0.80)
-For more information: https://docs.rubocop.org/en/latest/versioning/
-Inspecting 5 files
-.....
-
-5 files inspected, no offenses detected
-----
-
-==== コードカバレッジ
-
-image::../../images/asciidoc/tdd_itddd/2020042201.png[]
-image::../../images/asciidoc/tdd_itddd/2020042202.png[]
-
-==== TODOリスト
-
-* [ ] ユーザーを管理できるようにする
-** [x] ユーザーを登録する
-*** [x] IDと名前を持ったユーザーを作成する
-*** [x] ユーザー名が３文字未満の場合はエラー
-*** [x] ユーザー名を指定しない場合はエラー
-*** [x] ユーザー名が４文字の場合は登録される
-*** [x] IDを指定しない場合はエラー
-** [x] ユーザー名を変更できるようにする
-** [x] ユーザーの同一性を判断できるようにする
-*** [x] 識別子を追加する
-*** [x] エンティティの比較のを行う
 
 
 === ふりかえり
