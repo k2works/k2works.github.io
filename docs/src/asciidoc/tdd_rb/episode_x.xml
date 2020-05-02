@@ -1,0 +1,2518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="5"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>パフォーマンスチューニングから始めるテスト駆動開発</title>
+<date>2020-04-05</date>
+</info>
+<section xml:id="_パフォーマンスチューニングから始めるテスト駆動開発">
+<title>パフォーマンスチューニングから始めるテスト駆動開発</title>
+<section xml:id="_概要">
+<title>概要</title>
+<simpara><link xl:href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0">フィボナッチ数</link> を計算するプログラムを <emphasis role="strong">テスト駆動開発</emphasis> で作ります。</simpara>
+<simpara>初めに <emphasis role="strong">TODOリスト</emphasis> をプログラミング作業をリストアップします。次に、最初に失敗するテストを作成します。 その後 <emphasis role="strong">仮実装</emphasis> でベタ書き値を返すテストを実行します。 それから <emphasis role="strong">三角測量</emphasis> を使って慎重にアルゴリズムを一般化していきます。そして、 <emphasis role="strong">明白な実装</emphasis> によりアルゴリズムを完成させます。</simpara>
+<simpara>アルゴリズムが完成したら <emphasis role="strong">リファクタリング</emphasis> を実施してコードベースを <emphasis role="strong">動作するきれいなコード</emphasis> に洗練していきます。</simpara>
+<simpara><emphasis role="strong">動作するきれいなコード</emphasis> になったらパフォーマンスの検証をするためパフォーマンスチューニングを実施します。 パフォーマンスチューニングでは <emphasis role="strong">プロファイラ</emphasis> を使ったプログラムのボトルネック調査を実施します。アルゴリズムのパフォーマンスを改善したら別途追加したアルゴリズムと <emphasis role="strong">ベンチマーク</emphasis> を実施してどのアルゴリズムを採用するかを決定します。</simpara>
+<simpara>仕上げは、 <emphasis role="strong">モジュール分割</emphasis> によりRubyアプリケーションとしてリリースします。</simpara>
+</section>
+<section xml:id="_仕様">
+<title>仕様</title>
+<simpara>仕様は以下の通りです。</simpara>
+<blockquote>
+<attribution>
+Wikipedia
+</attribution>
+<simpara>n 番目のフィボナッチ数を Fn で表すと、Fn は再帰的に</simpara>
+<simpara>F0 = 0,</simpara>
+<simpara>F1 = 1,</simpara>
+<simpara>Fn + 2 = Fn + Fn + 1 (n ≧ 0)</simpara>
+<simpara>で定義される。これは、2つの初期条件を持つ漸化式である。</simpara>
+<simpara>この数列 (Fn)はフィボナッチ数列（フィボナッチすうれつ、（英: Fibonacci sequence）と呼ばれ、</simpara>
+<simpara>0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, …（オンライン整数列大辞典の数列 A45）
+と続く。最初の二項は 0, 1 であり、以後どの項もその直前の2つの項の和となっている。</simpara>
+</blockquote>
+<simpara>表形式にすると以下のようになります。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="20">
+<colspec colname="col_1" colwidth="3*"/>
+<colspec colname="col_2" colwidth="3*"/>
+<colspec colname="col_3" colwidth="3*"/>
+<colspec colname="col_4" colwidth="3*"/>
+<colspec colname="col_5" colwidth="3*"/>
+<colspec colname="col_6" colwidth="3*"/>
+<colspec colname="col_7" colwidth="3*"/>
+<colspec colname="col_8" colwidth="3*"/>
+<colspec colname="col_9" colwidth="3*"/>
+<colspec colname="col_10" colwidth="3*"/>
+<colspec colname="col_11" colwidth="3*"/>
+<colspec colname="col_12" colwidth="3*"/>
+<colspec colname="col_13" colwidth="3*"/>
+<colspec colname="col_14" colwidth="3*"/>
+<colspec colname="col_15" colwidth="3*"/>
+<colspec colname="col_16" colwidth="3*"/>
+<colspec colname="col_17" colwidth="3*"/>
+<colspec colname="col_18" colwidth="3*"/>
+<colspec colname="col_19" colwidth="3*"/>
+<colspec colname="col_20" colwidth="3*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>4</simpara></entry>
+<entry align="left" valign="top"><simpara>5</simpara></entry>
+<entry align="left" valign="top"><simpara>6</simpara></entry>
+<entry align="left" valign="top"><simpara>7</simpara></entry>
+<entry align="left" valign="top"><simpara>8</simpara></entry>
+<entry align="left" valign="top"><simpara>9</simpara></entry>
+<entry align="left" valign="top"><simpara>10</simpara></entry>
+<entry align="left" valign="top"><simpara>11</simpara></entry>
+<entry align="left" valign="top"><simpara>12</simpara></entry>
+<entry align="left" valign="top"><simpara>13</simpara></entry>
+<entry align="left" valign="top"><simpara>14</simpara></entry>
+<entry align="left" valign="top"><simpara>15</simpara></entry>
+<entry align="left" valign="top"><simpara>16</simpara></entry>
+<entry align="left" valign="top"><simpara>18</simpara></entry>
+<entry align="left" valign="top"><simpara>19</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>5</simpara></entry>
+<entry align="left" valign="top"><simpara>8</simpara></entry>
+<entry align="left" valign="top"><simpara>13</simpara></entry>
+<entry align="left" valign="top"><simpara>21</simpara></entry>
+<entry align="left" valign="top"><simpara>34</simpara></entry>
+<entry align="left" valign="top"><simpara>55</simpara></entry>
+<entry align="left" valign="top"><simpara>89</simpara></entry>
+<entry align="left" valign="top"><simpara>144</simpara></entry>
+<entry align="left" valign="top"><simpara>233</simpara></entry>
+<entry align="left" valign="top"><simpara>377</simpara></entry>
+<entry align="left" valign="top"><simpara>610</simpara></entry>
+<entry align="left" valign="top"><simpara>987</simpara></entry>
+<entry align="left" valign="top"><simpara>1597</simpara></entry>
+<entry align="left" valign="top"><simpara>2584</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="_todoリスト">
+<title>TODOリスト</title>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>TODOリスト</simpara>
+<simpara>何をテストすべきだろうか----着手する前に、必要になりそうなテストをリストに書き出しておこう。</simpara>
+</blockquote>
+<simpara><emphasis role="strong">TODOリスト</emphasis> を書き出す取っ掛かりとして仕様で定義されている内容からプログラムで実施できる内容に分解してきましょう。
+仕様では以下のように定義されているので。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="20">
+<colspec colname="col_1" colwidth="3*"/>
+<colspec colname="col_2" colwidth="3*"/>
+<colspec colname="col_3" colwidth="3*"/>
+<colspec colname="col_4" colwidth="3*"/>
+<colspec colname="col_5" colwidth="3*"/>
+<colspec colname="col_6" colwidth="3*"/>
+<colspec colname="col_7" colwidth="3*"/>
+<colspec colname="col_8" colwidth="3*"/>
+<colspec colname="col_9" colwidth="3*"/>
+<colspec colname="col_10" colwidth="3*"/>
+<colspec colname="col_11" colwidth="3*"/>
+<colspec colname="col_12" colwidth="3*"/>
+<colspec colname="col_13" colwidth="3*"/>
+<colspec colname="col_14" colwidth="3*"/>
+<colspec colname="col_15" colwidth="3*"/>
+<colspec colname="col_16" colwidth="3*"/>
+<colspec colname="col_17" colwidth="3*"/>
+<colspec colname="col_18" colwidth="3*"/>
+<colspec colname="col_19" colwidth="3*"/>
+<colspec colname="col_20" colwidth="3*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>4</simpara></entry>
+<entry align="left" valign="top"><simpara>5</simpara></entry>
+<entry align="left" valign="top"><simpara>6</simpara></entry>
+<entry align="left" valign="top"><simpara>7</simpara></entry>
+<entry align="left" valign="top"><simpara>8</simpara></entry>
+<entry align="left" valign="top"><simpara>9</simpara></entry>
+<entry align="left" valign="top"><simpara>10</simpara></entry>
+<entry align="left" valign="top"><simpara>11</simpara></entry>
+<entry align="left" valign="top"><simpara>12</simpara></entry>
+<entry align="left" valign="top"><simpara>13</simpara></entry>
+<entry align="left" valign="top"><simpara>14</simpara></entry>
+<entry align="left" valign="top"><simpara>15</simpara></entry>
+<entry align="left" valign="top"><simpara>16</simpara></entry>
+<entry align="left" valign="top"><simpara>18</simpara></entry>
+<entry align="left" valign="top"><simpara>19</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>5</simpara></entry>
+<entry align="left" valign="top"><simpara>8</simpara></entry>
+<entry align="left" valign="top"><simpara>13</simpara></entry>
+<entry align="left" valign="top"><simpara>21</simpara></entry>
+<entry align="left" valign="top"><simpara>34</simpara></entry>
+<entry align="left" valign="top"><simpara>55</simpara></entry>
+<entry align="left" valign="top"><simpara>89</simpara></entry>
+<entry align="left" valign="top"><simpara>144</simpara></entry>
+<entry align="left" valign="top"><simpara>233</simpara></entry>
+<entry align="left" valign="top"><simpara>377</simpara></entry>
+<entry align="left" valign="top"><simpara>610</simpara></entry>
+<entry align="left" valign="top"><simpara>987</simpara></entry>
+<entry align="left" valign="top"><simpara>1597</simpara></entry>
+<entry align="left" valign="top"><simpara>2584</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>最初のタスクは <literal>0を渡したら0を返す</literal> 振る舞いをするプログラムを作ることにしましょう。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="32*"/>
+<colspec colname="col_2" colwidth="32*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>同様のパターンで他のタスクも切り出してみましょう。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="21*"/>
+<colspec colname="col_2" colwidth="21*"/>
+<colspec colname="col_3" colwidth="21*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="16*"/>
+<colspec colname="col_2" colwidth="16*"/>
+<colspec colname="col_3" colwidth="16*"/>
+<colspec colname="col_4" colwidth="16*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>とりあえず、３件ほどタスクとして切り出したので <emphasis role="strong">TODOリスト</emphasis> の作成は一旦終了してプログラミング作業に入るとしましょう。</simpara>
+<itemizedlist>
+<listitem>
+<simpara>0を渡したら0を返す</simpara>
+</listitem>
+<listitem>
+<simpara>1を渡したら1を返す</simpara>
+</listitem>
+<listitem>
+<simpara>2を渡したら1を返す</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_仮実装">
+<title>仮実装</title>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>仮実装を経て本実装へ</simpara>
+<simpara>失敗するテストを書いてから、最初に行う実装はどのようなものだろうか----ベタ書きの値を返そう。</simpara>
+</blockquote>
+<section xml:id="_0を渡したら0を返す">
+<title>0を渡したら0を返す</title>
+<simpara>早速、 <emphasis role="strong">TODOリスト</emphasis> の１つ目から片付けていくとしましょう。</simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">0を渡したら0を返す</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara>1を渡したら1を返す</simpara>
+</listitem>
+<listitem>
+<simpara>2を渡したら1を返す</simpara>
+</listitem>
+</itemizedlist>
+<simpara>まずは最初に失敗するテストを書きますがまずは以下のサンプルコードを使ってテスティングフレームワークの動作確認をしておきましょう。今回利用するRubyのテスティングフレームワークは <link xl:href="https://github.com/seattlerb/minitest">minitest</link> です。 <literal>test</literal> フォルダ以下に <literal>fibonacci_test.rb</literal> ファイルを追加して以下のコードを入力します。</simpara>
+<simpara><literal>test/fibonacci_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+
+class FibonacciTest &lt; Minitest::Test
+  def greeting
+    'hello world'
+  end
+
+  def test_greeting
+    assert_equal 'hello world', greeting
+  end
+end</programlisting>
+<simpara>今回テスト結果を見やすくするため <literal>minitest/reporters</literal> というgemを使っているのでまずインストールしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ gem install minitest-reporters</programlisting>
+<simpara>gemインストールが完了したらコマンドラインに <literal>ruby test/fibonacci_test.rb</literal> コマンドを入力してテストを実施します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 28548
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01040s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
+...</programlisting>
+<simpara>テストは無事実行されたようですね。続いてテストが失敗するか確認しておきましょう。 <literal>greeting</literal> メソッドの <literal>hello world</literal> を <literal>hello world!</literal> に変更してテストを実行します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci &lt; Minitest::Test
+  def greeting
+    'hello world!'
+  end
+...
+end</programlisting>
+<simpara>テストは失敗して以下のようなメッセージが表示されました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 30787
+
+ FAIL["test_greeting", &lt;Minitest::Reporters::Suite:0x000055eaefeef5e0 @name="Fibonacci"&gt;, 0.003157061990350485]
+ test_greeting#Fibonacci (0.00s)
+        Expected: "hello world"
+          Actual: "hello world!"
+        test/fibonacci_test.rb:13:in `test_greeting`
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00398s
+1 tests, 1 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara>テスティングフレームワークのセットアップと動作確認が終了したので最初の失敗するテストを書きます。まずは <emphasis role="strong">アサーションファースト</emphasis>　でサンプルコードを削除して以下のコードにします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def test_fibonacci
+    assert_equal 0, fib(0)
+  end
+end</programlisting>
+<simpara>テストは無事？失敗します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 21656
+
+ERROR["test_fibonacci", &lt;Minitest::Reporters::Suite:0x0000559acae8d068 @name="FibonacciTest"&gt;, 0.001314591965638101]
+ test_fibonacci#FibonacciTest (0.00s)
+Minitest::UnexpectedError:         NoMethodError: undefined method `fib' for #&lt;FibonacciTest:0x0000559acae8d860&gt;
+            test/fibonacci_test.rb:9:in `test_fibonacci'`
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00419s
+1 tests, 0 assertions, 0 failures, 1 errors, 0 skips</programlisting>
+<simpara>まずは <emphasis role="strong">仮実装</emphasis> でテストを通すようにしましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    0
+  end
+
+  def test_fibonacci
+    assert_equal 0, fib(0)
+  end
+end</programlisting>
+<simpara>テストはレッドからグリーンになりました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 2885
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00352s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>テストが通ったのでバージョン管理システムにコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'test: 0を渡したら0を返す'</programlisting>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara>1を渡したら1を返す</simpara>
+</listitem>
+<listitem>
+<simpara>2を渡したら1を返す</simpara>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+<section xml:id="_三角測量">
+<title>三角測量</title>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>三角測量</simpara>
+<simpara>テストから最も慎重に一般化を引き出すやり方はどのようなものだろうか----２つ以上の例があるときだけ、一般化を行うようにしよう。</simpara>
+</blockquote>
+<section xml:id="_1を渡したら1を返す">
+<title>1を渡したら1を返す</title>
+<simpara>１つ目の <emphasis role="strong">TODOリスト</emphasis> を片付けたので２つ目の <emphasis role="strong">TODOリスト</emphasis> に取り掛かるとしましょう。</simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">1を渡したら1を返す</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara>2を渡したら1を返す</simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">テストファースト</emphasis>　<emphasis role="strong">アサーションファースト</emphasis> なのでまずはテストを追加するとこから始めます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    0
+  end
+
+  def test_fibonacci
+    assert_equal 0, fib(0)
+    assert_equal 1, fib(1)
+  end
+end</programlisting>
+<simpara>テストは失敗します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 21207
+
+ FAIL["test_fibonacci", &lt;Minitest::Reporters::Suite:0x000056525007ccb0 @name="FibonacciTest"&gt;, 0.0014098359970375896]
+ test_fibonacci#FibonacciTest (0.00s)
+        Expected: 1
+          Actual: 0
+        test/fibonacci_test.rb:14:in `test_fibonacci`
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00196s
+1 tests, 2 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara><emphasis role="strong">仮実装</emphasis> で0しか返さないベタ書きのコードなのだから当然ですよね。0ならば0を返してそれ以外の場合は1を返すようにプログラムを変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+
+    1
+  end
+...
+end</programlisting>
+<simpara>プログラムの変更によりテストはレッドからグリーンに戻りました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 58331
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00169s
+1 tests, 2 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>ここでコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'test: 1を渡したら1を返す'</programlisting>
+</section>
+<section xml:id="_リファクタリング">
+<title>リファクタリング</title>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara>2を渡したら1を返す</simpara>
+</listitem>
+</itemizedlist>
+<simpara>次の <emphasis role="strong">TODOリスト</emphasis> に着手する前にテストケース内の重複が気になり始めたので、共通部分をアサーションからくくり出して、入力値と期待値の組でテストを回すようにテストコードを <emphasis role="strong">リファクタリング</emphasis> します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci &lt; Minitest::Test
+...
+  def test_fibonacci
+    cases = [[0, 0], [1, 1]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara>テストを実行してプログラムが壊れていないことを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 5991
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00200s
+1 tests, 2 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>プログラムが壊れていないことが確認できたのでコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor: アルゴリズムの置き換え'</programlisting>
+</section>
+<section xml:id="_1を渡したら2を返す">
+<title>1を渡したら2を返す</title>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">2を渡したら1を返す</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara>テストコードの　<emphasis role="strong">リファクタリング</emphasis> を実施したので続いて　<emphasis role="strong">TODOリスト</emphasis> の３つ目に着手します。まずは <emphasis role="strong">アサーション</emphasis> の追加ですね。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+
+    1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara>おや、今回はプロダクトコードを変更しなくてもテストは通るようです。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 26882
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00287s
+1 tests, 3 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>ここでコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'test: 1を渡したら2を返す'</programlisting>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">2を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+<section xml:id="_明白な実装">
+<title>明白な実装</title>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>明白な実装</simpara>
+<simpara>シンプルな操作を実現するにはどうすればいいだろうか----そのまま実装しよう。</simpara>
+<simpara>仮実装や三角測量は、細かく細かく刻んだ小さなステップだ。だが、ときには実装をどうすべきか既に見えていることが。
+そのまま進もう。例えば先ほどのplusメソッドくらいシンプルなものを仮実装する必要が本当にあるだろうか。
+普通は、その必要はない。頭に浮かんだ明白な実装をただ単にコードに落とすだけだ。もしもレッドバーが出て驚いたら、あらためてもう少し歩幅を小さくしよう。</simpara>
+</blockquote>
+<section xml:id="_3を渡したら2を返す">
+<title>3を渡したら2を返す</title>
+<simpara>最初に定義した <emphasis role="strong">TODOリスト</emphasis> の内容は完了しましたがプログラムの一般化にはまだテストケースが足りないでしょう。3を渡した場合のテストケースを追加します。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="5">
+<colspec colname="col_1" colwidth="13*"/>
+<colspec colname="col_2" colwidth="13*"/>
+<colspec colname="col_3" colwidth="13*"/>
+<colspec colname="col_4" colwidth="13*"/>
+<colspec colname="col_5" colwidth="13*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">2を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">3を渡したら2を返す</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara>テストケースを追加してテストを実施します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+...
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara>テストが失敗しました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 7598
+
+ FAIL["test_fibonacci", &lt;Minitest::Reporters::Suite:0x000055c987498120 @name="FibonacciTest"&gt;, 0.00104286998976022]
+ test_fibonacci#FibonacciTest (0.00s)
+        Expected: 2
+          Actual: 1
+        test/fibonacci_test.rb:17:in `block in test_fibonacci''
+        test/fibonacci_test.rb:16:in `each'
+        test/fibonacci_test.rb:16:in `test_fibonacci'
+
+  1/1: [========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00160s
+1 tests, 4 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara>2までは1を返すので条件分岐を追加します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n &lt;= 2
+
+    1
+  end
+...
+end</programlisting>
+<simpara>まだ、失敗したままです。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 26066
+
+ FAIL["test_fibonacci", &lt;Minitest::Reporters::Suite:0x0000562bc96ee330 @name="Fibonacci"&gt;, 0.0055934099946171045]
+ test_fibonacci#Fibonacci (0.01s)
+        Expected: 2
+          Actual: 1
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00882s
+1 tests, 4 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara>どの条件にも該当としない場合は2を返すように変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n &lt;= 2
+
+    2
+  end
+...
+end</programlisting>
+<simpara>グリーンになりました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 25117
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01680s
+1 tests, 4 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>ここでコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'test: 3を渡したら2を返す'</programlisting>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">2を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">3を渡したら2を返す</phrase></emphasis></simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_フィボナッチ数計算">
+<title>フィボナッチ数計算</title>
+<simpara>そろそろゴールが見えてきました。<emphasis role="strong">TODOリスト</emphasis> を追加してフィボナッチ数計算アルゴリズムを完成させましょう。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="6">
+<colspec colname="col_1" colwidth="11*"/>
+<colspec colname="col_2" colwidth="11*"/>
+<colspec colname="col_3" colwidth="11*"/>
+<colspec colname="col_4" colwidth="11*"/>
+<colspec colname="col_5" colwidth="11*"/>
+<colspec colname="col_6" colwidth="11*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>4</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">2を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">3を渡したら2を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">4を渡したら3を返す</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">テストファースト</emphasis> <emphasis role="strong">アサートファースト</emphasis> です。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n &lt;= 2
+
+    2
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 34595
+
+ FAIL["test_fibonacci", &lt;Minitest::Reporters::Suite:0x0000564fdbd6dfe0 @name="Fibonacci"&gt;, 0.005386559059843421]
+ test_fibonacci#Fibonacci (0.01s)
+        Expected: 3
+          Actual: 2
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
+
+  1/1: [==========================================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01030s
+1 tests, 5 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara>最後に2を返すのではなく合計値をかえすのだから</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n &lt;= 2
+
+    1 + 1
+  end
+...
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 10848
+
+ FAIL["test_fibonacci", &lt;Minitest::Reporters::Suite:0x00005621247c9f48 @name="Fibonacci"&gt;, 0.0007573128677904606]
+ test_fibonacci#Fibonacci (0.00s)
+        Expected: 3
+          Actual: 2
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00130s
+1 tests, 5 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara>一つ前の <literal>fib</literal> の結果を足すのだから</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n &lt;= 2
+
+    fib(n - 1) + 1
+  end
+...
+end</programlisting>
+<simpara>グリーンになりました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 25629
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00467s
+1 tests, 5 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>ここでコミット。。。しないで今回は更に進めます。 <emphasis role="strong">TODOリスト</emphasis> を追加します。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="7">
+<colspec colname="col_1" colwidth="9*"/>
+<colspec colname="col_2" colwidth="9*"/>
+<colspec colname="col_3" colwidth="9*"/>
+<colspec colname="col_4" colwidth="9*"/>
+<colspec colname="col_5" colwidth="9*"/>
+<colspec colname="col_6" colwidth="9*"/>
+<colspec colname="col_7" colwidth="9*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>4</simpara></entry>
+<entry align="left" valign="top"><simpara>5</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>2</simpara></entry>
+<entry align="left" valign="top"><simpara>3</simpara></entry>
+<entry align="left" valign="top"><simpara>5</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">2を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">3を渡したら2を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">4を渡したら3を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">5を渡したら5を返す</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara>テストケースを追加して</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+...
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara>レッド</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 54754
+
+ FAIL["test_fibonacci", &lt;Minitest::Reporters::Suite:0x000055c42397e108 @name="Fibonacci"&gt;, 0.00174815789796412]
+ test_fibonacci#Fibonacci (0.00s)
+        Expected: 5
+          Actual: 4
+        test/fibonacci_test.rb:24:in `block in test_fibonacci'
+        test/fibonacci_test.rb:23:in `each'
+        test/fibonacci_test.rb:23:in `test_fibonacci''
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00237s
+1 tests, 6 assertions, 1 failures, 0 errors, 0 skips</programlisting>
+<simpara>結局1つ前と2つ前の <literal>fib</literal> の結果を合計して返しているのだから</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n &lt;= 2
+
+    fib(n - 1) + fib(n - 2)
+  end
+...
+end</programlisting>
+<simpara>グリーン</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 8399
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00107s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>一般化ができたので0の場合と1の場合は与えらた値を返せば良くなったので</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + fib(n - 2)
+  end
+...
+end</programlisting>
+<simpara>リファクター</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 42476
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00162s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>フィボナッチ数計算アルゴリズムが完成したのでコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'feat: フィボナッチ数計算'</programlisting>
+<itemizedlist>
+<listitem>
+<simpara><emphasis><phrase role="line-through">0を渡したら0を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">1を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">2を渡したら1を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">3を渡したら2を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">4を渡したら3を返す</phrase></emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis><phrase role="line-through">5を渡したら5を返す</phrase></emphasis></simpara>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+<section xml:id="_リファクタリング_2">
+<title>リファクタリング</title>
+<blockquote>
+<attribution>
+リファクタリング(第2版)
+</attribution>
+<simpara>リファクタリング(名詞) 外部から見たときの振る舞いを保ちつつ、理解や修正が簡単になるように、ソフトウェアの内部構造を変化させること。</simpara>
+</blockquote>
+<blockquote>
+<attribution>
+リファクタリング(第2版
+</attribution>
+<simpara>リファクタリングする(動詞) 一連のリファクタリングを適用して、外部から見た振る舞いの変更なしに、ソフトウェアを再構築すること。</simpara>
+</blockquote>
+<simpara>アルゴリズムの実装は出来ましたがアプリケーションとしては不十分なので <emphasis role="strong">リファクタリング</emphasis> を適用してコードを <emphasis role="strong">動作するきれいなコード</emphasis> に洗練していきます。</simpara>
+<section xml:id="_クラスの抽出">
+<title>クラスの抽出</title>
+<simpara>まず、テストケース内でメソッドを定義していますがこれでは一つのクラスでアルゴリズムの実行とテストの実行という２つの責務を <literal>FibonacciTest</literal> クラスが担当しています。 <emphasis role="strong">単一責任の原則</emphasis> に違反しているので <emphasis role="strong">クラスの抽出</emphasis> を実施して責務を分担させましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+  def fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + 1
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara><literal>Fibonacci</literal> クラスを作成して <emphasis role="strong">クラスメソッド</emphasis> の <literal>Fibonacci.fib</literal> をコピー＆ペーストで作成します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + fib(n - 2)
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def self.fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + fib(n - 2)
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara>テストが壊れていないことを確認したら <literal>FibonacciTest</literal> クラス内の <emphasis role="strong">クラスメソッド</emphasis> <literal>FIbonacciTest.fib</literal> を削除して <emphasis role="strong">フィクスチャー</emphasis> <literal>setup</literal> メソッドを作成して <emphasis role="strong">インスタンス変数</emphasis> <literal>@fib</literal> に <literal>Fibonacci</literal> クラスの参照を代入します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + fib(n - 2)
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara>テストが壊れていないかを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 40694
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00393s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara><emphasis role="strong">クラスの抽出</emphasis> の <emphasis role="strong">リファクタリング</emphasis> 適用が完了したのでコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor: クラスの抽出'</programlisting>
+</section>
+<section xml:id="_変数名の変更">
+<title>変数名の変更</title>
+<simpara>続いて、 <literal>Fibonacci</literal> クラスに移動した <emphasis role="strong">クラスメソッド</emphasis> ですが引数が <literal>n</literal> というのは分かりづらいですね。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.fib(n)
+    return 0 if n.zero?
+    return 1 if n == 1
+
+    fib(n - 1) + fib(n - 2)
+  end
+end
+...</programlisting>
+<simpara>ここは省略せず、引数の型を表す名前に変更して可読性を上げておきましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.fib(number)
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    fib(number - 1) + fib(number - 2)
+  end
+end
+...</programlisting>
+<simpara>テストが壊れていないか確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 37760
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00744s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>コミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor: 変数名の変更'</programlisting>
+</section>
+<section xml:id="_メソッド名の変更">
+<title>メソッド名の変更</title>
+<simpara><literal>Fibonacci</literal> クラスの <emphasis role="strong">クラスメソッド</emphasis> <literal>Fibonacci.fib</literal> はフィボナッチ数を計算するメソッドですが名前が紛らわしいので <emphasis role="strong">メソッド名の変更</emphasis> を適用します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.fib(number)
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    fib(number - 1) + fib(number - 2)
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.fib(i[0])
+    end
+  end
+end</programlisting>
+<simpara><emphasis role="strong">インスタンスメソッド</emphasis> を <literal>fib</literal> から <literal>calc</literal> に変更します。今回は呼び出し先の <literal>FibonacciTest</literal> のテストコードも修正する必要があります。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.calc(number)
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    calc(number - 1) + calc(number - 2)
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.calc(i[0])
+    end
+  end
+end</programlisting>
+<simpara>テストが壊れていないか確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 15099
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00285s
+1 tests, 6 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara><emphasis role="strong">メソッド名の変更</emphasis> の適用が完了したのでコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor: メソッド名の変更'</programlisting>
+</section>
+</section>
+<section xml:id="_パフォーマンスチューニング">
+<title>パフォーマンスチューニング</title>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>心がけるべきことは、他のパフォーマンス分析とおなじように、実際のデータを使い、リアルな利用パターンを試し、プロファイリングを行ってからでないと、パフォーマンスを問題にする資格はない、ということだ。</simpara>
+</blockquote>
+<simpara>これまでのテストケースでは小さな値を使ってきましたが大きな値の場合のプログラムの挙動が問題無いか確認しておく必要があります <link xl:href="http://www.suguru.jp/Fibonacci/Fib100.html">１００番目までのフィボナッチ数列</link> を参考に大きな値の場合のテストケースを追加してアプリケーションのパフォーマンスを検証しましょう。</simpara>
+<section xml:id="_メモ化によるパフォーマンス改善">
+<title>メモ化によるパフォーマンス改善</title>
+<simpara><emphasis role="strong">TODOリスト</emphasis> に新しいタスクを追加します。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="15%"?>
+<?dbfo table-width="15%"?>
+<?dblatex table-width="15%"?>
+<tgroup cols="7">
+<colspec colname="col_1" colwidth="9*"/>
+<colspec colname="col_2" colwidth="9*"/>
+<colspec colname="col_3" colwidth="9*"/>
+<colspec colname="col_4" colwidth="9*"/>
+<colspec colname="col_5" colwidth="9*"/>
+<colspec colname="col_6" colwidth="9*"/>
+<colspec colname="col_7" colwidth="9*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+<entry align="left" valign="top"><simpara>38</simpara></entry>
+<entry align="left" valign="top"><simpara>39</simpara></entry>
+<entry align="left" valign="top"><simpara>40</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>0</simpara></entry>
+<entry align="left" valign="top"><simpara>1</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+<entry align="left" valign="top"><simpara>39088169</simpara></entry>
+<entry align="left" valign="top"><simpara>63245986</simpara></entry>
+<entry align="left" valign="top"><simpara>102334155</simpara></entry>
+<entry align="left" valign="top"><simpara>&#8230;&#8203;</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<itemizedlist>
+<listitem>
+<simpara>大きな数値を計算する</simpara>
+</listitem>
+</itemizedlist>
+<simpara>テストケースを追加します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class FibonacciTest &lt; Minitest::Test
+...
+  def test_large_number
+    assert_equal 102_334_155, @fib.calc(40)
+  end
+end</programlisting>
+<simpara>テストを実行します</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 1160
+
+  2/2: [=========================================] 100% Time: 00:00:51, Time: 00:00:51
+
+Finished in 51.15914s
+2 tests, 7 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>テストが完了するのが随分遅くなってしまいました。これはアルゴリズムを改善する必要がありそうです。
+まずは <emphasis role="strong">プロファイラ</emphasis> を使って実行状況を確認します。今回は <link xl:href="https://docs.ruby-lang.org/ja/latest/library/profile.html">profileライブラリ</link> を使います。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby -r profile test/fibonacci_test.rb
+Started with run options --seed 42383
+
+  2/1: [======================                      ] 50% Time: 00:00:00,  ETA: 00:00:00</programlisting>
+<simpara>処理が終わらないようなら <literal>ctr-c</literal> で強制終了すれば結果が出力されます。出力内容の <literal>Fibonacci.calc</literal> がフィボナッチ数計算メソッド実行部分です。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">...
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+192.39    25.50     25.50        2 12750.69 12750.69  Thread::Queue#pop
+ 75.32    35.49      9.98   246940     0.04     1.65  Fibonacci.calc
+....</programlisting>
+<simpara>再帰呼び出しが何度も実行された結果パフォーマンスを低下させているようです。ここは <link xl:href="https://ja.wikipedia.org/wiki/%E3%83%A1%E3%83%A2%E5%8C%96">メモ化</link> を使ってパフォーマンスを改善させましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.calc(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.calc(i[0])
+    end
+  end
+
+  def test_large_number
+    assert_equal 102_334_155, @fib.calc(40)
+  end
+end</programlisting>
+<simpara><emphasis role="strong">プロファイラ</emphasis> で確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby -r profile test/fibonacci_test.rb
+Started with run options --seed 20468
+
+  2/2: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.04214s
+2 tests, 7 assertions, 0 failures, 0 errors, 0 skips
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  ms/call  ms/call  name
+...
+ 12.09     0.06      0.06        2    32.09    32.09  Thread::Queue#pop
+...
+  1.33     0.26      0.01      105     0.07     1.41  Fibonacci.calc
+...</programlisting>
+<simpara>一気に再帰呼び出し回数が減りパフォーマンスを改善することが出来ましたのでコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'perf: メモ化によるパフォーマンス改善'</programlisting>
+</section>
+</section>
+<section xml:id="_ベンチマーク">
+<title>ベンチマーク</title>
+<simpara>続いて、異なるフィボナッチ数計算アルゴリズムを実装してどのアルゴリズムを採用するべきかを <link xl:href="https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%B3%E3%83%81%E3%83%9E%E3%83%BC%E3%82%AF">ベンチマーク</link> を取って判断したいと思います。</simpara>
+<section xml:id="_ループ処理による実装">
+<title>ループ処理による実装</title>
+<simpara>まずはループ処理によるフィボナッチ数計算のアルゴリズムを実装します。以下が <emphasis role="strong">テストファースト</emphasis> <emphasis role="strong">アサートファースト</emphasis> で作成したコードです。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.calc(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+  end
+
+  def self.calc2(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.calc(i[0])
+    end
+  end
+
+  def test_large_number
+    assert_equal 102_334_155, @fib.calc(40)
+  end
+
+  def test_large_number_calc2
+    assert_equal 102_334_155, @fib.calc2(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb -n test_large_number_calc2 Started with run options -n test_large_number_calc2 --seed 18167
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00123s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>テストが通ることを確認したらコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'feat: ループ処理による実装'</programlisting>
+</section>
+<section xml:id="_一般項による実装">
+<title>一般項による実装</title>
+<simpara><link xl:href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%9C%E3%83%8A%E3%83%83%E3%83%81%E6%95%B0#%E4%B8%80%E8%88%AC%E9%A0%85">フィボナッチ数列の一般項</link> で定義されているのでこれを <emphasis role="strong">テストファースト</emphasis> <emphasis role="strong">アサートファースト</emphasis> で実装します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.calc(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+  end
+
+  def self.calc2(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+
+  def self.calc3(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.calc(i[0])
+    end
+  end
+
+  def test_large_number
+    assert_equal 102_334_155, @fib.calc(40)
+  end
+
+  def test_large_number_calc2
+    assert_equal 102_334_155, @fib.calc2(40)
+  end
+
+  def test_large_number_calc3
+    assert_equal 102_334_155, @fib.calc3(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb -n test_large_number_calc3
+Started with run options -n test_large_number_calc3 --seed 55659
+
+  1/1: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00111s
+1 tests, 1 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>テストが壊れていないか確認したらコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'feat: 一般項による実装'</programlisting>
+</section>
+<section xml:id="_メソッド名の変更_2">
+<title>メソッド名の変更</title>
+<simpara>各アルゴリズムのメソッド名が <literal>calc</literal> では分かりづらいので <emphasis role="strong">メソッド名の変更</emphasis> を適用して <emphasis role="strong">リファクタリング</emphasis> します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.recursive(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= recursive(number - 1, memo) + recursive(number - 2, memo)
+  end
+
+  def self.calc2(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+
+  def self.calc3(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.recursive(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @fib.recursive(40)
+  end
+
+  def test_large_number_calc2
+    assert_equal 102_334_155, @fib.calc2(40)
+  end
+
+  def test_large_number_calc3
+    assert_equal 102_334_155, @fib.calc3(40)
+  end
+end</programlisting>
+<simpara>まず、最初に実装した再帰呼び出しアルゴリズムのメソッド名を <literal>Fibonacci.calc</literal> から <literal>Fibonacci.recursive</literal> に変更します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 15174
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00137s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>続いて、ループアルゴリズムのメソッド名を <literal>Fibonacci.calc2</literal> から <literal>Fibonacci.loop</literal> に変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class Fibonacci
+  def self.recursive(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= recursive(number - 1, memo) + recursive(number - 2, memo)
+  end
+
+  def self.loop(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+
+  def self.calc3(number)
+    a = ((1 + Math.sqrt(5)) / 2) ** number
+    b = ((1 - Math.sqrt(5)) / 2) ** number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.recursive(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @fib.recursive(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @fib.loop(40)
+  end
+
+  def test_large_number_calc3
+    assert_equal 102_334_155, @fib.calc3(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 28586
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00188s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>最後に、一般項アルゴリズムのメソッド名を <literal>Fibonacci.calc3</literal> から <literal>Fibonacci.general_term</literal> に変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.recursive(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= recursive(number - 1, memo) + recursive(number - 2, memo)
+  end
+
+  def self.loop(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+
+  def self.general_term(number)
+    a = ((1 + Math.sqrt(5)) / 2) ** number
+    b = ((1 - Math.sqrt(5)) / 2) ** number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.recursive(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @fib.recursive(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @fib.loop(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @fib.general_term(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 42729
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00736s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>変更によりテストが壊れていないことを確認したらコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor: メソッド名の変更'</programlisting>
+</section>
+<section xml:id="_サブクラスによるタイプコードの置き換え_1">
+<title>サブクラスによるタイプコードの置き換え 1</title>
+<simpara>現在の <literal>Fibonacci</literal> クラスはアルゴリズムを追加する場合クラスを編集する必要があります。その際に既存のアルゴリズムを壊してしまう可能性があります。これは <emphasis role="strong">オープン・クローズド原則</emphasis> に違反しているので <emphasis role="strong">サブクラスによるタイプコードの置き換え</emphasis> を適用してアルゴリズムを <emphasis role="strong">カプセル化</emphasis> して、安全に追加・変更できる設計に <emphasis role="strong">リファクタリング</emphasis> します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.recursive(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= recursive(number - 1, memo) + recursive(number - 2, memo)
+  end
+
+  def self.loop(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |_i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+
+  def self.general_term(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciRecursive
+  def calc(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= calc(number - 1, memo) + calc(number - 2, memo)
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+    @recursive = FibonacciRecursive.new
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @recursive.calc(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.calc(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @fib.loop(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @fib.general_term(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 12762
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00130s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>まず、<emphasis role="strong">クラスの抽出</emphasis> により再帰呼び出しアルゴリズムの <emphasis role="strong">メソッドオブジェクト</emphasis> <literal>FibonacciRecursive</literal> クラスを作成して テスト <emphasis role="strong">フィクスチャー</emphasis> で <emphasis role="strong">インスタンス化</emphasis> して <emphasis role="strong">インスタンス変数</emphasis> にオブジェクトの参照を代入します。ここではメソッドの呼び出しが <literal>exec</literal> に変更されているのでテストコードもそれに合わせて変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.loop(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |_i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+
+  def self.general_term(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciRecursive
+  def exec(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+    @recursive = FibonacciRecursive.new
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @recursive.exec(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.exec(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @fib.loop(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @fib.general_term(40)
+  end
+end</programlisting>
+<simpara>まだ、 仕掛ですがコードが壊れていない状態でコミットをしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</programlisting>
+</section>
+<section xml:id="_サブクラスによるタイプコードの置き換え_2">
+<title>サブクラスによるタイプコードの置き換え 2</title>
+<simpara>続いて、 <emphasis role="strong">メソッドオブジェクト</emphasis> <literal>FibonacciLoop</literal> クラスを抽出します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def self.general_term(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciRecursive
+  def exec(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
+  end
+end
+
+class FibonacciLoop
+  def exec(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |_i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+    @recursive = FibonacciRecursive.new
+    @loop = FibonacciLoop.new
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @recursive.exec(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.exec(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @loop.exec(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @fib.general_term(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rbStarted with run options --seed 33171
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00337s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>コミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</programlisting>
+</section>
+<section xml:id="_サブクラスによるタイプコードの置き換え_3">
+<title>サブクラスによるタイプコードの置き換え 3</title>
+<simpara>続いて、 <emphasis role="strong">メソッドオブジェクト</emphasis> <literal>FibonacciGeneralTerm</literal> クラスを抽出します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+end
+
+class FibonacciRecursive
+  def exec(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
+  end
+end
+
+class FibonacciLoop
+  def exec(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |_i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+end
+
+class FibonacciGeneralTerm
+  def exec(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci
+    @recursive = FibonacciRecursive.new
+    @loop = FibonacciLoop.new
+    @general_term = FibonacciGeneralTerm.new
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @recursive.exec(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.exec(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @loop.exec(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @general_term.exec(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rbStarted with run options --seed 65058
+
+  4/4: [===========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.01576s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>コミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor(WIP): サブクラスによるタイプコードの置き換え'</programlisting>
+</section>
+<section xml:id="_サブクラスによるタイプコードの置き換え_4">
+<title>サブクラスによるタイプコードの置き換え 4</title>
+<simpara>最後に、 <literal>Fibonacci</literal> クラスに <emphasis role="strong">Strategyパターン</emphasis> を適用して各アルゴリズムの実行を <emphasis role="strong">委譲</emphasis> します。</simpara>
+<simpara><link xl:href="https://ja.wikipedia.org/wiki/Strategy_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3">Strategy パターン</link></simpara>
+<screen>abstract class Protocol {
+}
+Protocol &lt;--r Fibonacci
+Protocol &lt;|-- FibonacciRecursive
+Protocol &lt;|-- FibonacciLoop
+Protocol &lt;|-- FibonacciGeneralTerm
+
+class Fibonacci {
+-algorithm
+exec()
+}
+class FibonacciRecursive {
+exec()
+}
+class FibonacciLoop {
+exec()
+}
+class FibonacciGeneralTerm {
+exec()
+}</screen>
+<programlisting language="ruby" linenumbering="unnumbered">...
+class Fibonacci
+  def initialize(algorithm)
+    @algorithm = algorithm
+  end
+
+  def exec(number)
+    @algorithm.exec(number)
+  end
+end
+
+class FibonacciRecursive
+  def exec(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
+  end
+end
+
+class FibonacciLoop
+  def exec(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |_i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+end
+
+class FibonacciGeneralTerm
+  def exec(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @recursive = Fibonacci.new(FibonacciRecursive.new)
+    @loop = Fibonacci.new(FibonacciLoop.new)
+    @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @recursive.exec(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.exec(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @loop.exec(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @general_term.exec(40)
+  end
+end</programlisting>
+<simpara><emphasis role="strong">サブクラスによるタイプコードの置き換え</emphasis> の適用が完了したのでコメントから <literal>(WIP)</literal> を外してコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'refactor: サブクラスによるタイプコードの置き換え'</programlisting>
+</section>
+<section xml:id="_ファイル分割">
+<title>ファイル分割</title>
+<simpara>続いてテストとアプリケーションを分割します。 <literal>lib</literal> ディレクトリを作成して <literal>fibonacci.rb</literal> ファイルを追加してアプリケーションコード部分をカット＆ペーストします。</simpara>
+<simpara><literal>lib/fibonacci.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# Fibonacci Calcultor
+class Fibonacci
+  def initialize(algorithm)
+    @algorithm = algorithm
+  end
+
+  def exec(number)
+    @algorithm.exec(number)
+  end
+end
+
+# Fibonacci Recursive algorithm
+class FibonacciRecursive
+  def exec(number, memo = {})
+    return 0 if number.zero?
+    return 1 if number == 1
+
+    memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
+  end
+end
+
+# Fibonacci Loop algorithm
+class FibonacciLoop
+  def exec(number)
+    a = 0
+    b = 1
+    c = 0
+    (0...number).each do |_i|
+      a = b
+      b = c
+      c = a + b
+    end
+    c
+  end
+end
+
+# Fibonacci General Term algorithm
+class FibonacciGeneralTerm
+  def exec(number)
+    a = ((1 + Math.sqrt(5)) / 2)**number
+    b = ((1 - Math.sqrt(5)) / 2)**number
+    ((a - b) / Math.sqrt(5)).round
+  end
+end</programlisting>
+<simpara>続いて、分割した <literal>fibonacci.rb</literal> ファイル内に定義されたクラスを読み込むようにテストクラスを修正します。
+ファイルの読み込みには <literal>require</literal> を使います。</simpara>
+<simpara><literal>test/fibonacci_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fibonacci'
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @fib = Fibonacci.new(FibonacciRecursive.new)
+    @recursive = Fibonacci.new(FibonacciRecursive.new)
+    @loop = Fibonacci.new(FibonacciLoop.new)
+    @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @fib.calc(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.calc(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @loop.calc(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @general_term.calc(40)
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_test.rb
+Started with run options --seed 39723
+
+  4/4: [==========================================] 100% Time: 00:00:00, Time: 00:00:00
+
+Finished in 0.00227s
+4 tests, 9 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>分割したファイルからクラスが読み込まれテストが通ることを確認したらコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'feat: ファイル分割'</programlisting>
+</section>
+<section xml:id="_ベンチマークの実施">
+<title>ベンチマークの実施</title>
+<simpara><emphasis role="strong">ベンチマーク</emphasis> を実施する準備が出来たので <literal>test</literal> ディレクトリに以下の <literal>fibonacci_benchmark.rb</literal> ファイルを追加します。</simpara>
+<simpara><literal>test/fibonacci_benchmark.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'minitest'
+require 'minitest/autorun'
+require 'minitest/benchmark'
+require './lib/fibonacci'
+
+class FibonacciTestBenchmark &lt; Minitest::Benchmark
+  def setup
+    @recursive = Fibonacci.new(FibonacciRecursive.new)
+    @loop = Fibonacci.new(FibonacciLoop.new)
+    @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
+  end
+
+  def bench_recursive
+    assert_performance_constant do |_n|
+      1000.times do |i|
+        @recursive.exec(i)
+      end
+    end
+  end
+
+  def bench_loop
+    assert_performance_constant do |_n|
+      1000.times.each do |i|
+        @loop.exec(i)
+      end
+    end
+  end
+
+  def bench_general_term
+    assert_performance_constant do |_n|
+      1000.times.each do |i|
+        @general_term.exec(i)
+      end
+    end
+  end
+end</programlisting>
+<simpara><emphasis role="strong">ベンチマーク</emphasis> を実行します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/fibonacci_benchmark.rb
+Run options: --seed 1009
+
+# Running:
+
+bench_recursive  0.438420        0.436003        0.437170        0.453267        0.428123
+.bench_loop      0.157816        0.160366        0.159504        0.160275        0.162165
+.bench_general_term      0.001215        0.001200        0.001255        0.001204      0.001184
+.
+
+Finished in 3.074021s, 0.9759 runs/s, 0.9759 assertions/s.
+
+3 runs, 3 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>結果を見たところ、再帰処理アルゴリズムが一番遅く、一般項アルゴリズムが一番早く実行されるようです。</simpara>
+<simpara><emphasis role="strong">ベンチマーク</emphasis> を実施してアルゴリズムの性能を比較できたのでコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'perf: ベンチマークの実施'</programlisting>
+</section>
+</section>
+<section xml:id="_モジュール分割">
+<title>モジュール分割</title>
+<section xml:id="_アプリケーションのリリース">
+<title>アプリケーションのリリース</title>
+<simpara><emphasis role="strong">動作するきれいなコード</emphasis> をリリースするにあたってクラスモジュールごとにファイル分割して <emphasis role="strong">エントリーポイント</emphasis> からアプリケーションを実行できるようにしたいと思います。</simpara>
+<literallayout class="monospaced">/
+  |--lib/
+      |
+       -- fibonacci.rb
+  |--test/
+      |
+       -- fibonacci_test.rb
+       -- fibonacci_benchmark.rb</literallayout>
+<simpara>まず、 <literal>lib</literal> に <literal>fibonacci</literal> フォルダを追加します。クラスモジュールは <literal>Fibonacci</literal> の <emphasis role="strong">名前空間</emphasis> で管理するようにします。</simpara>
+<simpara><literal>lib/fibonacci/command.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Calcultor
+  class Command
+    def initialize(algorithm)
+      @algorithm = algorithm
+    end
+
+    def exec(number)
+      @algorithm.exec(number)
+    end
+  end
+end</programlisting>
+<simpara><literal>lib/fibonacci/recursive.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Recursive algorithm
+  class Recursive
+    def exec(number, memo = {})
+      return 0 if number.zero?
+      return 1 if number == 1
+
+      memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
+    end
+  end
+end</programlisting>
+<simpara><literal>lib/fibonacci/loop.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Loop algorithm
+  class Loop
+    def exec(number)
+      a = 0
+      b = 1
+      c = 0
+      (0...number).each do |_i|
+        a = b
+        b = c
+        c = a + b
+      end
+      c
+    end
+  end
+end</programlisting>
+<simpara><literal>lib/fibonacci/general_term.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci General Term algorithm
+  class GeneralTerm
+    def exec(number)
+      a = ((1 + Math.sqrt(5)) / 2)**number
+      b = ((1 - Math.sqrt(5)) / 2)**number
+      ((a - b) / Math.sqrt(5)).round
+    end
+  end
+end</programlisting>
+<simpara><literal>fibonacci.rb</literal> は分割したクラスモジュールを読み込むエントリーポイントに変更します。</simpara>
+<simpara><literal>lib/fibonacci.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './lib/fibonacci/command'
+require './lib/fibonacci/recursive'
+require './lib/fibonacci/loop'
+require './lib/fibonacci/general_term'</programlisting>
+<simpara><emphasis role="strong">名前空間</emphasis> を変更して呼び出すクラスが変わったのでテストとベンチマークを修正します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+require './lib/fibonacci'
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @recursive = Fibonacci.new(FibonacciRecursive.new)
+    @loop = Fibonacci.new(FibonacciLoop.new)
+    @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
+  end
+...</programlisting>
+<simpara>まず、テストを修正してテストが通ることを確認します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+require './lib/fibonacci'
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @recursive = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @loop = Fibonacci::Command.new(Fibonacci::Loop.new)
+    @general_term = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+  end
+...</programlisting>
+<programlisting language="ruby" linenumbering="unnumbered">...
+require './lib/fibonacci'
+
+class FibonacciTestBenchmark &lt; Minitest::Benchmark
+  def setup
+    @recursive = Fibonacci.new(FibonacciRecursive.new)
+    @loop = Fibonacci.new(FibonacciLoop.new)
+    @general_term = Fibonacci.new(FibonacciGeneralTerm.new)
+  end
+...</programlisting>
+<simpara>続いてベンチマークを修正して実行できることを確認します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+require './lib/fibonacci'
+
+class FibonacciTestBenchmark &lt; Minitest::Benchmark
+  def setup
+    @recursive = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @loop = Fibonacci::Command.new(Fibonacci::Loop.new)
+    @general_term = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+  end
+...</programlisting>
+<simpara>仕上げはコマンドラインから実行できるようにします。 ルート直下に <literal>main.rb</literal> を追加して以下のコードを追加します。
+ここでは <emphasis role="strong">ベンチマーク</emphasis> で一番良い結果の出た一般項のアルゴリズムを使うことにします。</simpara>
+<simpara><literal>main.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require './lib/fibonacci'
+
+number = ARGV[0].to_i
+command = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+puts command.exec(number)</programlisting>
+<simpara>コマンドラインから引数に番号を指定して実行します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby main.rb 0
+0
+$ ruby main.rb 1
+1
+$ ruby main.rb 2
+1
+$ ruby main.rb 3
+2
+$ ruby main.rb 4
+3</programlisting>
+<simpara>アプリケーションの完成したのでコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'feat: モジュール分割'</programlisting>
+</section>
+<section xml:id="_アプリケーションの構成">
+<title>アプリケーションの構成</title>
+<screen>package Fibonacci {
+  abstract class Protocol {
+  }
+  Protocol &lt;--r Command
+  Protocol &lt;|-- Recursive
+  Protocol &lt;|-- Loop
+  Protocol &lt;|-- GeneralTerm
+}
+main --&gt; Command
+
+package Fibonacci {
+  class Command {
+  -algorithm
+  exec()
+  }
+  class Recursive {
+  exec()
+  }
+  class Loop {
+  exec()
+  }
+  class GeneralTerm {
+  exec()
+  }
+}</screen>
+<literallayout class="monospaced">/main.rb
+  |--lib/
+      |
+       -- fibonacci.rb
+     fibonacci/
+      |
+       -- command.rb
+       -- general_term.rb
+       -- loop.rb
+       -- recursive.rb
+  |--test/
+      |
+       -- fibonacci_test.rb
+       -- fibonacci_benchmark.rb</literallayout>
+<formalpara>
+<title>/main.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered">require './lib/fibonacci'
+
+number = ARGV[0].to_i
+command = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+puts command.exec(number)</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/fibonacci.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './lib/fibonacci/command'
+require './lib/fibonacci/recursive'
+require './lib/fibonacci/loop'
+require './lib/fibonacci/general_term'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/fibonacci/command.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Calcultor
+  class Command
+    def initialize(algorithm)
+      @algorithm = algorithm
+    end
+
+    def exec(number)
+      @algorithm.exec(number)
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/fibonacci/recursive.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Recursive algorithm
+  class Recursive
+    def exec(number, memo = {})
+      return 0 if number.zero?
+      return 1 if number == 1
+
+      memo[number] ||= exec(number - 1, memo) + exec(number - 2, memo)
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/fibonacci/loop.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci Loop algorithm
+  class Loop
+    def exec(number)
+      a = 0
+      b = 1
+      c = 0
+      (0...number).each do |_i|
+        a = b
+        b = c
+        c = a + b
+      end
+      c
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/fibonacci/general_term.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+module Fibonacci
+  # Fibonacci General Term algorithm
+  class GeneralTerm
+    def exec(number)
+      a = ((1 + Math.sqrt(5)) / 2)**number
+      b = ((1 - Math.sqrt(5)) / 2)**number
+      ((a - b) / Math.sqrt(5)).round
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/fibonacci_test.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'minitest/reporters'
+Minitest::Reporters.use!
+require 'minitest/autorun'
+require './lib/fibonacci'
+
+class FibonacciTest &lt; Minitest::Test
+  def setup
+    @recursive = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @loop = Fibonacci::Command.new(Fibonacci::Loop.new)
+    @general_term = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+  end
+
+  def test_fibonacci
+    cases = [[0, 0], [1, 1], [2, 1], [3, 2], [4, 3], [5, 5]]
+    cases.each do |i|
+      assert_equal i[1], @recursive.exec(i[0])
+    end
+  end
+
+  def test_large_number_recursive
+    assert_equal 102_334_155, @recursive.exec(40)
+  end
+
+  def test_large_number_loop
+    assert_equal 102_334_155, @loop.exec(40)
+  end
+
+  def test_large_number_general_term
+    assert_equal 102_334_155, @general_term.exec(40)
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/fibonacci_benchmark.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'minitest'
+require 'minitest/autorun'
+require 'minitest/benchmark'
+require './lib/fibonacci'
+
+class FibonacciTestBenchmark &lt; Minitest::Benchmark
+  def setup
+    @recursive = Fibonacci::Command.new(Fibonacci::Recursive.new)
+    @loop = Fibonacci::Command.new(Fibonacci::Loop.new)
+    @general_term = Fibonacci::Command.new(Fibonacci::GeneralTerm.new)
+  end
+
+  def bench_recursive
+    assert_performance_constant do |_n|
+      1000.times do |i|
+        @recursive.exec(i)
+      end
+    end
+  end
+
+  def bench_loop
+    assert_performance_constant do |_n|
+      1000.times.each do |i|
+        @loop.exec(i)
+      end
+    end
+  end
+
+  def bench_general_term
+    assert_performance_constant do |_n|
+      1000.times.each do |i|
+        @general_term.exec(i)
+      end
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+</section>
+</section>
+</section>
+</article>

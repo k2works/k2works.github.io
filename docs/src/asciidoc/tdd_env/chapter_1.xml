@@ -1,0 +1,1397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="5"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>環境構築から始めるテスト駆動開発</title>
+<date>2020-04-21</date>
+</info>
+<section xml:id="_環境構築から始めるテスト駆動開発">
+<title>環境構築から始めるテスト駆動開発</title>
+<section xml:id="_6s">
+<title>6S</title>
+<simpara>環境構築をするにあたっては <emphasis role="strong">5S</emphasis> + セキュリティの <emphasis role="strong">6S</emphasis> をベースに進めていきます。まず <emphasis role="strong">5S</emphasis> について、それからセキュリティについて解説します。</simpara>
+<section xml:id="_5s">
+<title>5S</title>
+<blockquote>
+<attribution>
+Wikipedia
+<citetitle><link xl:href="https://ja.wikipedia.org/wiki/5S">https://ja.wikipedia.org/wiki/5S</link></citetitle>
+</attribution>
+<simpara>5S（ごエス、ごーエス）とは、製造業・サービス業などの職場環境の維持改善で用いられるスローガンである。各職場において徹底されるべき事項を5つにまとめたもので、4S運動に「躾」（習慣化の場合もある）を加えた5項。</simpara>
+</blockquote>
+<simpara>具体的には、</simpara>
+<itemizedlist>
+<listitem>
+<simpara>整理（せいり、Seiri）
+いらないものを捨てる</simpara>
+</listitem>
+<listitem>
+<simpara>整頓（せいとん、Seiton）
+決められた物を決められた場所に置き、いつでも取り出せる状態にしておく</simpara>
+</listitem>
+<listitem>
+<simpara>清掃（せいそう、Seisou）
+常に掃除をする</simpara>
+</listitem>
+<listitem>
+<simpara>清潔（せいけつ、Seiketsu）
+3S（上の整理・整頓・清掃）を維持し職場の衛生を保つ</simpara>
+</listitem>
+<listitem>
+<simpara>躾（しつけ、Shitsuke）
+決められたルール・手順を正しく守る習慣をつける</simpara>
+</listitem>
+</itemizedlist>
+<simpara>これがプログラミング環境構築とどのように関係していくのでしょうか？まずは、いらないものを捨てるのが <emphasis role="strong">整理</emphasis> ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱っていけばよいでしょう？ここは、 <emphasis role="strong">分類するな。ひたすら並べよ</emphasis> の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして <emphasis role="strong">エンジニアリングデイブックス</emphasis> があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。</simpara>
+<simpara>Engineering Dayboks</simpara>
+<blockquote>
+<attribution>
+Pragmatic Programmer: your journey to mastery
+<citetitle>20th Anniversary Edition</citetitle>
+</attribution>
+<simpara>Eventually Dave asked the obvious question. It turned out that they’d been trained to keep an engineering daybook, a kind of journal in which they recorded what they did, things they’d learned, sketches of ideas, readings from meters: basically anything to do with their work. When the notebook became full, they’d write the date range on the spine, then stick it on the shelf next to previous daybooks. &#8230;&#8203;</simpara>
+</blockquote>
+<simpara>ノートは市販のものならどれでも構いませんがおすすめは <link xl:href="https://www.kokuyo-st.co.jp/stationery/softring-note/">ソフトリングノード</link> のB5サイズが手元に置いてもかさばらず使いやすいです。情報を一箇所に集めて必要なものと不要なものを分ける準備が出来ました。次は必要なものをすぐに取り出せるようにする <emphasis role="strong">整頓</emphasis> をどのように実践していくかを解説します。</simpara>
+<simpara><emphasis role="strong">整頓</emphasis> の基本は <emphasis role="strong">分類するな。ひたすら並べよ</emphasis> です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。具体的な方法は都度解説していきます。</simpara>
+<blockquote>
+<attribution>
+Pragmatic Programmer: your journey to mastery
+<citetitle>20th Anniversary Edition</citetitle>
+</attribution>
+<simpara>Name Well; Rename When Needed.</simpara>
+<simpara>Name to express your intent to readers, and rename as soon as that intent shifts.</simpara>
+</blockquote>
+<simpara>基本は実践しなければ意味がありません。そして習慣にすることで初めてものにできるものです。そのためには自ら躾けて習慣化していかなければなりません。</simpara>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。</simpara>
+</blockquote>
+<blockquote>
+<attribution>
+リファクタリング(第2版)
+</attribution>
+<simpara>ここで、Kent Beckが自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。</simpara>
+</blockquote>
+</section>
+<section xml:id="_セキュリティ_security">
+<title>セキュリティ(Security)</title>
+<simpara><emphasis role="strong">5S</emphasis> に続いてセキュリティに関してですがここで扱う内容は <emphasis role="strong">情報セキュリティ</emphasis> に関する内容です。</simpara>
+<blockquote>
+<attribution>
+Wikipedia
+<citetitle><link xl:href="https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3">https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3</link></citetitle>
+</attribution>
+<simpara>情報セキュリティ（じょうほうセキュリティ、英: information security）とは、情報の機密性、完全性、可用性を維持すること。</simpara>
+</blockquote>
+<simpara>ここではパスワードに関する基本だけ抑えておいてください。</simpara>
+<blockquote>
+<attribution>
+子どもに「パスワード」の付け方を教えられますか？
+<citetitle><link xl:href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html">子どもを守るITリテラシー学</link></citetitle>
+</attribution>
+<itemizedlist>
+<listitem>
+<simpara>誕生日や電話番号など、親が見てパッと理解できる文字列はダメ</simpara>
+</listitem>
+<listitem>
+<simpara>1単語で“読めてしまう”文字列はダメ</simpara>
+</listitem>
+<listitem>
+<simpara>8文字以下の文字列は短すぎるからダメ</simpara>
+</listitem>
+</itemizedlist>
+</blockquote>
+<simpara>実際にパスワードを設定するときは</simpara>
+<blockquote>
+<attribution>
+子どもに「パスワード」の付け方を教えられますか？
+<citetitle><link xl:href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html">子どもを守るITリテラシー学</link></citetitle>
+</attribution>
+<itemizedlist>
+<listitem>
+<simpara>サービスごとに、3単語以上の英文字を並べる（例：pekinese-optimal-start）</simpara>
+</listitem>
+<listitem>
+<simpara>なるべく長いパスワードを用意する（例：nagai-pasuwa-do-wo-youi-suru-amari-iirei-deha-naiga）</simpara>
+</listitem>
+<listitem>
+<simpara>辞書に載っていないような文字列を用意する（例：Itags80vZyMp）</simpara>
+</listitem>
+</itemizedlist>
+</blockquote>
+<simpara>を参考にしてください。</simpara>
+</section>
+<section xml:id="_itリテラシ">
+<title>ITリテラシ</title>
+<simpara>以上がプログラミング環境構築にあたっての基本となる考えです。この記事では6Sを軸としたソフトウェア開発のための <emphasis role="strong">ITリテラシ</emphasis> 習得のベースとなる環境構築をすることを目的としています。</simpara>
+<blockquote>
+<attribution>
+https://t-wada.hatenablog.jp/entry/clean-code-that-works
+</attribution>
+<simpara>今日のソフトウェア開発の世界において絶対になければならない3つの技術的な柱があります。 三本柱と言ったり、三種の神器と言ったりしていますが、それらは</simpara>
+<itemizedlist>
+<listitem>
+<simpara>バージョン管理</simpara>
+</listitem>
+<listitem>
+<simpara>テスティング</simpara>
+</listitem>
+<listitem>
+<simpara>自動化</simpara>
+</listitem>
+</itemizedlist>
+<simpara>の3つです。</simpara>
+</blockquote>
+</section>
+</section>
+<section xml:id="_アカウントの登録">
+<title>アカウントの登録</title>
+<simpara>まず各種サービスのアカウントを登録します。ここでは以下のアカウント設定で作業を進めていきますが各自作業の際は読み替えてください。</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="50*"/>
+<colspec colname="col_2" colwidth="50*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Microsft</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="mailto:newbie4649@outlook.jp">newbie4649@outlook.jp</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Google</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="mailto:newbie4649@gmail.com">newbie4649@gmail.com</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>GitHub</simpara></entry>
+<entry align="left" valign="top"><simpara>newbie4649</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Windows</simpara></entry>
+<entry align="left" valign="top"><simpara><link xl:href="mailto:newbie4649@outlook.jp">newbie4649@outlook.jp</link></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>WSL</simpara></entry>
+<entry align="left" valign="top"><simpara>newbie4649</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara>また、パスワードに関しては <emphasis role="strong">セキュリティ</emphasis> を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は <emphasis role="strong">エンジニアリングデイブックス</emphasis> に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ <emphasis role="strong">保存する場所は一箇所</emphasis> が原則です。</simpara>
+<section xml:id="_microsoftアカウントを作成する">
+<title>Microsoftアカウントを作成する</title>
+<simpara><link xl:href="https://signup.live.com/signup?wa=wsignin1.0&amp;rpsnv=13&amp;rver=7.3.6963.0&amp;wp=MBI_SSL&amp;wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&amp;id=74335&amp;aadredir=1&amp;contextid=E56866F842F4E143&amp;bk=1584685585&amp;uiflavor=web&amp;lic=1&amp;mkt=JA-JP&amp;lc=1041&amp;uaid=491fc017de0f48c5c67a3833e7aca9ee">アカウントの作成</link> から新しいメールアドレスを取得を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ms-001.png"/>
+</imageobject>
+<textobject><phrase>ms 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ms-002.png"/>
+</imageobject>
+<textobject><phrase>ms 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ms-003.png"/>
+</imageobject>
+<textobject><phrase>ms 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ms-004.png"/>
+</imageobject>
+<textobject><phrase>ms 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ms-005.png"/>
+</imageobject>
+<textobject><phrase>ms 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ms-006.png"/>
+</imageobject>
+<textobject><phrase>ms 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_googleアカウントを作成する">
+<title>Googleアカウントを作成する</title>
+<simpara><link xl:href="https://support.google.com/accounts/answer/27441?hl=ja">Google アカウントの作成</link> から <literal>Googleアカウントを作成する</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ggl-001.png"/>
+</imageobject>
+<textobject><phrase>ggl 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ggl-002.png"/>
+</imageobject>
+<textobject><phrase>ggl 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ggl-003.png"/>
+</imageobject>
+<textobject><phrase>ggl 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_githubアカウントを作成する">
+<title>GitHubアカウントを作成する</title>
+<simpara><link xl:href="https://github.co.jp/">GitHubに登録する</link> から <literal>GitHubに登録する</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ghb-001.png"/>
+</imageobject>
+<textobject><phrase>ghb 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ghb-002.png"/>
+</imageobject>
+<textobject><phrase>ghb 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>Freeプランを選択します</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ghb-003.png"/>
+</imageobject>
+<textobject><phrase>ghb 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_アカウントにサインインする">
+<title>アカウントにサインインする</title>
+<simpara><link xl:href="https://support.microsoft.com/ja-jp/help/4028195">Microsoft アカウントにサインインする方法</link> を参考にしてローカルアカウントからMicrosoftアカウントに切り替えます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/login-001.png"/>
+</imageobject>
+<textobject><phrase>login 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/login-002.png"/>
+</imageobject>
+<textobject><phrase>login 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/login-003.png"/>
+</imageobject>
+<textobject><phrase>login 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/login-004.png"/>
+</imageobject>
+<textobject><phrase>login 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/login-005.png"/>
+</imageobject>
+<textobject><phrase>login 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/login-006.png"/>
+</imageobject>
+<textobject><phrase>login 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/login-007.png"/>
+</imageobject>
+<textobject><phrase>login 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+</section>
+<section xml:id="_クラウドストレージのセットアップ">
+<title>クラウドストレージのセットアップ</title>
+<blockquote>
+<attribution>
+Pragmatic Programmer: your journey to mastery
+<citetitle>20th Anniversary Edition</citetitle>
+</attribution>
+<simpara>Keep Knowledge in Plain Text</simpara>
+<simpara>Plain text won&#8217;t become obsolete.It helps leverage your work and simplifies debugging and testing.</simpara>
+</blockquote>
+<simpara><link xl:href="https://products.office.com/ja-jp/home?SilentAuth=1">Office365</link> からOneDriveの設定を確認します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/drive-001.png"/>
+</imageobject>
+<textobject><phrase>drive 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/drive-002.png"/>
+</imageobject>
+<textobject><phrase>drive 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/drive-003.png"/>
+</imageobject>
+<textobject><phrase>drive 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>アカウントのパスワードなど機密情報は <link xl:href="https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4">Personal Vault で OneDrive ファイルを保護する</link> を使って管理すると良いでしょう。もしくは <link xl:href="https://1password.com/jp/">1Password</link> などパスワード管理ツールの導入を検討してください。</simpara>
+<simpara><link xl:href="https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive">PCのOneDrive</link> にあるようにデータはローカルとクラウドの両方にあるので破損・紛失をしても復旧することが出来ます。</simpara>
+</section>
+<section xml:id="_開発環境のセットアップ">
+<title>開発環境のセットアップ</title>
+<section xml:id="_パッケージ管理ツールのインストール">
+<title>パッケージ管理ツールのインストール</title>
+<simpara>アプリケーションの管理にはパッケージ管理ツール <link xl:href="https://chocolatey.org/">The Package Manager for Windows</link> を使います。インストールの方法は <link xl:href="https://qiita.com/konta220/items/95b40b4647a737cb51aa">Chocolateyを使った環境構築の時のメモ</link> を参照してください。</simpara>
+<simpara><literal>Get Started</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-001.png"/>
+</imageobject>
+<textobject><phrase>pkg 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>コードをコピーします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-002.png"/>
+</imageobject>
+<textobject><phrase>pkg 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>画面左下のスタートボタンを右クリックして <literal>Windows PowerSHell(管理者)(A)</literal> を起動してコピーしたコードを貼り付け実行します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-003.png"/>
+</imageobject>
+<textobject><phrase>pkg 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-004.png"/>
+</imageobject>
+<textobject><phrase>pkg 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-005.png"/>
+</imageobject>
+<textobject><phrase>pkg 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-006.png"/>
+</imageobject>
+<textobject><phrase>pkg 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_gitのインストール">
+<title>gitのインストール</title>
+<blockquote>
+<attribution>
+Pragmatic Programmer: your journey to mastery
+<citetitle>20th Anniversary Edition</citetitle>
+</attribution>
+<simpara>Always Use Version Control</simpara>
+<simpara>Vsersion control is a time machine for your work;you can go back.</simpara>
+</blockquote>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/git-001.png"/>
+</imageobject>
+<textobject><phrase>git 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>画面左下のスタートボタンを右クリックして <literal>Windows PowerSHell(管理者)(A)</literal> を起動して以下のコマンドを入力します。質問には全てYを入力してください。</simpara>
+<screen>choco install git</screen>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/git-002.png"/>
+</imageobject>
+<textobject><phrase>git 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_powershellcoreのインストール">
+<title>PowerShellCoreのインストール</title>
+<simpara>続いて、以下のコマンドを入力します。質問には全てYを入力してください。</simpara>
+<screen>choco install powershell-core</screen>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-001.png"/>
+</imageobject>
+<textobject><phrase>pwsh 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_windows_terminalのインストール">
+<title>Windows Terminalのインストール</title>
+<blockquote>
+<attribution>
+Pragmatic Programmer: your journey to mastery
+<citetitle>20th Anniversary Edition</citetitle>
+</attribution>
+<simpara>Use the Power of Command Shells</simpara>
+<simpara>Use the shell when graphical user interfaces don&#8217;t cut it.</simpara>
+</blockquote>
+<simpara>画面左下のスタートメニューから <literal>Microsft Store</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/terminal-001.png"/>
+</imageobject>
+<textobject><phrase>terminal 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>検索欄に <literal>terminal</literal> と入力したら表示されられる候補の中から <literal>Windows Terminal</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/terminal-002.png"/>
+</imageobject>
+<textobject><phrase>terminal 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>入手</literal> を押してアプリケーションをインストールします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/terminal-003.png"/>
+</imageobject>
+<textobject><phrase>terminal 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_wslのインストール">
+<title>WSLのインストール</title>
+<simpara>続いて、検索欄に <literal>ubuntu</literal> と入力して候補の中から <literal>Ubuntu</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-001.png"/>
+</imageobject>
+<textobject><phrase>wsl 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>入手を押してアプリケーションをインストールします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-002.png"/>
+</imageobject>
+<textobject><phrase>wsl 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>インストール後に起動を実行しても必要な設定があるため実行できません。一旦アプリケーションを閉じます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-003.png"/>
+</imageobject>
+<textobject><phrase>wsl 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>画面左下のスタートメニューから歯車のアイコンを選択してWindowsの設定画面を表示します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-004.png"/>
+</imageobject>
+<textobject><phrase>wsl 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>アプリ</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-005.png"/>
+</imageobject>
+<textobject><phrase>wsl 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>アプリと機能</literal> から <literal>プログラミングと機能</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-006.png"/>
+</imageobject>
+<textobject><phrase>wsl 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>Windows Subsystem for Linux</literal> にチェックを入れてOKボタンを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-007.png"/>
+</imageobject>
+<textobject><phrase>wsl 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>今すぐ再起動</literal> を押してWindowsを再起動します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-008-1.png"/>
+</imageobject>
+<textobject><phrase>wsl 008 1</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>画面左下のスタートメニューから <literal>Ubuntu</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-008-2.png"/>
+</imageobject>
+<textobject><phrase>wsl 008 2</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>セットアップが始まるのでユーザーIDとパスワードを設定してください。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-009.png"/>
+</imageobject>
+<textobject><phrase>wsl 009</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-010.png"/>
+</imageobject>
+<textobject><phrase>wsl 010</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+</section>
+<section xml:id="_エディタのセットアップ">
+<title>エディタのセットアップ</title>
+<blockquote>
+<attribution>
+Pragmatic Programmer: your journey to mastery
+<citetitle>20th Anniversary Edition</citetitle>
+</attribution>
+<simpara>Achieve Editor Fluency</simpara>
+<simpara>An editor is your most important tool. Know how to make it do what you need, quickly and accurately.</simpara>
+</blockquote>
+<section xml:id="_インストール">
+<title>インストール</title>
+<simpara><link xl:href="https://aka.ms/vscode-java-installer-win">Download Visual Studio Code Java Pack Installer</link> からVSCodeをダウンロードしてセットアッププログラムを実行します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/vscode-001.png"/>
+</imageobject>
+<textobject><phrase>vscode 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/vscode-002.png"/>
+</imageobject>
+<textobject><phrase>vscode 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/vscode-003.png"/>
+</imageobject>
+<textobject><phrase>vscode 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_設定">
+<title>設定</title>
+<simpara>エディタが起動すると画面右下にWSL拡張機能インストールのポップアップが表示されるので <literal>Install</literal> を押して拡張機能をインストールします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/setting-001.png"/>
+</imageobject>
+<textobject><phrase>setting 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>続いて画面左下の歯車を選択してメニューから <literal>Settings</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/setting-002.png"/>
+</imageobject>
+<textobject><phrase>setting 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>検索欄に <literal>trim</literal> と入力します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/setting-003.png"/>
+</imageobject>
+<textobject><phrase>setting 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>チェックをオンにします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/setting-004.png"/>
+</imageobject>
+<textobject><phrase>setting 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>同様に検索欄に <literal>format on save</literal> と入力してチェックをオンにします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/setting-005.png"/>
+</imageobject>
+<textobject><phrase>setting 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>必要に応じてキーバインドなども自分が使いやすいようにカスタマイズします。</simpara>
+<itemizedlist>
+<listitem>
+<simpara><link xl:href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503">Visual Studio Codeで簡単にショートカットキーを変更する方法</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://loumo.jp/wp/archive/20191125120000/">VSCode 内蔵ターミナルで ctrl-p などのショートカットキーを利用する方法</link></simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_拡張機能の追加">
+<title>拡張機能の追加</title>
+<simpara>エディタのメニューが英語なので日本語に変更する拡張機能をインストールします。</simpara>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja">Japanese Language Pack for Visual Studio Code</link></simpara>
+<simpara>画面左のExtensionアイコンを選択して検索欄に <literal>japanese</literal> と入力したら日本語拡張パッケージが表示されるので <literal>Install</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/package-001.png"/>
+</imageobject>
+<textobject><phrase>package 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>Restart Now</literal> を押してエディタを再起動します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/package-002.png"/>
+</imageobject>
+<textobject><phrase>package 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>メニューが日本語になりました。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/package-003.png"/>
+</imageobject>
+<textobject><phrase>package 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>同様の手順で以下の拡張機能をインストールします。</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons">vscode-icons</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens">GitLens</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode">Prettier</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory">Git History</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer">Bracket Pair Colorizer</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks">Bookmarks</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight">TODO Highlight</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=ionutvmi.path-autocomplete">Path Autocomplete</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv">Rainbow CSV</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=ryu1kn.partial-diff">Partial Diff</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-duplicate">Duplicate action</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github">GitHub Pull Requests</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore">gitignore</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus">Todo+</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer">Output Colorizer</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces">Trailing Spaces</link></simpara>
+</listitem>
+</orderedlist>
+</section>
+<section xml:id="_設定の同期">
+<title>設定の同期</title>
+<simpara>エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。</simpara>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync">Settings Sync</link> をインストールすると以下の画面が表示されるので <literal>LOGIN WITH GITHUB</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-001.png"/>
+</imageobject>
+<textobject><phrase>sync 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>アクセスを許可する</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-002.png"/>
+</imageobject>
+<textobject><phrase>sync 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>開く</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-003.png"/>
+</imageobject>
+<textobject><phrase>sync 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ブラウザが起動するので <literal>Authorize</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-004.png"/>
+</imageobject>
+<textobject><phrase>sync 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-005.png"/>
+</imageobject>
+<textobject><phrase>sync 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>SKIP</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-006.png"/>
+</imageobject>
+<textobject><phrase>sync 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>エディタメニューの <literal>表示</literal> から <literal>コマンドパレット</literal> を選択して <literal>Sync</literal> と入力して入力候補の中から <literal>アップデート・アップロードの設定</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-007.png"/>
+</imageobject>
+<textobject><phrase>sync 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>はい</literal> を押して設定をアップロードします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-008.png"/>
+</imageobject>
+<textobject><phrase>sync 008</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから <literal>Sync: 設定をダウンロード</literal> を選択します。</simpara>
+<simpara>もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-009.png"/>
+</imageobject>
+<textobject><phrase>sync 009</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/sync-010.png"/>
+</imageobject>
+<textobject><phrase>sync 010</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_hello_world">
+<title>Hello world</title>
+<section xml:id="_プログラムを作成する">
+<title>プログラムを作成する</title>
+<simpara>エディタのセットアップが出来たのでかんたんなプログラムを作ってみましょう。
+お題は <link xl:href="https://ja.wikipedia.org/wiki/Hello_world">Hello world</link> です。
+まず、プログラムを作成する場所ですが今回はディスクトップの直下に <literal>Projects</literal> というフォルダを作成してその中に配置したいと思います。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-001.png"/>
+</imageobject>
+<textobject><phrase>hello 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>Projects</literal> フォルダの中に <literal>PowerShell</literal> フォルダを作成します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-002.png"/>
+</imageobject>
+<textobject><phrase>hello 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-003.png"/>
+</imageobject>
+<textobject><phrase>hello 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>エディタを起動します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-004.png"/>
+</imageobject>
+<textobject><phrase>hello 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>エディタを起動したらエクスプローラアイコンから <literal>フォルダを開く</literal> を選択して作成したフォルダを開きます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-005.png"/>
+</imageobject>
+<textobject><phrase>hello 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-007.png"/>
+</imageobject>
+<textobject><phrase>hello 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>フォルダを開いたらファイルアイコンを選択して <literal>HelloWorld.ps1</literal> ファイルを作成します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-008.png"/>
+</imageobject>
+<textobject><phrase>hello 008</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-009.png"/>
+</imageobject>
+<textobject><phrase>hello 009</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>まず、以下のコードを入力してキーボードのF5を押します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $false
+    }
+}</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-010.png"/>
+</imageobject>
+<textobject><phrase>hello 010</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>プログラムの実行と一緒にテストの実行結果が表示されます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-011.png"/>
+</imageobject>
+<textobject><phrase>hello 011</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>テストが通るように修正します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+}</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-012.png"/>
+</imageobject>
+<textobject><phrase>hello 012</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>テスティングフレームワークの動作が確認できたのでプログラム作成に入ります。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-013.png"/>
+</imageobject>
+<textobject><phrase>hello 013</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>HelloWorld</literal> 関数を追加します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
+}</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-014.png"/>
+</imageobject>
+<textobject><phrase>hello 014</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>F5キーを押してテストが通ったことを確認したらテストケースを追加します。もしテストが失敗するようなら保存のタイミングあっていない場合があるので再度F5キーを押して実行してみてください。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld {
+    return "Hello from PowerShell"
+}</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-015.png"/>
+</imageobject>
+<textobject><phrase>hello 015</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>HelloWorld</literal> 関数は既定の挨拶しか返さないのでテストが失敗します。</simpara>
+<screen>...
+Describing HelloWorld
+ [+] 何か便利なものだ 41ms
+ [+] 簡単な挨拶を返す 12ms
+ [-] 指定された名前で挨拶を返す 56ms
+   Expected string length 17 but was 21. Strings differ at index 11.
+   Expected: {Hello from VSCode}
+   But was:  {Hello from PowerShell}
+   ----------------------^
+...</screen>
+<simpara><literal>HelloWorld</literal> 関数に引数を追加して表示できるように変更します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld($name) {
+    return "Hello from $name"
+}</programlisting>
+<simpara>F5を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-016.png"/>
+</imageobject>
+<textobject><phrase>hello 016</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>指定された名前で挨拶を返す</literal> テストは通りましたが今度は <literal>簡単な挨拶を返す</literal> テストが失敗してしまいました。</simpara>
+<screen>Describing HelloWorld
+ [+] 何か便利なものだ 39ms
+ [-] 簡単な挨拶を返す 23ms
+   Expected string length 21 but was 11. Strings differ at index 11.
+   Expected: {Hello from PowerShell}
+   But was:  {Hello from }
+   ----------------------^
+...
+ [+] 指定された名前で挨拶を返す 29ms
+...</screen>
+<simpara><literal>HelloWorld</literal> 関数にデフォルト引数を設定してテストを通るようにします。</simpara>
+<screen>Describe "HelloWorld" {
+    It "何か便利なものだ" {
+        $true | Should Be $true
+    }
+    It "簡単な挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld($name = "PowerShell") {
+    return "Hello from $name"
+}</screen>
+<simpara>F5を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-017.png"/>
+</imageobject>
+<textobject><phrase>hello 017</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。</simpara>
+<screen>Describe "HelloWorld" {
+    It "何も指定されていない場合は既定の挨拶を返す" {
+        HelloWorld | Should Be "Hello from PowerShell"
+    }
+    It "指定された名前で挨拶を返す" {
+        HelloWorld "VSCode" | Should Be "Hello from VSCode"
+    }
+}
+
+function HelloWorld($name = "PowerShell") {
+    return "Hello from $name"
+}</screen>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-018.png"/>
+</imageobject>
+<textobject><phrase>hello 018</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>HelloWorld</literal> プログラムの完成です。</simpara>
+</section>
+<section xml:id="_プログラムをデバッグする">
+<title>プログラムをデバッグする</title>
+<simpara>プログラムを作成していると思った通りに動かないことが多々あります。そのようなときにプログラムの動作を確認するにはエディタのデバッグ機能を使います。</simpara>
+<simpara>まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-019.png"/>
+</imageobject>
+<textobject><phrase>hello 019</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-020.png"/>
+</imageobject>
+<textobject><phrase>hello 020</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>画面上の実行ボタンを押すと次のブレークポイントに移動します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-021.png"/>
+</imageobject>
+<textobject><phrase>hello 021</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-022.png"/>
+</imageobject>
+<textobject><phrase>hello 022</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-023.png"/>
+</imageobject>
+<textobject><phrase>hello 023</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>デバッガを終了するには終了ボタンを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-024.png"/>
+</imageobject>
+<textobject><phrase>hello 024</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ブレークポイントを再度押すことで解除ができます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-025.png"/>
+</imageobject>
+<textobject><phrase>hello 025</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_プログラムをレポジトリに保存する">
+<title>プログラムをレポジトリに保存する</title>
+<simpara>作成したプログラムをレポジトリに保存します。まずソース管理アイコンを選択して <literal>リポジトリを初期化する</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-026.png"/>
+</imageobject>
+<textobject><phrase>hello 026</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-027.png"/>
+</imageobject>
+<textobject><phrase>hello 027</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>変更をステージ</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-028.png"/>
+</imageobject>
+<textobject><phrase>hello 028</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>変更内容を入力します。ここでは <literal>feat: HelloWorld</literal> を入力しておきます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-029.png"/>
+</imageobject>
+<textobject><phrase>hello 029</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>コミット</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-030.png"/>
+</imageobject>
+<textobject><phrase>hello 030</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>初回登録時は以下の警告が表示されるので追加作業が必要になります。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-031-1.png"/>
+</imageobject>
+<textobject><phrase>hello 031 1</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-031-2.png"/>
+</imageobject>
+<textobject><phrase>hello 031 2</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>以下のコマンドをターミナルに入力します。</simpara>
+<screen>git config --global user.name "newbie4649"
+git config --global user.email newbie4649@outlook.jp</screen>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-032.png"/>
+</imageobject>
+<textobject><phrase>hello 032</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>再度 <literal>コミット</literal> を押してレポジトリに保存します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-033.png"/>
+</imageobject>
+<textobject><phrase>hello 033</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>レポジトリの記録内容は <literal>GitLens</literal> から確認することが出来ます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-034.png"/>
+</imageobject>
+<textobject><phrase>hello 034</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+</section>
+</section>
+<section xml:id="_開発言語のセットアップ">
+<title>開発言語のセットアップ</title>
+<simpara>Unresolved directive in chapter_1.adoc - include::episode_0_win.adoc[]
+Unresolved directive in chapter_1.adoc - include::episode_0_wsl.adoc[]</simpara>
+</section>
+<section xml:id="_参照">
+<title>参照</title>
+<itemizedlist>
+<listitem>
+<simpara><link xl:href="https://roadmap.sh/">Developer Roadmaps</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://github.com/kamranahmedse/developer-roadmap">WEB DEVELOPER ROADMAP - 2020</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://note.com/yukionoguchi/n/n6fa36e6aff86">「超」整理法の思想</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://at-jinji.jp/work/007">効率的な文書管理方法とは。保管方法、運用ルール作りの3ステップを紹介</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://at-jinji.jp/blog/11259/">書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/">The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html">子どもを守るITリテラシー学</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://jaminlifelog.com/notes/work/clean-desktop-files">フォルダ管理の基本ルール5選！整理されていないデスクトップにさよならバイバイ！</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create">新しい Microsoft アカウントを作成する方法</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/kikutaro/items/0e5deb36047d0137a767">Java開発環境がすぐに作れる「Visual Studio Code Installer for Java」を試してみた</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://code.visualstudio.com/docs/languages/java">Java in Visual Studio Code</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e">WSL (Windows Subsystem for Linux)の基本メモ</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/">Practical PowerShell Unit-Testing: Getting Started</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/y-tsutsu/items/179717ecbdcc27509e5a">日頃お世話になっているElectronのアプリ開発に入門してみる</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/kai_kou/items/ceeee47996339e5eecc4">VSCodeの拡張機能「GIST」が便利すぎてHackMDを使うのをやめた</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234">VSCodeのオススメ拡張機能 24 選 (とTipsをいくつか)</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/n_oshiumi/items/1ad3f55d58f2d9d48d1e">VScodeで保存時に自動で空白を削除しよう！</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/mitashun/items/e2f118a9ca7b96b97840">Visual Studio Codeで保存時自動整形の設定方法</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28">VisualStudioCode でRubyの開発環境を作る</link></simpara>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+</article>

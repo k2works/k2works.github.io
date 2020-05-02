@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Ruby環境のセットアップ(WSL版)</title>
+<date>2020-04-21</date>
+</info>
+<section xml:id="_ruby環境のセットアップ_wsl版">
+<title>Ruby環境のセットアップ(WSL版)</title>
+<simpara>画面左下の <literal>&gt;&lt;</literal> を押してメニューから <literal>Remote-WSL: New Window</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-001.png"/>
+</imageobject>
+<textobject><phrase>ruby 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>アクセスを許可する</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-002.png"/>
+</imageobject>
+<textobject><phrase>ruby 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>新しいウィンドウが立ち上がったらExtensionメニューから <literal>Install Local Extensions in "WSL: Ubuntu'&#8230;&#8203;"</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-003.png"/>
+</imageobject>
+<textobject><phrase>ruby 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>全てにチェックをしてインストールします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-004.png"/>
+</imageobject>
+<textobject><phrase>ruby 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>拡張機能のインストールが終わったら <literal>Reload Window</literal> を押して拡張機能を読み込みます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-005.png"/>
+</imageobject>
+<textobject><phrase>ruby 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_プロビジョニングの実行">
+<title>プロビジョニングの実行</title>
+<simpara>Ruby開発環境の自動構築をするため以下のレポジトリを自分のレポジトリにフォークします。</simpara>
+<simpara><link xl:href="https://github.com/hiroshima-arc/tdd_rb">テスト駆動開発から始めるRuby入門</link></simpara>
+<simpara><literal>Fork</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-001.png"/>
+</imageobject>
+<textobject><phrase>provision 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>Fork</literal> が完了して自分のレポジトリにコピーされたら <literal>Clone or download</literal> を押してレポジトリのURLをコピーします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-002.png"/>
+</imageobject>
+<textobject><phrase>provision 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>エクスプローラアイコンメニューから <literal>レポジトリをクローンする</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-003.png"/>
+</imageobject>
+<textobject><phrase>provision 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>先程コピーしたレポジトリのURLを貼り付けます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-004.png"/>
+</imageobject>
+<textobject><phrase>provision 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>保存先はそのままで <literal>OK</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-005.png"/>
+</imageobject>
+<textobject><phrase>provision 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>開く</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-006.png"/>
+</imageobject>
+<textobject><phrase>provision 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>メニューから <literal>ターミナル</literal> <literal>新しいターミナル</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-007-1.png"/>
+</imageobject>
+<textobject><phrase>provision 007 1</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-007-2.png"/>
+</imageobject>
+<textobject><phrase>provision 007 2</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ターミナルに以下のコマンドを入力します。実行時にパスワード入力が求められるのでWSLで設定したパスワードを入力してください。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ sudo apt-get update -y
+[sudo] password for newbie4649:</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-008.png"/>
+</imageobject>
+<textobject><phrase>provision 008</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>続いて、ターミナルに以下のコマンドを入力します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ sudo apt install ansible -y</programlisting>
+<simpara>続いて、エクスプローラから　<literal>provisioning/vars/site.yml</literal> をファイルを開いて <literal>user:</literal> の名前をWSLで設定したユーザーIDに変更します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-009.png"/>
+</imageobject>
+<textobject><phrase>provision 009</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>変更を保存したらターミナルに以下のコマンドを入力します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ cd provisioning/tasks/
+$ sudo ansible-playbook --inventory=localhost, --connection=local site.yml</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-010.png"/>
+</imageobject>
+<textobject><phrase>provision 010</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>セットアップが完了したらエディタを再起動してプロジェクトを開きます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-010-2.png"/>
+</imageobject>
+<textobject><phrase>provision 010 2</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>以下のコマンドを入力してRubyがセットアップされていることを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby -v</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-011.png"/>
+</imageobject>
+<textobject><phrase>provision 011</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>続いて、ターミナルに以下のコマンドを入力します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ code ~/.bashrc</programlisting>
+<simpara>表示されたファイルの一番最後に以下のコードを追加して保存します。</simpara>
+<screen>...
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] &amp;&amp; \. "$NVM_DIR/bash_completion" # This loads nvm bash_compl</screen>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-012.png"/>
+</imageobject>
+<textobject><phrase>provision 012</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>保存したら以下のコマンドを実行してNode.jsのバージョンが表示されたらセットアップ完了です。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ source ~/.bashrc
+$ nvm install --lts
+$ node -v</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/provision-013.png"/>
+</imageobject>
+<textobject><phrase>provision 013</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_追加パッケージのインストール">
+<title>追加パッケージのインストール</title>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby">Ruby for Visual Studio Code</link></simpara>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=castwide.solargraph">Ruby Solargraph</link></simpara>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise">vscode-endwise</link></simpara>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop">ruby-rubocop</link></simpara>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer">Test Explorer UI</link></simpara>
+<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter">Ruby Test Explorer</link></simpara>
+<simpara>ターミナルに以下のコマンドを入力します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">gem install rubocop
+gem install debase
+gem install ruby-debug-ide
+gem install solargraph</programlisting>
+</section>
+<section xml:id="_hello_world">
+<title>Hello world</title>
+<section xml:id="_プログラムを作成する">
+<title>プログラムを作成する</title>
+<simpara><literal>REAMD.md</literal> を選択してから <literal>新しいファイル</literal> 作成アイコンを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-001.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ファイル名は <literal>main.rb</literal> とします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-002.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ファイルに以下のコードを入力したらRunアイコンを選択して <literal>create a launch.json file</literal> を押してメニューからRubyを選択します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, false)
+  end
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-003.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>Debug Local File</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-004.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>launch.json</literal> ファイルが作成されたら <literal>main.rb</literal> タブに戻ってF5キーを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-005.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>デバッグコンソールに実行結果が表示されれば準備完了です。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-006.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>テストをパスするようにコードを修正してF5キーを押します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-007.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>テスティングフレームワークの動作が確認できたので <literal>hello_world</literal> 関数の作成に入ります。まず以下のコードを追加してF5キーを押してテストが失敗することを確認します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-008.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 008</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>hello_world</literal> 関数を追加してテストをパスさせます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+
+def hello_world
+  'Hello from Ruby'
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-009.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 009</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>指定された名前で挨拶を返すようにします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world
+  "Hello from Ruby"
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-010.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 010</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>関数に引数を追加します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name)
+  "Hello from #{name}"
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-011.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 011</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>指定された名前で挨拶を返す</literal> テストはパスしましたが今度は <literal>簡単な挨拶を返す</literal> テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-012.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 012</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'minitest/autorun'
+
+class TestHelloWorld &lt; Minitest::Test
+  def test_何も指定されていない場合は既定の挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end</programlisting>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-hello-013.png"/>
+</imageobject>
+<textobject><phrase>ruby hello 013</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_プログラムをデバッグする">
+<title>プログラムをデバッグする</title>
+<simpara>まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-debug-001.png"/>
+</imageobject>
+<textobject><phrase>ruby debug 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-debug-002.png"/>
+</imageobject>
+<textobject><phrase>ruby debug 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>画面上の実行ボタンを押すと次のブレークポイントに移動します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-debug-003.png"/>
+</imageobject>
+<textobject><phrase>ruby debug 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>デバッガを終了するには終了ボタンを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-debug-004.png"/>
+</imageobject>
+<textobject><phrase>ruby debug 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ブレークポイントを再度押すことで解除ができます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-debug-005.png"/>
+</imageobject>
+<textobject><phrase>ruby debug 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_プログラムをレポジトリに保存する">
+<title>プログラムをレポジトリに保存する</title>
+<simpara><literal>全ての変更をステージ</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-git-001.png"/>
+</imageobject>
+<textobject><phrase>ruby git 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>変更内容に <literal>feat: HelloWorld</literal> と入力して <literal>コミット</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-git-002.png"/>
+</imageobject>
+<textobject><phrase>ruby git 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>変更内容は <literal>GitLens</literal> から確認できます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-git-003.png"/>
+</imageobject>
+<textobject><phrase>ruby git 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+</section>
+</article>
