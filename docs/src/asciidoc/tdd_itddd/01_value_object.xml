@@ -1,0 +1,1220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="5"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>ユーザーストーリー</title>
+<date>2020-04-21</date>
+</info>
+<section xml:id="_ユーザーストーリー">
+<title>ユーザーストーリー</title>
+<simpara>まず <emphasis role="strong">ユーザーストーリー</emphasis> をもとに仕様を整理します。</simpara>
+<blockquote>
+<attribution>
+Martin Fowler's Bliki (ja)
+<citetitle><link xl:href="https://bliki-ja.github.io/UserStory">https://bliki-ja.github.io/UserStory</link></citetitle>
+</attribution>
+<simpara>ユーザーストーリーとは、ソフトウェアシステムに求められるふるまいをまとめたものだ。アジャイルソフトウェア開発の世界で広く使われており、大量の機能を細かく分解して計画作りに生かせるようにしている。 同じような概念を表す用語としてフィーチャーという言い方もあるが、 最近のアジャイル界隈では「ストーリー」とか「ユーザーストーリー」とかいう用語のほうが広まっている。</simpara>
+</blockquote>
+<simpara>SNS(ソーシャルネットワークサービス)のユーザー機能ということなので以下の <emphasis role="strong">ユーザーストーリー</emphasis> を作成しました。</simpara>
+<literallayout class="monospaced">利用者として
+ユーザーを管理できるようにしたい
+なぜならユーザーはシステムを利用するために必要だから</literallayout>
+</section>
+<section xml:id="_todoリスト">
+<title>TODOリスト</title>
+<simpara><emphasis role="strong">ユーザーストーリー</emphasis> を作成したらそれをもとに <emphasis role="strong">TODOリスト</emphasis> を作成します。<?asciidoc-br?>
+<emphasis role="strong">TODOリスト</emphasis> はプログラムとして実行できる粒度で具体的に記述します。</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_仮実装">
+<title>仮実装</title>
+<section xml:id="_ユーザーを登録する">
+<title>ユーザーを登録する</title>
+<simpara>さっそく <emphasis role="strong">TODOリスト</emphasis> の１つ目を片付けましょう。<?asciidoc-br?>
+まずは <emphasis role="strong">テストファースト</emphasis> で最初に失敗するコードを書きます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class HelloTest &lt; Minitest::Test
+  def test_greeting
+    assert_equal 'hello world', greeting
+  end
+end
+
+def greeting
+  'hello world'
+end</programlisting>
+<simpara>サンプルコードを以下のコードに書き換えてテストを実行します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def test_IDと名前を持ったユーザーを作成する
+    user = User.new
+    assert_equal '1', user.id
+    assert_equal 'Bob', user.name
+  end
+end</programlisting>
+<simpara>テストは失敗しました。 <literal>NameError: uninitialized constant UserTest::User</literal> クラスが定義されていないからですね。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/hello_test.rb
+Started with run options --seed 44125
+
+UserTest
+  test_IDと名前を持ったユーザーを作成する                                        ERROR (0.00s)
+Minitest::UnexpectedError:         NameError: uninitialized constant UserTest::User
+            test/hello_test.rb:7:in test_IDと名前を持ったユーザーを作成する
+
+
+Finished in 0.00135s
+1 tests, 0 assertions, 0 failures, 1 errors, 0 skips</programlisting>
+<simpara>テストをパスさせるためにUserクラスを追加します。<?asciidoc-br?>
+まずはテストをパスさせるために <emphasis role="strong">仮実装</emphasis> でベタ書きのコードを実装します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def test_IDと名前を持ったユーザーを作成する
+    user = User.new
+    assert_equal '1', user.id
+    assert_equal 'Bob', user.name
+  end
+end
+
+class User
+  attr_accessor :id, :name
+
+  def initialize
+    @id = '1'
+    @name = 'Bob'
+  end
+end</programlisting>
+<simpara>テストをパスさせてレッドからグリーンになりました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/hello_test.rb
+Started with run options --seed 55832
+
+UserTest
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00072s
+1 tests, 2 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+</section>
+<section xml:id="_仮実装から実装へ">
+<title>仮実装から実装へ</title>
+<section xml:id="_ユーザーを登録する_2">
+<title>ユーザーを登録する</title>
+<simpara>テストは通りましたがコードはベタ書きのままです。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def test_IDと名前を持ったユーザーを作成する
+    user = User.new
+    assert_equal '1', user.id
+    assert_equal 'Bob', user.name
+  end
+end
+
+class User
+  attr_accessor :id, :name
+
+  def initialize
+    @id = '1'
+    @name = 'Bob'
+  end
+end</programlisting>
+<simpara><emphasis role="strong">仮実装</emphasis> のままでは別のユーザーを作ることが出来ないので、コンストラクタ経由で作成できるようにします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def test_IDと名前を持ったユーザーを作成する
+    user = User.new('1', 'Bob')
+    assert_equal '1', user.id
+    assert_equal 'Bob', user.name
+  end
+end
+
+class User
+  attr_accessor :id, :name
+
+  def initialize(id, name)
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>テストが通りました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/hello_test.rb
+Started with run options --seed 6402
+
+UserTest
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00089s
+1 tests, 2 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara><emphasis role="strong">仮実装から実装へ</emphasis> を経て一つ目の <emphasis role="strong">TODOリスト</emphasis> を片付けたのでここでバージョン管理システムを使ってコミットしておきます。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ git add .
+$ git commit -m 'test: ユーザーを登録する'</programlisting>
+<simpara>以下、 <emphasis role="strong">TODOリスト</emphasis> を片付けるたびにコミットしていきます。</simpara>
+</section>
+</section>
+<section xml:id="_リファクタリング">
+<title>リファクタリング</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara>レッド・グリーンときたので続いて <emphasis role="strong">リファクタリング</emphasis> を実施します。</simpara>
+<section xml:id="_メソッドの抽出">
+<title>メソッドの抽出</title>
+<simpara>本来はコードの重複が発生してからやるのですが今回は予め <emphasis role="strong">メソッドの抽出</emphasis> を適用してフィクスチャーを抽出しておきます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def test_IDと名前を持ったユーザーを作成する
+    user = User.new('1', 'Bob')
+    assert_equal '1', user.id
+    assert_equal 'Bob', user.name
+  end
+end</programlisting>
+<simpara>Rubyのテスティングフレームワークminitestではフィクスチャーはsetupメソッドです。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    @user = User.new('1', 'Bob')
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id
+    assert_equal 'Bob', @user.name
+  end
+end</programlisting>
+<simpara>テストが壊れていないことを確認したらコミットします。</simpara>
+</section>
+</section>
+<section xml:id="_明白な実装">
+<title>明白な実装</title>
+<simpara>続いて <emphasis role="strong">TODOリスト</emphasis> を追加します。</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10063; <emphasis role="strong">ユーザー名が３文字未満の場合はエラー</emphasis></simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<section xml:id="_ユーザーを登録する_3">
+<title>ユーザーを登録する</title>
+<simpara>追加した <emphasis role="strong">TODOリスト</emphasis> に取り掛かります。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    @user = User.new('1', 'Bob')
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id
+    assert_equal 'Bob', @user.name
+  end
+end
+
+class User
+  attr_accessor :id, :name
+
+  def initialize(id, name)
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>まず、失敗するテストを書いて <emphasis role="strong">明白な実装</emphasis> でテストをパスするようにします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    @user = User.new('1', 'Bob')
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id
+    assert_equal 'Bob', @user.name
+  end
+
+  def test_ユーザー名が３文字未満の場合はエラー
+    e = assert_raises RuntimeError do
+      User.new('1', 'a')
+    end
+
+    assert_equal 'ユーザー名は3文字以上です。', e.message
+  end
+end
+
+class User
+  attr_accessor :id, :name
+
+  def initialize(id, name)
+    raise 'ユーザー名は3文字以上です。' if name.length &lt; 3
+
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>レッドからグリーンになったことを確認したらコミットします。</simpara>
+</section>
+</section>
+<section xml:id="_リファクタリング_2">
+<title>リファクタリング</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara>レッド・グリーン・リファクタリングです。</simpara>
+<section xml:id="_クラスの抽出">
+<title>クラスの抽出</title>
+<simpara><emphasis role="strong">クラスの抽出</emphasis> を適用して Userクラスから <emphasis role="strong">値オブジェクト</emphasis> を抽出する <emphasis role="strong">リファクタリング</emphasis> を適用します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    @user = User.new('1', 'Bob')
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id
+    assert_equal 'Bob', @user.name
+  end
+
+  def test_ユーザー名が３文字未満で新規登録する場合はエラー
+    e = assert_raises RuntimeError do
+      User.new(1, 'a')
+    end
+
+    assert_equal 'ユーザー名は3文字以上です。', e.message
+  end
+end
+
+class User
+  attr_accessor :id, :name
+
+  def initialize(id, name)
+    raise 'ユーザー名は3文字以上です。' if name.length &lt; 3
+
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>まずはUserIdクラスを抽出します。テストコードをUserIdクラスを使って呼び出すように変更したらエラーを修正してグリーンの状態を維持します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    id = UserId.new('1')
+    @user = User.new(id, 'Bob')
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id.value
+    assert_equal 'Bob', @user.name
+  end
+...
+end
+
+class UserId
+  attr_accessor :value
+
+  def initialize(value)
+    @value = value
+  end
+end
+
+...</programlisting>
+<simpara>続いてUserNameクラスを抽出します。テストコードも同様に変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    id = UserId.new('1')
+    name = UserName.new('Bob')
+    @user = User.new(id, name)
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id.value
+    assert_equal 'Bob', @user.name.value
+  end
+...
+end
+
+...
+
+class UserName
+  attr_accessor :value
+
+  def initialize(value)
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end
+
+...</programlisting>
+<simpara>テストコードを修正してグリーンになったらコミットして <emphasis role="strong">クラスの抽出</emphasis> の <emphasis role="strong">リファクタリング</emphasis> 完了です。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ruby test/hello_test.rb
+Started with run options --seed 59746
+
+UserTest
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00071s
+2 tests, 4 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+<section xml:id="_setメソッドの削除">
+<title>setメソッドの削除</title>
+<simpara><emphasis role="strong">クラスの抽出</emphasis> により <emphasis role="strong">値オブジェクト</emphasis> を抽出することは出来ましたがインスタンスの値が変更可能な状態です。<?asciidoc-br?>
+<emphasis role="strong">setメソッドの削除</emphasis> を適用して <emphasis role="strong">値オブジェクト</emphasis> の要求を満たす不変オブジェクトに <emphasis role="strong">リファクタリング</emphasis> しましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    id = UserId.new('1')
+    name = UserName.new('Bob')
+    @user = User.new(id, name)
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id.value
+    assert_equal 'Bob', @user.name.value
+  end
+
+  def test_ユーザー名が３文字未満の場合はエラー
+    e = assert_raises RuntimeError do
+      UserName.new('a')
+    end
+
+    assert_equal 'ユーザー名は3文字以上です。', e.message
+  end
+end
+
+class UserId
+  attr_accessor :value
+
+  def initialize(value)
+    @value = value
+  end
+end
+
+class UserName
+  attr_accessor :value
+
+  def initialize(value)
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end
+
+class User
+  attr_accessor :id, :name
+
+  def initialize(id, name)
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>アックセッサメソッドを読み取り専用に変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+
+class UserId
+  attr_reader :value
+
+...
+end
+
+class UserName
+  attr_reader :value
+
+...
+end
+
+class User
+  attr_reader :id, :name
+
+...
+end</programlisting>
+<simpara>テストが壊れていないことを確認したらコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/hello_test.rb
+Started with run options --seed 62273
+
+UserTest
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00075s
+2 tests, 4 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+</section>
+<section xml:id="_例外ケース">
+<title>例外ケース</title>
+<simpara>正常系の実装が出来たので続いて例外系の実装に入りたいと思います。<?asciidoc-br?>
+まず <emphasis role="strong">TODOリスト</emphasis> を追加します。</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10063; <emphasis role="strong">ユーザー名が４文字の場合は登録される</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara>&#10063; <emphasis role="strong">ユーザー名を指定しない場合はエラー</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara>&#10063; <emphasis role="strong">IDを指定しない場合はエラー</emphasis></simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<section xml:id="_ユーザーを登録する_4">
+<title>ユーザーを登録する</title>
+<simpara>追加した <emphasis role="strong">TODOリスト</emphasis> をテストを壊さないように１つづつ片付けていくとしましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    id = UserId.new('1')
+    name = UserName.new('Bob')
+    @user = User.new(id, name)
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id.value
+    assert_equal 'Bob', @user.name.value
+  end
+
+  def test_ユーザー名が３文字未満の場合はエラー
+    e = assert_raises RuntimeError do
+      UserName.new('a')
+    end
+
+    assert_equal 'ユーザー名は3文字以上です。', e.message
+  end
+end
+
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    @value = value
+  end
+end
+
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end
+
+class User
+  attr_reader :id, :name
+
+  def initialize(id, name)
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>実装後のコードです。<?asciidoc-br?>
+実際は１つテストコードを追加したらプロダクトコードを実装してレッド・グリーンのサイクルを回しています。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    id = UserId.new('1')
+    name = UserName.new('Bob')
+    @user = User.new(id, name)
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id.value
+    assert_equal 'Bob', @user.name.value
+  end
+
+  def test_ユーザー名が３文字未満の場合はエラー
+    e = assert_raises RuntimeError do
+      UserName.new('a')
+    end
+
+    assert_equal 'ユーザー名は3文字以上です。', e.message
+  end
+
+  def test_ユーザー名が4文字の場合は登録される
+    user = User.new(UserId.new('1'), UserName.new('abcd'))
+    assert_equal 'abcd', user.name.value
+  end
+
+  def test_ユーザー名を指定しない場合はエラー
+    assert_raises RuntimeError do
+      UserName.new(nil)
+    end
+  end
+
+  def test_IDを指定しない場合はエラー
+    assert_raises RuntimeError do
+      UserId.new(nil)
+    end
+  end
+end
+
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+
+    @value = value
+  end
+end
+
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end
+
+class User
+  attr_reader :id, :name
+
+  def initialize(id, name)
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>例外系の機能を追加してテストもパスしたのでコミットします。</simpara>
+</section>
+</section>
+<section xml:id="_リファクタリング_3">
+<title>リファクタリング</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を指定しない場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が４文字の場合は登録される</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを指定しない場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara>今回はコードの可読性を改善する観点で <emphasis role="strong">リファクタリング</emphasis> を実施してみたいと思います。</simpara>
+<section xml:id="_メソッドのインライン化">
+<title>メソッドのインライン化</title>
+<simpara>テストコードが増えてきましたここでテストコードをグルーピングするため <emphasis role="strong">メソッドのインライン化</emphasis> を適用します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  def setup
+    id = UserId.new('1')
+    name = UserName.new('Bob')
+    @user = User.new(id, name)
+  end
+
+  def test_IDと名前を持ったユーザーを作成する
+    assert_equal '1', @user.id.value
+    assert_equal 'Bob', @user.name.value
+  end
+
+  def test_ユーザー名が３文字未満の場合はエラー
+    e = assert_raises RuntimeError do
+      UserName.new('a')
+    end
+
+    assert_equal 'ユーザー名は3文字以上です。', e.message
+  end
+
+  def test_ユーザー名が４文字の場合は登録される
+    user = User.new(UserId.new('1'), UserName.new('abcd'))
+    assert_equal 'abcd', user.name.value
+  end
+
+  def test_ユーザー名を指定しない場合はエラー
+    assert_raises RuntimeError do
+      UserName.new(nil)
+    end
+  end
+
+  def test_IDを指定しない場合はエラー
+    assert_raises RuntimeError do
+      UserId.new(nil)
+    end
+  end
+end
+
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+
+    @value = value
+  end
+end
+
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end
+
+class User
+  attr_reader :id, :name
+
+  def initialize(id, name)
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara>テストコードの構造を <emphasis role="strong">TODOリスト</emphasis> の構造に合わせることで可読性を改善します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(id, name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal '1', @user.id.value
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(UserId.new('1'), UserName.new('abcd'))
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+end
+
+...</programlisting>
+<simpara>実行結果もわかりやすいなりました。
+テストは壊れていないのでコミットします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/hello_test.rb
+Started with run options --seed 39340
+
+ユーザーを登録する
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+
+Finished in 0.00217s
+5 tests, 7 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+<section xml:id="_キーワード引数の導入">
+<title>キーワード引数の導入</title>
+<simpara>テストコードは読みやすくなりました。続いてプロダクトコードを改善しましょう。<?asciidoc-br?>
+動的言語であるRubyでは型を明示しないため引数の値がリテラルなのか <emphasis role="strong">値オブジェクト</emphasis> なのかメソッドの定義だけでは把握できません。<emphasis role="strong">キーワード引数の導入</emphasis> をしてできるだけ引数の型を把握しやすいように <emphasis role="strong">リファクタリング</emphasis> しましょう。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(id, name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal '1', @user.id.value
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(UserId.new('1'), UserName.new('abcd'))
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+end
+
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+
+    @value = value
+  end
+end
+
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end
+
+class User
+  attr_reader :id, :name
+
+  def initialize(id, name)
+    @id = id
+    @name = name
+  end
+end</programlisting>
+<simpara><emphasis role="strong">キーワード引数</emphasis> を <emphasis role="strong">値オブジェクト</emphasis> と同じ名称にします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+...
+end
+
+...
+
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+end</programlisting>
+<simpara>テストを修正してグリーンになったらコミットします。<?asciidoc-br?>
+ちなみに <emphasis role="strong">キーワード引数の導入</emphasis> という名称はリファクタリングのカタログにはない用語です。Ruby固有のパターンとして便宜上命名しています。</simpara>
+</section>
+</section>
+<section xml:id="_モジュール分割">
+<title>モジュール分割</title>
+<simpara><emphasis role="strong">TODOリスト</emphasis> を全部片付けたのでここで単一ファイルから各クラスモジュールごとに <emphasis role="strong">モジュール分割</emphasis> を実施します。</simpara>
+<section xml:id="_todoリスト_2">
+<title>TODOリスト</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を指定しない場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が４文字の場合は登録される</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを指定しない場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_クラス図">
+<title>クラス図</title>
+<screen>class User {
+  UserId id
+  UserName name
+}
+class UserId {
+  String value
+}
+class UserName {
+  String value
+}
+
+User *-l UserId
+User *-r UserName</screen>
+</section>
+<section xml:id="_ファイル構成">
+<title>ファイル構成</title>
+<literallayout class="monospaced">/main.rb
+  |--lib/
+      |
+       -- sns.rb
+       -- user_id.rb
+       -- user_name.rb
+       -- user.rb
+  |--test/
+      |
+       -- user_test.rb</literallayout>
+<formalpara>
+<title>/main.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered">require './test/user_test.rb'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/sns.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user_id.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User ID value object
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+
+    @value = value
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user_name.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User name value object
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/user_test.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'
+require './lib/sns.rb'
+
+class UserTest &lt; Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal '1', @user.id.value
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(user_id: UserId.new('1'),
+                      user_name: UserName.new('abcd'))
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+</section>
+</section>
+<section xml:id="_リリース">
+<title>リリース</title>
+<simpara><emphasis role="strong">モジュール分割</emphasis> により最初のリリースの準備が出来ました。<?asciidoc-br?>
+リリース前に <emphasis role="strong">静的コード解析</emphasis> と <emphasis role="strong">コードカバレッジ</emphasis> を実施してコードの品質を確認しておきましょう。<?asciidoc-br?>
+手順の詳細は <link xl:href="https://qiita.com/k2works/items/385dc16333e065d69bd6">こちらの記事</link> をご参照ください。</simpara>
+<section xml:id="_静的コード解析">
+<title>静的コード解析</title>
+<programlisting language="bash" linenumbering="unnumbered">$ rubocop
+Inspecting 5 files
+....C
+
+Offenses:
+
+test/user_test.rb:11:3: C: Metrics/BlockLength: Block has too many lines. [30/25]
+  describe 'ユーザーを登録する' do ...
+  ^^^^^^^^^^^^^^^^^^^^^^^
+test/user_test.rb:18:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_IDと名前を持ったユーザーを作成する
+        ^^^^^^^^^^^^^^^^^^^^^^^
+test/user_test.rb:18:16: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_IDと名前を持ったユーザーを作成する
+               ^^^^^^^^^^^^^^^^
+test/user_test.rb:23:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_ユーザー名が３文字未満の場合はエラー
+        ^^^^^^^^^^^^^^^^^^^^^^^
+test/user_test.rb:23:14: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_ユーザー名が３文字未満の場合はエラー
+             ^^^^^^^^^^^^^^^^^^
+test/user_test.rb:31:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_ユーザー名が４文字の場合は登録される
+        ^^^^^^^^^^^^^^^^^^^^^^^
+test/user_test.rb:31:14: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_ユーザー名が４文字の場合は登録される
+             ^^^^^^^^^^^^^^^^^^
+test/user_test.rb:37:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_ユーザー名を指定しない場合はエラー
+        ^^^^^^^^^^^^^^^^^^^^^^
+test/user_test.rb:37:14: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_ユーザー名を指定しない場合はエラー
+             ^^^^^^^^^^^^^^^^^
+test/user_test.rb:43:9: C: Naming/MethodName: Use snake_case for method names.
+    def test_IDを指定しない場合はエラー
+        ^^^^^^^^^^^^^^^^^^^
+test/user_test.rb:43:16: C: Naming/AsciiIdentifiers: Use only ascii symbols in identifiers.
+    def test_IDを指定しない場合はエラー
+               ^^^^^^^^^^^^
+
+5 files inspected, 11 offenses detected</programlisting>
+<simpara>いくつか警告が表示されていますがテストコードの日本語に関する内容なのでチェック対象から除外することにします。 `.</simpara>
+<simpara>rubocop.yml` ファイルを以下に更新します。</simpara>
+<programlisting language="yml" linenumbering="unnumbered">inherit_from: .rubocop_todo.yml
+
+AllCops:
+    Include:
+      - 'lib/**/*.rb'
+      - 'test/**/*_test.rb'
+    Exclude:
+      - 'docs'
+
+Style/AsciiComments:
+  Enabled: false
+
+Naming/MethodName:
+  Exclude:
+    - 'test/**'
+
+Naming/AsciiIdentifiers:
+  Exclude:
+    - 'test/**'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**'</programlisting>
+<simpara>警告は無くなりました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ rubocop
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected</programlisting>
+</section>
+<section xml:id="_コードカバレッジ">
+<title>コードカバレッジ</title>
+<simpara>まず、テストコードからコードカバレッジを実行できるようにします。</simpara>
+<simpara><literal>user_test.rb</literal> の先頭を以下に更新します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'
+require './lib/sns.rb'
+
+...</programlisting>
+<simpara>テストを実行します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 24571
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00106s
+5 tests, 7 assertions, 0 failures, 0 errors, 0 skips
+Coverage report generated for Unit Tests to /Users/k2works/Projects/sandbox/tdd_itddd/coverage. 19 / 19 LOC (100.0%) covered.</programlisting>
+<simpara>テストカバレッジは100%です。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_itddd/20200222.png"/>
+</imageobject>
+<textobject><phrase>20200222</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+</section>
+<section xml:id="_ふりかえり">
+<title>ふりかえり</title>
+<simpara>最初のリリースが完了したのでここでやってきたことのふりかえりをしておきましょう。</simpara>
+<simpara>まず、<emphasis role="strong">ユーザーストーリー</emphasis> から <emphasis role="strong">TODOリスト</emphasis> を作成しました。<?asciidoc-br?>
+<emphasis role="strong">TODOリスト</emphasis> の１つめを <emphasis role="strong">仮実装</emphasis> でまずベタ書きのコードを書いてテストをパスするようにしました。<?asciidoc-br?>
+テストをパスしてグリーンになったら <emphasis role="strong">仮実装から実装へ</emphasis> を経て最初の <emphasis role="strong">TODOリスト</emphasis> を完了させました。</simpara>
+<simpara>次の <emphasis role="strong">TODOリスト</emphasis> を追加する前にテストコードに <emphasis role="strong">メソッドの抽出</emphasis> を適用して <emphasis role="strong">リファクタリング</emphasis> を実施しました。<?asciidoc-br?>
+<emphasis role="strong">リファクタリング</emphasis> を実施してテストが壊れていないことを確認してから <emphasis role="strong">TODOリスト</emphasis> を追加して次の作業に入りました。<?asciidoc-br?>
+次の作業ではまず <emphasis role="strong">TODOリスト</emphasis> を追加してその内容を <emphasis role="strong">明白な実装</emphasis> で片付けました。</simpara>
+<simpara><emphasis role="strong">明白な実装</emphasis> により再びテストがレッドからグリーンになったので <emphasis role="strong">クラスの抽出</emphasis> と <emphasis role="strong">setメソッドの削除</emphasis> を適用して <emphasis role="strong">リファクタリング</emphasis> を実施することにより <emphasis role="strong">値オブジェクト</emphasis> を追加しました。<?asciidoc-br?>
+<emphasis role="strong">リファクタリング</emphasis> を実施してテストが壊れていないことを確認したら 次は例外ケースの <emphasis role="strong">TODOリスト</emphasis> を追加しました。</simpara>
+<simpara>追加した例外ケースを <emphasis role="strong">明白な実装</emphasis> で片付けたら、まずテストコードに <emphasis role="strong">メソッドのインライン化</emphasis> を適用して プロダクトコードに <emphasis role="strong">キーワード引数の導入</emphasis> を適用してコードの可読性を改善する <emphasis role="strong">リファクタリング</emphasis> を実施しました。</simpara>
+<simpara>仕上げに <emphasis role="strong">モジュール分割</emphasis> を実施しました。<?asciidoc-br?>
+続いて <emphasis role="strong">静的コード</emphasis> と <emphasis role="strong">コードカバレッジ</emphasis> を実施してコードの品質を確認して、最初のリリースを完了しました。</simpara>
+<simpara>今回のテーマである <emphasis role="strong">値オブジェクト</emphasis> は書籍『テスト駆動開発』では <emphasis>第１部 他国通貨</emphasis> の中でMoneyクラスとして実装されていますし <emphasis role="strong">Value Objectパターン</emphasis> として紹介されています。</simpara>
+<blockquote>
+<attribution>
+テスト駆動開発
+</attribution>
+<simpara>Value Objectパターン</simpara>
+<simpara>広く共有されるものの、同一インスタンスであることはさほど重要でないオブジェクトを設計するにはどうしたらよいだろうか-----オブジェクト作成時に状態を設定したら、その後決して変えないようにする。オブジェクトへの操作は必ず新しいオブジェクトを返すようにしよう。</simpara>
+</blockquote>
+<simpara>また、書籍『リファクタリング』では <emphasis>第３章　コードの不吉な臭い</emphasis> の中の <emphasis role="strong">基本データ型への執着</emphasis> で言及されています。</simpara>
+<blockquote>
+<attribution>
+新装版 リファクタリング
+</attribution>
+<simpara>基本データ型への執着</simpara>
+<simpara>オブジェクト指向を始めたばかりの人は、小さなオブジェクトを使ってちょっとしたことをさせるのを嫌がる傾向があります。金額と通貨単位を組み合わせたMoney(貨幣)クラス、上限と下限と持つRange(範囲)クラス、電話番号や郵便番号を表すための特殊な文字列クラスなどがこの例に該当します。</simpara>
+</blockquote>
+<simpara>アプリケーション開発の過程でどのように <emphasis role="strong">値オブジェクト</emphasis> を適用するかは <link xl:href="https://qiita.com/k2works/items/928d519a7afe99361ff2#%E5%80%A4%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">こちらの記事</link>をご参照ください。</simpara>
+<simpara>今回のリリースでユーザーは登録することは出来ましたがユーザー名を変更することが出来ません。</simpara>
+<simpara>次回は <emphasis role="strong">エンティティ</emphasis> の実装に取り組んでみたいと思います。</simpara>
+</section>
+</article>

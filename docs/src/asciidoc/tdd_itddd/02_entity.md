@@ -1,0 +1,599 @@
+# ユーザーストーリー
+
+前回の **値オブジェクト** に続いて今回は **エンティティ** を作成します。まず **ユーザーストーリー** から追加作業を
+**TODOリスト** に追加します。
+
+    利用者として
+    ユーザーを管理できるようにしたい
+    なぜならユーザーはシステムを利用するために必要だから
+
+# TODOリスト
+
+  - ❏ ユーザーを管理できるようにする
+    
+      - ✓ ユーザーを登録する
+        
+          - ✓ IDと名前を持ったユーザーを作成する
+        
+          - ✓ ユーザー名が３文字未満の場合はエラー
+        
+          - ✓ ユーザー名を指定しない場合はエラー
+        
+          - ✓ ユーザー名が４文字の場合は登録される
+        
+          - ✓ IDを指定しない場合はエラー
+    
+      - ❏ ユーザー名を変更できるようにする
+    
+      - ❏ ユーザーの同一性を判断できるようにする
+        
+          - ❏ 識別子を追加する
+        
+          - ❏ エンティティの比較のを行う
+
+# 明白な実装
+
+## ユーザー名を変更する
+
+追加した **TODOリスト** を **テストファースト** で片づけるため最初にテストコードの追加から始めます。
+
+``` ruby
+...
+  describe 'ユーザーを更新する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+end
+```
+
+テストを実行して失敗することを確認します。
+
+``` bash
+$ ruby test/user_test.rb
+Started with run options --seed 16647
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                ERROR (0.00s)
+Minitest::UnexpectedError:         NoMethodError: undefined method change_name' for #<User:0x00007fdc9101e850>
+            test/user_test.rb:61:in `test_ユーザー名を更新する'
+
+
+Finished in 0.00382s
+6 tests, 7 assertions, 0 failures, 1 errors, 0 skips
+```
+
+続いて、メソッドの追加します。簡単な実装なので **明白な実装** で片づけるとします。
+
+``` ruby
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+end
+```
+
+続いて、テストが通ることを確認します。
+
+``` bash
+$ ruby test/user_test.rb
+Started with run options --seed 6624
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.00127s
+6 tests, 8 assertions, 0 failures, 0 errors, 0 skips
+```
+
+## ユーザーの同一性を判断する
+
+**エンティティ** として同一性を判断するためのテストケースを追加します。
+
+``` ruby
+...
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      id = UserId.new('2')
+      name = UserName.new('Bob')
+      @user2 = User.new(user_id: id, user_name: name)
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end
+```
+
+``` bash
+$ ruby test/user_test.rb
+Started with run options --seed 20456
+
+ユーザーの同一性を判断する
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+ユーザーを登録する
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00166s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips
+```
+
+比較メソッドを識別子で判定するようにオーバーライドします。
+
+``` ruby
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+end
+```
+
+``` bash
+ $ ruby test/user_test.rb
+Started with run options --seed 1326
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+ユーザーの同一性を判断する
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.00226s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips
+```
+
+# リファクタリング
+
+## メソッドの委譲
+
+`eql?` メソッドを `==` に委譲します。
+
+``` ruby
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    self == other
+  end
+
+  def ==(other)
+    other.equal?(self) || (other.instance_of?(self.class) && other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end
+```
+
+変更によりコードが壊れていないことを確認します。
+
+``` bash
+$ ruby test/user_test.rb
+Started with run options --seed 37624
+
+ユーザーの同一性を判断する
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+ユーザーを登録する
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+
+Finished in 0.00164s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips
+```
+
+## モジュール分割
+
+テストコードの基本部分をヘルパーとして分割して共通利用できるようにしておきます。
+
+`test_helper.rb` を作成します。
+
+``` ruby
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'
+```
+
+`user_test.rb` の先頭部部を変更します。
+
+``` ruby
+require './test/test_helper'
+require './lib/sns.rb'
+
+class UserTest < Minitest::Test
+...
+```
+
+# リリース
+
+## 静的コード解析
+
+``` bash
+$ rubocop
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected
+```
+
+## コードカバレッジ
+
+![2020042201](../../images/asciidoc/tdd_itddd/2020042201.png)
+
+![2020042202](../../images/asciidoc/tdd_itddd/2020042202.png)
+
+## TODOリスト
+
+  - ❏ ユーザーを管理できるようにする
+    
+      - ✓ ユーザーを登録する
+        
+          - ✓ IDと名前を持ったユーザーを作成する
+        
+          - ✓ ユーザー名が３文字未満の場合はエラー
+        
+          - ✓ ユーザー名を指定しない場合はエラー
+        
+          - ✓ ユーザー名が４文字の場合は登録される
+        
+          - ✓ IDを指定しない場合はエラー
+    
+      - ✓ ユーザー名を変更できるようにする
+    
+      - ✓ ユーザーの同一性を判断できるようにする
+        
+          - ✓ 識別子を追加する
+        
+          - ✓ エンティティの比較のを行う
+
+## ファイル構成
+
+    /main.rb
+      |--lib/
+          |
+           -- sns.rb
+           -- user_id.rb
+           -- user_name.rb
+           -- user.rb
+      |--test/
+          |
+           -- test_helper.rb
+           -- user_test.rb
+
+**/main.rb.**
+
+``` ruby
+require './test/user_test.rb'
+```
+
+**/lib/sns.rb.**
+
+``` ruby
+# frozen_string_literal: true
+
+require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'
+```
+
+**/lib/user\_id.rb.**
+
+``` ruby
+# frozen_string_literal: true
+
+# User ID value object
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+
+    @value = value
+  end
+end
+```
+
+**/lib/user\_name.rb.**
+
+``` ruby
+# frozen_string_literal: true
+
+# User name value object
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length < 3
+
+    @value = value
+  end
+end
+```
+
+**/lib/user.rb.**
+
+``` ruby
+# frozen_string_literal: true
+
+# User
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+
+  def ==(other)
+    other.equal?(self) || other.instance_of?(self.class) && other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end
+```
+
+**/test/test\_helper.rb.**
+
+``` ruby
+# frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'
+```
+
+**/test/user\_test.rb.**
+
+``` ruby
+# frozen_string_literal: true
+
+require './test/test_helper'
+require './lib/sns.rb'
+
+class UserTest < Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal '1', @user.id.value
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(user_id: UserId.new('1'),
+                      user_name: UserName.new('abcd'))
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+
+  describe 'ユーザーを更新する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      id = UserId.new('2')
+      name = UserName.new('Bob')
+      @user2 = User.new(user_id: id, user_name: name)
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end
+```
+
+# ふりかえり
+
+まず、**ユーザーストーリー** から追加の **TODOリスト** を作成しました。  
+**テストファースト** で最初に失敗するテストから始めて **明白な実装** によりユーザ名を更新するメソッドを追加しました。
+
+続いて、**値オブジェクト** であるユーザーオブジェクトを **エンティティ**
+として扱えるようにするためユーザーの同一性を判断するためのメソッドを追加しました。  
+そして、メソッドの委譲のリファクタリングを実施後、テストを実行してコードが壊れていないことを確認しました。
+
+仕上げに、ヘルパーファイルを抽出してテストファイルで共有できるようにしました。
+
+今回のテーマである **エンティティ**
+> に関しては、書籍『リファクタリング』第８章　データの再編成　値から参照への変更で言及されています。
+
+> 多くのシステムにおいて、参照オブジェクトと値オブジェクトを分けて考えることが役立ちます。「参照オブジェクト」とは、顧客とか勘定といったもので、実世界における１個のオブジェクトを表しており、それらが同じものかどうかを調べるには、オブジェクト識別が用いられます。「値オブジェクト」とは、日付やお金のようなもので、もっぱら、それ自体のデータ値によって定義されます。それらのコピーはいくつあってもかまいません。
+> 
+> —  新装版 リファクタリング 
+
+**値オブジェクト** と **エンティティ** に関してはリファクタリングカタログで **値から参照への変更** と
+**参照から値への変更** として解説されています。
+
+> 値から参照への変更
+> 
+> 同じインスタンスが多数存在するクラスがある。それらを１つのオブジェクトに置き換えたい。
+> 
+> そのオブジェクトを参照オブジェクトに変える。
+> 
+> —  新装版 リファクタリング 
+
+> 参照から値への変更
+> 
+> 小さくて、不変で、コントロールが煩わしい参照オブジェクトがある。
+> 
+> 値オブジェクトに変える。
+> 
+> —  新装版 リファクタリング 
+
+次回は **ドメインサービス** の実装に取り組んでみたいと思います。

@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="5"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>ユーザーストーリー</title>
+<date>2020-05-02</date>
+</info>
+<section xml:id="_ユーザーストーリー">
+<title>ユーザーストーリー</title>
+<simpara>前回の <emphasis role="strong">値オブジェクト</emphasis> に続いて今回は <emphasis role="strong">エンティティ</emphasis> を作成します。まず <emphasis role="strong">ユーザーストーリー</emphasis> から追加作業を <emphasis role="strong">TODOリスト</emphasis> に追加します。</simpara>
+<literallayout class="monospaced">利用者として
+ユーザーを管理できるようにしたい
+なぜならユーザーはシステムを利用するために必要だから</literallayout>
+</section>
+<section xml:id="_todoリスト">
+<title>TODOリスト</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を指定しない場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が４文字の場合は登録される</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを指定しない場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10063; ユーザー名を変更できるようにする</simpara>
+</listitem>
+<listitem>
+<simpara>&#10063; ユーザーの同一性を判断できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; 識別子を追加する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10063; エンティティの比較のを行う</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_明白な実装">
+<title>明白な実装</title>
+<section xml:id="_ユーザー名を変更する">
+<title>ユーザー名を変更する</title>
+<simpara>追加した <emphasis role="strong">TODOリスト</emphasis> を <emphasis role="strong">テストファースト</emphasis> で片づけるため最初にテストコードの追加から始めます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+  describe 'ユーザーを更新する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+end</programlisting>
+<simpara>テストを実行して失敗することを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 16647
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                ERROR (0.00s)
+Minitest::UnexpectedError:         NoMethodError: undefined method change_name' for #&lt;User:0x00007fdc9101e850&gt;
+            test/user_test.rb:61:in `test_ユーザー名を更新する'
+
+
+Finished in 0.00382s
+6 tests, 7 assertions, 0 failures, 1 errors, 0 skips</programlisting>
+<simpara>続いて、メソッドの追加します。簡単な実装なので <emphasis role="strong">明白な実装</emphasis> で片づけるとします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+end</programlisting>
+<simpara>続いて、テストが通ることを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 6624
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.00127s
+6 tests, 8 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+<section xml:id="_ユーザーの同一性を判断する">
+<title>ユーザーの同一性を判断する</title>
+<simpara><emphasis role="strong">エンティティ</emphasis> として同一性を判断するためのテストケースを追加します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      id = UserId.new('2')
+      name = UserName.new('Bob')
+      @user2 = User.new(user_id: id, user_name: name)
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 20456
+
+ユーザーの同一性を判断する
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+ユーザーを登録する
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+Finished in 0.00166s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+<simpara>比較メソッドを識別子で判定するようにオーバーライドします。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+end</programlisting>
+<programlisting language="bash" linenumbering="unnumbered"> $ ruby test/user_test.rb
+Started with run options --seed 1326
+
+ユーザーを登録する
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+
+ユーザーの同一性を判断する
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.00226s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+</section>
+<section xml:id="_リファクタリング">
+<title>リファクタリング</title>
+<section xml:id="_メソッドの委譲">
+<title>メソッドの委譲</title>
+<simpara><literal>eql?</literal> メソッドを <literal>==</literal> に委譲します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    self == other
+  end
+
+  def ==(other)
+    other.equal?(self) || (other.instance_of?(self.class) &amp;&amp; other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end</programlisting>
+<simpara>変更によりコードが壊れていないことを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 37624
+
+ユーザーの同一性を判断する
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+ユーザーを登録する
+  test_IDと名前を持ったユーザーを作成する                                         PASS (0.00s)
+  test_ユーザー名が３文字未満の場合はエラー                                         PASS (0.00s)
+  test_IDを指定しない場合はエラー                                             PASS (0.00s)
+  test_ユーザー名を指定しない場合はエラー                                          PASS (0.00s)
+  test_ユーザー名が４文字の場合は登録される                                         PASS (0.00s)
+
+Finished in 0.00164s
+9 tests, 11 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+<section xml:id="_モジュール分割">
+<title>モジュール分割</title>
+<simpara>テストコードの基本部分をヘルパーとして分割して共通利用できるようにしておきます。</simpara>
+<simpara><literal>test_helper.rb</literal> を作成します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'</programlisting>
+<simpara><literal>user_test.rb</literal> の先頭部部を変更します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require './test/test_helper'
+require './lib/sns.rb'
+
+class UserTest &lt; Minitest::Test
+...</programlisting>
+</section>
+</section>
+<section xml:id="_リリース">
+<title>リリース</title>
+<section xml:id="_静的コード解析">
+<title>静的コード解析</title>
+<programlisting language="bash" linenumbering="unnumbered">$ rubocop
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+Inspecting 5 files
+.....
+
+5 files inspected, no offenses detected</programlisting>
+</section>
+<section xml:id="_コードカバレッジ">
+<title>コードカバレッジ</title>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_itddd/2020042201.png"/>
+</imageobject>
+<textobject><phrase>2020042201</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_itddd/2020042202.png"/>
+</imageobject>
+<textobject><phrase>2020042202</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_todoリスト_2">
+<title>TODOリスト</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を指定しない場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が４文字の場合は登録される</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを指定しない場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を変更できるようにする</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザーの同一性を判断できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; 識別子を追加する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; エンティティの比較のを行う</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_ファイル構成">
+<title>ファイル構成</title>
+<literallayout class="monospaced">/main.rb
+  |--lib/
+      |
+       -- sns.rb
+       -- user_id.rb
+       -- user_name.rb
+       -- user.rb
+  |--test/
+      |
+       -- test_helper.rb
+       -- user_test.rb</literallayout>
+<formalpara>
+<title>/main.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered">require './test/user_test.rb'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/sns.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user_id.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User ID value object
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+
+    @value = value
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user_name.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User name value object
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User
+class User
+  attr_reader :id, :name
+
+  def initialize(user_id:, user_name:)
+    @id = user_id
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+
+  def ==(other)
+    other.equal?(self) || other.instance_of?(self.class) &amp;&amp; other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/test_helper.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/user_test.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './test/test_helper'
+require './lib/sns.rb'
+
+class UserTest &lt; Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal '1', @user.id.value
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(user_id: UserId.new('1'),
+                      user_name: UserName.new('abcd'))
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+
+  describe 'ユーザーを更新する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      @user = User.new(user_id: id, user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      id = UserId.new('2')
+      name = UserName.new('Bob')
+      @user2 = User.new(user_id: id, user_name: name)
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+</section>
+</section>
+<section xml:id="_ふりかえり">
+<title>ふりかえり</title>
+<simpara>まず、<emphasis role="strong">ユーザーストーリー</emphasis> から追加の <emphasis role="strong">TODOリスト</emphasis> を作成しました。<?asciidoc-br?>
+<emphasis role="strong">テストファースト</emphasis> で最初に失敗するテストから始めて <emphasis role="strong">明白な実装</emphasis> によりユーザ名を更新するメソッドを追加しました。</simpara>
+<simpara>続いて、<emphasis role="strong">値オブジェクト</emphasis> であるユーザーオブジェクトを <emphasis role="strong">エンティティ</emphasis> として扱えるようにするためユーザーの同一性を判断するためのメソッドを追加しました。<?asciidoc-br?>
+そして、メソッドの委譲のリファクタリングを実施後、テストを実行してコードが壊れていないことを確認しました。</simpara>
+<simpara>仕上げに、ヘルパーファイルを抽出してテストファイルで共有できるようにしました。</simpara>
+<simpara>今回のテーマである <emphasis role="strong">エンティティ</emphasis> に関しては、書籍『リファクタリング』第８章　データの再編成　値から参照への変更で言及されています。</simpara>
+<blockquote>
+<attribution>
+新装版 リファクタリング
+</attribution>
+<simpara>多くのシステムにおいて、参照オブジェクトと値オブジェクトを分けて考えることが役立ちます。「参照オブジェクト」とは、顧客とか勘定といったもので、実世界における１個のオブジェクトを表しており、それらが同じものかどうかを調べるには、オブジェクト識別が用いられます。「値オブジェクト」とは、日付やお金のようなもので、もっぱら、それ自体のデータ値によって定義されます。それらのコピーはいくつあってもかまいません。</simpara>
+</blockquote>
+<simpara><emphasis role="strong">値オブジェクト</emphasis> と <emphasis role="strong">エンティティ</emphasis> に関してはリファクタリングカタログで <emphasis role="strong">値から参照への変更</emphasis> と <emphasis role="strong">参照から値への変更</emphasis> として解説されています。</simpara>
+<blockquote>
+<attribution>
+新装版 リファクタリング
+</attribution>
+<simpara>値から参照への変更</simpara>
+<simpara>同じインスタンスが多数存在するクラスがある。それらを１つのオブジェクトに置き換えたい。</simpara>
+<simpara>そのオブジェクトを参照オブジェクトに変える。</simpara>
+</blockquote>
+<blockquote>
+<attribution>
+新装版 リファクタリング
+</attribution>
+<simpara>参照から値への変更</simpara>
+<simpara>小さくて、不変で、コントロールが煩わしい参照オブジェクトがある。</simpara>
+<simpara>値オブジェクトに変える。</simpara>
+</blockquote>
+<simpara>次回は <emphasis role="strong">ドメインサービス</emphasis> の実装に取り組んでみたいと思います。</simpara>
+</section>
+</article>
