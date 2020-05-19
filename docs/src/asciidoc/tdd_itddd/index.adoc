@@ -14,6 +14,7 @@ include::01_value_object.adoc[]
 include::02_entity.adoc[]
 
 == ドメインサービス
+include::03_domain_service.adoc[]
 
 == リポジトリ
 
