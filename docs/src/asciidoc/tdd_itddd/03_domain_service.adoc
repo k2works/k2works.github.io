@@ -5,20 +5,749 @@
 
 === ユーザーストーリー
 
-前回の *エンティティ* に続いて今回は *ドメインサービス* を作成します。まず *ユーザーストーリー* から追加作業を *TODOリスト* に追加します。
+前回の *エンティティ* に続いて今回は *ドメインサービス* を作成します。
+まず *ユーザーストーリー* から追加作業を *TODOリスト* に追加します。
 
   利用者として
   ユーザーを管理できるようにしたい
   なぜならユーザーはシステムを利用するために必要だから
 
-
 === TODOリスト
+* [ ] ユーザーを管理できるようにする
+** [x] ユーザーを登録する
+*** [x] IDと名前を持ったユーザーを作成する
+*** [x] ユーザー名が３文字未満の場合はエラー
+*** [x] ユーザー名を指定しない場合はエラー
+*** [x] ユーザー名が４文字の場合は登録される
+*** [x] IDを指定しない場合はエラー
+** [x] ユーザー名を変更できるようにする
+** [x] ユーザーの同一性を判断できるようにする
+*** [x] 識別子を追加する
+*** [x] エンティティの比較のを行う
+** [ ] ユーザーを重複して登録できないようにする
+
 
 === 仮実装を経て本実装へ
 
+==== SQLite3セットアップ
+
+`Gemfile`
+[source, ruby]
+----
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+...
+gem 'sqlite3'
+----
+
+`lib/sns.rb`
+[source, ruby]
+----
+# frozen_string_literal: true
+
+require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'
+require 'sqlite3'
+----
+
+`test/user_test.rb`
+[source, ruby]
+----
+...
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end
+----
+
+[source, bash]
+----
+$ bundle install
+----
+
+
+
+==== ユーザーの重複を判定する
+
+`test_user_test.rb`
+[source, ruby]
+----
+...
+    def test_登録するユーザーがすでに存在している
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      user = User.new(user_id: id, user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert user.exist?(user)
+    end
+...
+----
+
+[source, bash]
+----
+----
+
+`lib/user.rb`
+[source, ruby]
+----
+class User
+...
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def exist?(_user)
+    true
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+...
+end
+----
+
+[source, bash]
+----
+----
+
+==== ユーザーの重複を判定する
+
+[source, ruby]
+----
+...
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+...
+----
+
+[source, bash]
+----
+----
+
+==== ユーザーの重複を判定する
+
+[source, ruby]
+----
+...
+    def test_登録するユーザーが存在していない
+      id = UserId.new('2')
+      name = UserName.new('Alice')
+      user = User.new(user_id: id, user_name: name)
+
+      refute user.exist?(user)
+    end
+...
+----
+
+
 === リファクタリング
 
+==== クラスの抽出
+
+`test/user_service_test.rb`
+[source, ruby]
+----
+require './test/test_helper'
+require './lib/sns.rb'
+
+class UserServiceTest < Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+    end
+
+    def test_登録するユーザーがすでに存在している
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      user = User.new(user_id: id, user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert user.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      id = UserId.new('2')
+      name = UserName.new('Alice')
+      user = User.new(user_id: id, user_name: name)
+
+      refute user.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end
+----
+
+`lib/user_service.rb`
+[source, ruby]
+----
+class UserService
+end
+----
+
+`lib/sns.rb`
+[source, ruby]
+----
+require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'
+require './lib/user_service.rb'
+require 'sqlite3'
+----
+
+[source, bash]
+----
+----
+
+==== メソッドの移動
+
+[source, ruby]
+----
+class UserService
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+end
+----
+
+[source, ruby]
+----
+require './test/test_helper'
+require './lib/sns.rb'
+
+class UserServiceTest < Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+
+      @service = UserService.new
+    end
+
+    def test_登録するユーザーがすでに存在している
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      user = User.new(user_id: id, user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert @service.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      id = UserId.new('2')
+      name = UserName.new('Alice')
+      user = User.new(user_id: id, user_name: name)
+
+      refute @service.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end
+----
+
+=== TODOリスト
+
+* [ ] ユーザーを管理できるようにする
+** [x] ユーザーを登録する
+*** [x] IDと名前を持ったユーザーを作成する
+*** [x] ユーザー名が３文字未満の場合はエラー
+*** [x] ユーザー名を指定しない場合はエラー
+*** [x] ユーザー名が４文字の場合は登録される
+*** [x] IDを指定しない場合はエラー
+** [x] ユーザー名を変更できるようにする
+** [x] ユーザーの同一性を判断できるようにする
+*** [x] 識別子を追加する
+*** [x] エンティティの比較のを行う
+** [x] ユーザーを重複して登録できないようにする
+** [ ] IDを自動生成する
+
+=== リファクタリング
+
+==== 識別子を生成する
+
+`lib/sns.rb`
+[source, ruby]
+----
+require './lib/user.rb'
+require './lib/user_service.rb'
+require 'sqlite3'
+require 'securerandom'
+----
+
+[source, ruby]
+----
+class User
+  attr_reader :id, :name
+
+  def initialize(user_name:)
+    @id = UserId.new(SecureRandom.uuid.to_str)
+    @name = user_name
+  end
+...
+----
+
+[source, ruby]
+----
+class UserServiceTest < Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+
+      @service = UserService.new
+    end
+
+    def test_登録するユーザーがすでに存在している
+      name = UserName.new('Bob')
+      user = User.new(user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert @service.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      name = UserName.new('Alice')
+      user = User.new(user_name: name)
+
+      refute @service.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+class UserTest < Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(
+        user_name: UserName.new('abcd')
+      )
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+
+  describe 'ユーザーを更新する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      name = UserName.new('Bob')
+      @user2 = User.new(user_name: name)
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end
+----
+
+==== パラメータのインライン化
+
+[source, ruby]
+----
+class User
+  attr_reader :id, :name
+
+  def initialize(name:)
+    @id = UserId.new(SecureRandom.uuid.to_str)
+    @name = UserName.new(name)
+  end
+...
+----
+
+[source, ruby]
+----
+class UserServiceTest < Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+
+      @service = UserService.new
+    end
+
+    def test_登録するユーザーがすでに存在している
+      user = User.new(name: 'Bob')
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert @service.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      user = User.new(name: 'Alice')
+
+      refute @service.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end
+----
+
+[source, ruby]
+----
+class UserTest < Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      @user = User.new(name: 'Bob')
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(
+        name: 'abcd'
+      )
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+
+  describe 'ユーザーを更新する' do
+    def setup
+      @user = User.new(name: 'Bob')
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      @user = User.new(name: 'Bob')
+    end
+
+    def test_同じ名前の異なるユーザー
+      @user2 = User.new(name: 'Bob')
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end
+----
+
+==== ドメインモデル貧血症
+
+[source, ruby]
+----
+class User
+  attr_reader :id, :name
+
+  def initialize(name:)
+    @id = UserId.new(SecureRandom.uuid.to_str)
+    @name = UserName.new(name)
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+
+  def ==(other)
+    other.equal?(self) || other.instance_of?(self.class) && other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end
+----
+
+
+[source, ruby]
+----
+class UserService
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+
+  def change_name(user, name)
+    raise if name.nil?
+
+    user.name.value = name
+  end
+end
+----
+
+[source, ruby]
+----
+class UserName
+  attr_reader :value
+  attr_writer :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length < 3
+
+    @value = value
+  end
+end
+----
+
+[source, ruby]
+----
+...
+    def test_ユーザー名を更新する
+      service = UserService.new
+      service.change_name(@user, 'Alice')
+      assert_equal 'Alice', @user.name.value
+    end
+...
+    def test_名前を変更した同じユーザー
+      service = UserService.new
+      service.change_name(@user, 'Alice')
+
+      assert @user.eql?(@user)
+    end
+...
+----
+
+==== ドメインモデル貧血症
+
+[source, ruby]
+----
+class User
+  attr_reader :id, :name
+
+  def initialize(name:)
+    @id = UserId.new(SecureRandom.uuid.to_str)
+    @name = UserName.new(name)
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = UserName.new(name)
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+
+  def ==(other)
+    other.equal?(self) || other.instance_of?(self.class) && other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end
+----
+
+[source, ruby]
+----
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length < 3
+
+    @value = value
+  end
+end
+----
+
+[source, ruby]
+----
+class UserService
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+end
+----
+
+[source, ruby]
+----
+...
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name.value
+    end
+...
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+...
+----
+
 === リリース
+
+==== 静的コード解析
+
+==== コードカバレッジ
+
+==== TODOリスト
+
+* [ ] ユーザーを管理できるようにする
+** [x] ユーザーを登録する
+*** [x] IDと名前を持ったユーザーを作成する
+*** [x] ユーザー名が３文字未満の場合はエラー
+*** [x] ユーザー名を指定しない場合はエラー
+*** [x] ユーザー名が４文字の場合は登録される
+*** [x] IDを指定しない場合はエラー
+** [x] ユーザー名を変更できるようにする
+** [x] ユーザーの同一性を判断できるようにする
+*** [x] 識別子を追加する
+*** [x] エンティティの比較のを行う
+** [x] ユーザーを重複して登録できないようにする
+** [x] IDを自動生成する
+
+
+==== ファイル構成
 
 === ふりかえり
 
