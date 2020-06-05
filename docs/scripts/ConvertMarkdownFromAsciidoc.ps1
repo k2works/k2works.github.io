@@ -3,7 +3,7 @@ Start-Process -FilePath Docker -ArgumentList "image build -t k2works/pandoc:late
 $path = (Convert-Path .) + '/docs'
 $articles = @{
     'tdd_env'   = @('index', 'chapter_1', 'chapter_2_win', 'chapter_2_wsl')
-    'tdd_itddd' = @('index', '01_value_object', '02_entity')
+    'tdd_itddd' = @('index', '01_value_object', '02_entity', '03_domain_service')
     'tdd_rb'    = @('index', 'episode_1', 'episode_2', 'episode_3', 'episode_x')
 }
 

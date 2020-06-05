@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="5"?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>ユーザーストーリー</title>
+<date>2020-06-05</date>
+</info>
+<section xml:id="_ユーザーストーリー">
+<title>ユーザーストーリー</title>
+<simpara>前回の <emphasis role="strong">エンティティ</emphasis> に続いて今回は <emphasis role="strong">ドメインサービス</emphasis> を作成します。
+まず <emphasis role="strong">ユーザーストーリー</emphasis> をもとに追加作業を <emphasis role="strong">TODOリスト</emphasis> に追加します。</simpara>
+<literallayout class="monospaced">利用者として
+ユーザーを管理できるようにしたい
+なぜならユーザーはシステムを利用するために必要だから</literallayout>
+</section>
+<section xml:id="_todoリスト">
+<title>TODOリスト</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を指定しない場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が４文字の場合は登録される</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを指定しない場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を変更できるようにする</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザーの同一性を判断できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; 識別子を追加する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; エンティティの比較のを行う</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10063; ユーザーを重複して登録できないようにする</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_仮実装を経て本実装へ">
+<title>仮実装を経て本実装へ</title>
+<section xml:id="_セットアップ">
+<title>セットアップ</title>
+<simpara>ユーザーデータを永続化するため今回はSQLiteを使用します。Rubyでのセットアップ方法はまず <literal>Gemfile</literal> にsqlite3ライブラリを追加します。</simpara>
+<simpara><literal>Gemfile</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+...
+gem 'sqlite3'</programlisting>
+<simpara>続いてライブラリを読み込んで利用できるようにします。</simpara>
+<simpara><literal>lib/sns.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'
+require 'sqlite3'</programlisting>
+<simpara>追加する機能のテストコードの準備をします。テスト実行の最初にユーザーテーブルを作成してテスト終了時にテーブルを削除するようにします。</simpara>
+<simpara><literal>test/user_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end</programlisting>
+<simpara>準備が出来たら追加ライブラリをインストールします。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ bundle install</programlisting>
+</section>
+<section xml:id="_仮実装">
+<title>仮実装</title>
+<simpara>ユーザーの重複を判定する機能を実装したいのですがまだ具体的なコードの実装イメージが湧きません。こんな時は <emphasis role="strong">仮実装</emphasis>
+でまず失敗するテストから始めるとしましょう。</simpara>
+<simpara><literal>test_user_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+    def test_登録するユーザーがすでに存在している
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      user = User.new(user_id: id, user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert user.exist?(user)
+    end
+...</programlisting>
+<simpara><literal>User#exist?</literal> メソッドが存在しないためテストは失敗しました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 19263
+
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                        ERROR (0.04s)
+Minitest::UnexpectedError:         NoMethodError: undefined method exist? for #&lt;User:0x000055f6172730e0&gt;
+            test/user_test.rb:103:in test_登録するユーザーがすでに存在している
+...</programlisting>
+<simpara>テストを通すために <literal>User#exist?</literal> メソッドを追加して最小限の実装をします。</simpara>
+<simpara><literal>lib/user.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class User
+...
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def exist?(_user)
+    true
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+...
+end</programlisting>
+<simpara>テストが成功してグリーンの状態になりました。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 21516
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+...
+
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                         PASS (0.07s)
+
+Finished in 0.07418s
+10 tests, 12 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+<section xml:id="_本実装">
+<title>本実装</title>
+<simpara><emphasis role="strong">仮実装</emphasis> でテストは通るようになりましたがこのままではユーザーが存在しない場合もTrueを返すのでデータベースから該当するユーザーが存在するかを確認するコードを実装します。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+...</programlisting>
+<simpara>テストが通ることを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 47320
+
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+...
+
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                         PASS (0.05s)
+
+Finished in 0.05795s
+10 tests, 12 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+<section xml:id="_テスト">
+<title>テスト</title>
+<simpara>ユーザーが存在しない場合のテストも追加しておきます。</simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+    def test_登録するユーザーが存在していない
+      id = UserId.new('2')
+      name = UserName.new('Alice')
+      user = User.new(user_id: id, user_name: name)
+
+      refute user.exist?(user)
+    end
+...</programlisting>
+<simpara>テストが通ることを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ ruby test/user_test.rb
+Started with run options --seed 2872
+
+ユーザーの同一性を判断する
+  test_同じ名前の同じユーザー                                                PASS (0.00s)
+  test_同じ名前の異なるユーザー                                               PASS (0.00s)
+  test_名前を変更した同じユーザー                                              PASS (0.00s)
+
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                         PASS (0.19s)
+  test_登録するユーザーが存在していない                                           PASS (0.12s)
+...
+
+Finished in 0.32139s
+11 tests, 13 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+</section>
+<section xml:id="_リファクタリング">
+<title>リファクタリング</title>
+<simpara>レッド、グリーン、となったので次はリファクタです。</simpara>
+<section xml:id="_クラスの抽出">
+<title>クラスの抽出</title>
+<simpara>まず、ユーザー <emphasis role="strong">エンティティ</emphasis> にユーザーが存在するかを確認するメソッドが存在するのは不自然なので <emphasis role="strong">クラスの抽出</emphasis> を適用して <emphasis role="strong">ドメインサービス</emphasis> クラスを抽出するとしましょう。まず、 <emphasis role="strong">ドメインサービス</emphasis> クラスとテストクラスを追加します。</simpara>
+<simpara><literal>test/user_service_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require './test/test_helper'
+require './lib/sns.rb'
+
+class UserServiceTest &lt; Minitest::Test
+end</programlisting>
+<simpara>続いて <emphasis role="strong">ドメインサービス</emphasis> クラスとなる <literal>UserService</literal> クラスを追加して読み込むようにします。</simpara>
+<simpara><literal>lib/user_service.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserService
+end</programlisting>
+<simpara><literal>lib/sns.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'
+require './lib/user_service.rb'
+require 'sqlite3'</programlisting>
+<simpara>テストが壊れていないことを確認します。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ rake test
+...
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                         PASS (0.16s)
+  test_登録するユーザーが存在していない                                           PASS (0.12s)
+
+Finished in 0.60710s
+13 tests, 15 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+<section xml:id="_メソッドの移動">
+<title>メソッドの移動</title>
+<simpara><emphasis role="strong">ドメインサービス</emphasis> を <emphasis role="strong">クラスの抽出</emphasis> したので続いて <emphasis role="strong">エンティティ</emphasis> からユーザーの重複を確認する <emphasis role="strong">メソッドの移動</emphasis> を実施します。</simpara>
+<simpara><literal>test/user_service_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserServiceTest &lt; Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+    end
+
+    def test_登録するユーザーがすでに存在している
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      user = User.new(user_id: id, user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert user.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      id = UserId.new('2')
+      name = UserName.new('Alice')
+      user = User.new(user_id: id, user_name: name)
+
+      refute user.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end</programlisting>
+<simpara><literal>test/user_service_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">rlass UserService
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+end</programlisting>
+<simpara>テストを <emphasis role="strong">ドメインサービス</emphasis> 経由から実行するように変更します。</simpara>
+<simpara><literal>test/user_service_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require './test/test_helper'
+require './lib/sns'
+
+class UserServiceT.rbest &lt; Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+
+      @service = UserService.new
+    end
+
+    def test_登録するユーザーがすでに存在している
+      id = UserId.new('1')
+      name = UserName.new('Bob')
+      user = User.new(user_id: id, user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert @service.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      id = UserId.new('2')
+      name = UserName.new('Alice')
+      user = User.new(user_id: id, user_name: name)
+
+      refute @service.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end</programlisting>
+<simpara>テストが壊れていないことを確認したら <emphasis role="strong">ドメインサービス</emphasis> の <emphasis role="strong">クラスの抽出</emphasis> と <emphasis role="strong">メソッドの移動</emphasis> のリファクタリングは完了です。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ rake test
+...
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                         PASS (0.12s)
+  test_登録するユーザーが存在していない                                           PASS (0.06s)
+...
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.18120s
+11 tests, 13 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+</section>
+<section xml:id="_todoリスト_2">
+<title>TODOリスト</title>
+<simpara>続いてユーザーIDを <emphasis role="strong">エンティティ</emphasis> の生成時に引数として受け取っていますが重複したIDで <emphasis role="strong">エンティティ</emphasis> を生成してしまう可能性があるので自動生成するようにリファクタリングしたいと思います。</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を指定しない場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が４文字の場合は登録される</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを指定しない場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を変更できるようにする</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザーの同一性を判断できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; 識別子を追加する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; エンティティの比較のを行う</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザーを重複して登録できないようにする</simpara>
+</listitem>
+<listitem>
+<simpara>&#10063; IDを自動生成する</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_リファクタリング_2">
+<title>リファクタリング</title>
+<section xml:id="_パラメータの削除">
+<title>パラメータの削除</title>
+<simpara><link xl:href="https://ja.wikipedia.org/wiki/UUID">UUID</link> による識別子を導入するため <literal>securerandom</literal> ライブラリを追加します。なお <literal>securerandom</literal> は標準添付ライブラリなので <literal>gem</literal> によるインストールは必要ありません。</simpara>
+<simpara><literal>lib/sns.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'
+require './lib/user_service.rb'
+require 'sqlite3'
+require 'securerandom'</programlisting>
+<simpara><emphasis role="strong">エンティティ</emphasis> のコンストラクタの引数からidを削除して、生成時にUUIDを自動生成するように変更します。</simpara>
+<simpara><literal>lib/user.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class User
+  attr_reader :id, :name
+
+  def initialize(user_name:)
+    @id = UserId.new(SecureRandom.uuid.to_str)
+    @name = user_name
+  end
+...</programlisting>
+<simpara>プロダクトコードの変更に合わせてテストコードも修正します。</simpara>
+<simpara><literal>test/user_service_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserServiceTest &lt; Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+
+      @service = UserService.new
+    end
+
+    def test_登録するユーザーがすでに存在している
+      name = UserName.new('Bob')
+      user = User.new(user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert @service.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      name = UserName.new('Alice')
+      user = User.new(user_name: name)
+
+      refute @service.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end</programlisting>
+<simpara><literal>test/user_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserTest &lt; Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(
+        user_name: UserName.new('abcd')
+      )
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+
+  describe 'ユーザーを更新する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      name = UserName.new('Bob')
+      @user2 = User.new(user_name: name)
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end</programlisting>
+<simpara>テストが正しく動作することが確認出来たらリファクタリング完了です。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$ rake test
+...
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                         PASS (0.12s)
+  test_登録するユーザーが存在していない                                           PASS (0.06s)
+...
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.18120s
+11 tests, 13 assertions, 0 failures, 0 errors, 0 skips</programlisting>
+</section>
+</section>
+<section xml:id="_ドメインモデル貧血症">
+<title>ドメインモデル貧血症</title>
+<simpara>続いて <emphasis role="strong">エンティティ</emphasis> にある <literal>change_name</literal> メソッドに <emphasis role="strong">メソッドの移動</emphasis> を適用して <emphasis role="strong">ドメインサービス</emphasis> に移動するリファクタリング適用してみましょう。</simpara>
+<simpara><literal>lib/user.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class User
+  attr_reader :id, :name
+  attr_writer :name
+
+  def initialize(user_name:)
+    @id = UserId.new(SecureRandom.uuid.to_str)
+    @name = user_name
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+
+  def ==(other)
+    other.equal?(self) || other.instance_of?(self.class) &amp;&amp; other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end</programlisting>
+<simpara><literal>lib/user_service.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">class UserService
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+
+  def change_name(user, name)
+    raise if name.nil?
+
+    user.name = name
+  end
+end</programlisting>
+<simpara><literal>test/user_test.rb</literal></simpara>
+<programlisting language="ruby" linenumbering="unnumbered">...
+    def test_ユーザー名を更新する
+      service = UserService.new
+      service.change_name(@user, UserName.new('Alice'))
+      assert_equal 'Alice', @user.name.value
+    end
+...
+    def test_名前を変更した同じユーザー
+      service = UserService.new
+      service.change_name(@user, UserName.new('Alice'))
+
+      assert @user.eql?(@user)
+    end
+...</programlisting>
+<simpara><emphasis role="strong">メソッドの移動</emphasis> の結果 <emphasis role="strong">エンティティ</emphasis> がスカスカになった上に <emphasis role="strong">値オブジェクト</emphasis> を外部から更新するためのセッターを追加する必要が発生してしまいカプセル化が破壊されてしまう結果となりました。このような <emphasis role="strong">エンティティ</emphasis> の実装は <emphasis role="strong">ドメインモデル貧血症</emphasis> と呼ばれます。このリファクタリングはやりすぎだったようなので変更前に戻しておきましょう。</simpara>
+<programlisting language="bash" linenumbering="unnumbered">$git checkout .</programlisting>
+</section>
+<section xml:id="_リリース">
+<title>リリース</title>
+<section xml:id="_静的コード解析">
+<title>静的コード解析</title>
+<programlisting language="bash" linenumbering="unnumbered">$ rubocop
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Layout/EmptyLinesAroundAttributeAccessor (0.83)
+ - Layout/SpaceAroundMethodCallOperator (0.82)
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/ExponentialNotation (0.82)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+ - Style/SlicingWithRange (0.83)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+Inspecting 7 files
+.......
+
+7 files inspected, no offenses detected</programlisting>
+</section>
+<section xml:id="_コードカバレッジ">
+<title>コードカバレッジ</title>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_itddd/2020060501.png"/>
+</imageobject>
+<textobject><phrase>2020060501</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_todoリスト_3">
+<title>TODOリスト</title>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10063; ユーザーを管理できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; ユーザーを登録する</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; IDと名前を持ったユーザーを作成する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が３文字未満の場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を指定しない場合はエラー</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名が４文字の場合は登録される</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを指定しない場合はエラー</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザー名を変更できるようにする</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザーの同一性を判断できるようにする</simpara>
+<itemizedlist mark="none">
+<listitem>
+<simpara>&#10003; 識別子を追加する</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; エンティティの比較のを行う</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>&#10003; ユーザーを重複して登録できないようにする</simpara>
+</listitem>
+<listitem>
+<simpara>&#10003; IDを自動生成する</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_ファイル構成">
+<title>ファイル構成</title>
+<literallayout class="monospaced">/main.rb
+  |--lib/
+      |
+       -- sns.rb
+       -- user.rb
+       -- user_id.rb
+       -- user_name.rb
+       -- user_service.rb
+  |--test/
+      |
+       -- test_helper.rb
+       -- user_service_test.rb
+       -- user_test.rb</literallayout>
+<formalpara>
+<title>/main.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered">require './test/user_test.rb'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/sns.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './lib/user_id.rb'
+require './lib/user_name.rb'
+require './lib/user.rb'
+require './lib/user_service.rb'
+require 'sqlite3'
+require 'securerandom'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User
+class User
+  attr_reader :id, :name
+
+  def initialize(user_name:)
+    @id = UserId.new(SecureRandom.uuid.to_str)
+    @name = user_name
+  end
+
+  def change_name(name)
+    raise if name.nil?
+
+    @name = name
+  end
+
+  def eql?(other)
+    @id == other.id
+  end
+
+  def ==(other)
+    other.equal?(self) || other.instance_of?(self.class) &amp;&amp; other.id == id
+  end
+
+  def hash
+    id.hash
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user_id.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User ID value object
+class UserId
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+
+    @value = value
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user_name.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# User name value object
+class UserName
+  attr_reader :value
+
+  def initialize(value)
+    raise if value.nil?
+    raise 'ユーザー名は3文字以上です。' if value.length &lt; 3
+
+    @value = value
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/lib/user_service.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+# UserService
+class UserService
+  def exist?(user)
+    db = SQLite3::Database.new('sns.db')
+    sql = 'SELECT * FROM USERS WHERE name = :name'
+    result = db.execute(sql, name: user.name.value)
+    !result.empty?
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/test_helper.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start
+require 'minitest/reporters'
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
+require 'minitest/autorun'</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/user_service_test.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './test/test_helper'
+require './lib/sns.rb'
+
+class UserServiceTest &lt; Minitest::Test
+  describe 'ユーザーの重複を判定する' do
+    def setup
+      @db = SQLite3::Database.new('sns.db')
+      sql = 'CREATE TABLE USERS(id string, name string)'
+      @db.execute(sql)
+
+      @service = UserService.new
+    end
+
+    def test_登録するユーザーがすでに存在している
+      name = UserName.new('Bob')
+      user = User.new(user_name: name)
+
+      sql = 'INSERT INTO USERS(id, name) VALUES(:id, :name)'
+      @db.execute(sql, id: user.id.value, name: user.name.value)
+
+      assert @service.exist?(user)
+    end
+
+    def test_登録するユーザーが存在していない
+      name = UserName.new('Alice')
+      user = User.new(user_name: name)
+
+      refute @service.exist?(user)
+    end
+
+    def teardown
+      sql = 'DROP TABLE USERS'
+      @db.execute(sql)
+      @db.close
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>/test/user_test.rb</title>
+<para>
+<programlisting language="ruby" linenumbering="unnumbered"># frozen_string_literal: true
+
+require './test/test_helper'
+require './lib/sns.rb'
+
+
+class UserTest &lt; Minitest::Test
+  describe 'ユーザーを登録する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_IDと名前を持ったユーザーを作成する
+      assert_equal 'Bob', @user.name.value
+    end
+
+    def test_ユーザー名が３文字未満の場合はエラー
+      e = assert_raises RuntimeError do
+        UserName.new('a')
+      end
+
+      assert_equal 'ユーザー名は3文字以上です。', e.message
+    end
+
+    def test_ユーザー名が４文字の場合は登録される
+      user = User.new(user_name: UserName.new('abcd'))
+      assert_equal 'abcd', user.name.value
+    end
+
+    def test_ユーザー名を指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserName.new(nil)
+      end
+    end
+
+    def test_IDを指定しない場合はエラー
+      assert_raises RuntimeError do
+        UserId.new(nil)
+      end
+    end
+  end
+
+  describe 'ユーザーを更新する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_ユーザー名を更新する
+      @user.change_name('Alice')
+      assert_equal 'Alice', @user.name
+    end
+  end
+
+  describe 'ユーザーの同一性を判断する' do
+    def setup
+      name = UserName.new('Bob')
+      @user = User.new(user_name: name)
+    end
+
+    def test_同じ名前の異なるユーザー
+      name = UserName.new('Bob')
+      @user2 = User.new(user_name: name)
+
+      refute @user.eql?(@user2)
+    end
+
+    def test_同じ名前の同じユーザー
+      assert @user.eql?(@user)
+    end
+
+    def test_名前を変更した同じユーザー
+      @user.change_name('Alice')
+
+      assert @user.eql?(@user)
+    end
+  end
+end</programlisting>
+</para>
+</formalpara>
+</section>
+</section>
+<section xml:id="_ふりかえり">
+<title>ふりかえり</title>
+<simpara>まず、<emphasis role="strong">ユーザーストーリー</emphasis> から追加の <emphasis role="strong">TODOリスト</emphasis> を作成しました。<?asciidoc-br?>
+<emphasis role="strong">TODOリスト</emphasis> の内容を実装するにあたって今回は <emphasis role="strong">仮実装を経て本実装へ</emphasis> のアプローチで作業を進めていきました。</simpara>
+<simpara>続いて、 <emphasis role="strong">クラスの抽出</emphasis> で <emphasis role="strong">ドメインサービス</emphasis> を抽出して <emphasis role="strong">エンティティ</emphasis> から対象メソッドを <emphasis role="strong">メソッドの移動</emphasis> で <emphasis role="strong">ドメインサービス</emphasis> に移しました。</simpara>
+<simpara>UUIDによる識別子を導入した後 <emphasis role="strong">エンティティ</emphasis> から <emphasis role="strong">メソッドの移動</emphasis> をさらに実施した結果 <emphasis role="strong">ドメインモデル貧血症</emphasis> を起こしてしまったので変更を取り消しました。</simpara>
+<simpara>次回は <emphasis role="strong">リポジトリ</emphasis> の実装に取り組んでみたいと思います。</simpara>
+</section>
+</article>

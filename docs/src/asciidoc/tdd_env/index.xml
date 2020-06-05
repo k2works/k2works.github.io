@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>環境構築から始めるテスト駆動開発</title>
-<date>2020-04-21</date>
+<date>2020-05-01</date>
 </info>
 <simpara>この記事はソフトウェア開発者を目指す入門者を対象に、IT リテラシの基本とプログラミング学習とソフトウェア開発の基盤となる環境構築の手順を解説しています。以下の構成の Windows マシンで作業を進めていきます。</simpara>
 <informalfigure>
