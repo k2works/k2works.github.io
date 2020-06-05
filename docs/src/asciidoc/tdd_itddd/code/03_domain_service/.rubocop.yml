@@ -1,0 +1,23 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+    Include:
+      - 'lib/**/*.rb'
+      - 'test/**/*_test.rb'
+    Exclude:
+      - 'docs'
+
+Style/AsciiComments:
+  Enabled: false
+
+Naming/MethodName:
+  Exclude:
+    - 'test/**'
+
+Naming/AsciiIdentifiers:
+  Exclude:
+    - 'test/**'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**'

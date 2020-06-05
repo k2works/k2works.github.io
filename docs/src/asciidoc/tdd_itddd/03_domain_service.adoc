@@ -6,7 +6,7 @@
 === ユーザーストーリー
 
 前回の *エンティティ* に続いて今回は *ドメインサービス* を作成します。
-まず *ユーザーストーリー* から追加作業を *TODOリスト* に追加します。
+まず *ユーザーストーリー* をもとに追加作業を *TODOリスト* に追加します。
 
   利用者として
   ユーザーを管理できるようにしたい
@@ -413,7 +413,7 @@ Finished in 0.18120s
 
 === TODOリスト
 
-ユーザーを重複をして登録できないようにする
+続いてユーザーIDを *エンティティ* の生成時に引数として受け取っていますが重複したIDで *エンティティ* を生成してしまう可能性があるので自動生成するようにリファクタリングしたいと思います。
 
 * [ ] ユーザーを管理できるようにする
 ** [x] ユーザーを登録する
@@ -433,6 +433,8 @@ Finished in 0.18120s
 
 ==== パラメータの削除
 
+https://ja.wikipedia.org/wiki/UUID[UUID] による識別子を導入するため `securerandom` ライブラリを追加します。なお `securerandom` は標準添付ライブラリなので `gem` によるインストールは必要ありません。
+
 `lib/sns.rb`
 [source, ruby]
 ----
@@ -443,6 +445,8 @@ require './lib/user_service.rb'
 require 'sqlite3'
 require 'securerandom'
 ----
+
+*エンティティ* のコンストラクタの引数からidを削除して、生成時にUUIDを自動生成するように変更します。
 
 `lib/user.rb`
 [source, ruby]
@@ -456,6 +460,8 @@ class User
   end
 ...
 ----
+
+プロダクトコードの変更に合わせてテストコードも修正します。
 
 `test/user_service_test.rb`
 [source, ruby]
@@ -576,13 +582,33 @@ class UserTest < Minitest::Test
 end
 ----
 
+テストが正しく動作することが確認出来たらリファクタリング完了です。
+
+[source, bash]
+----
+$ rake test
+...
+ユーザーの重複を判定する
+  test_登録するユーザーがすでに存在している                                         PASS (0.12s)
+  test_登録するユーザーが存在していない                                           PASS (0.06s)
+...
+ユーザーを更新する
+  test_ユーザー名を更新する                                                 PASS (0.00s)
+
+Finished in 0.18120s
+11 tests, 13 assertions, 0 failures, 0 errors, 0 skips
+----
+
 === ドメインモデル貧血症
+
+続いて *エンティティ* にある `change_name` メソッドに *メソッドの移動* を適用して *ドメインサービス* に移動するリファクタリング適用してみましょう。
 
 `lib/user.rb`
 [source, ruby]
 ----
 class User
   attr_reader :id, :name
+  attr_writer :name
 
   def initialize(user_name:)
     @id = UserId.new(SecureRandom.uuid.to_str)
@@ -617,23 +643,7 @@ class UserService
   def change_name(user, name)
     raise if name.nil?
 
-    user.name.value = name
-  end
-end
-----
-
-`lib/user_name.rb`
-[source, ruby]
-----
-class UserName
-  attr_reader :value
-  attr_writer :value
-
-  def initialize(value)
-    raise if value.nil?
-    raise 'ユーザー名は3文字以上です。' if value.length < 3
-
-    @value = value
+    user.name = name
   end
 end
 ----
@@ -644,30 +654,52 @@ end
 ...
     def test_ユーザー名を更新する
       service = UserService.new
-      service.change_name(@user, 'Alice')
+      service.change_name(@user, UserName.new('Alice'))
       assert_equal 'Alice', @user.name.value
     end
 ...
     def test_名前を変更した同じユーザー
       service = UserService.new
-      service.change_name(@user, 'Alice')
+      service.change_name(@user, UserName.new('Alice'))
 
       assert @user.eql?(@user)
     end
 ...
 ----
 
+*メソッドの移動* の結果 *エンティティ* がスカスカになった上に *値オブジェクト* を外部から更新するためのセッターを追加する必要が発生してしまいカプセル化が破壊されてしまう結果となりました。このような *エンティティ* の実装は *ドメインモデル貧血症* と呼ばれます。このリファクタリングはやりすぎだったようなので変更前に戻しておきましょう。
+
 [source, bash]
 ----
 $git checkout .
 ----
 
-
 === リリース
 
 ==== 静的コード解析
+[source, bash]
+----
+$ rubocop
+The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
+ - Layout/EmptyLinesAroundAttributeAccessor (0.83)
+ - Layout/SpaceAroundMethodCallOperator (0.82)
+ - Lint/RaiseException (0.81)
+ - Lint/StructNewOverride (0.81)
+ - Style/ExponentialNotation (0.82)
+ - Style/HashEachMethods (0.80)
+ - Style/HashTransformKeys (0.80)
+ - Style/HashTransformValues (0.80)
+ - Style/SlicingWithRange (0.83)
+For more information: https://docs.rubocop.org/en/latest/versioning/
+Inspecting 7 files
+.......
+
+7 files inspected, no offenses detected
+----
 
 ==== コードカバレッジ
+
+image::../../images/asciidoc/tdd_itddd/2020060501.png[]
 
 ==== TODOリスト
 
@@ -685,9 +717,89 @@ $git checkout .
 ** [x] ユーザーを重複して登録できないようにする
 ** [x] IDを自動生成する
 
-
 ==== ファイル構成
 
+ /main.rb
+   |--lib/
+       |
+        -- sns.rb
+        -- user.rb
+        -- user_id.rb
+        -- user_name.rb
+        -- user_service.rb
+   |--test/
+       |
+        -- test_helper.rb
+        -- user_service_test.rb
+        -- user_test.rb
+
+./main.rb
+[source, ruby]
+----
+include::./code/03_domain_service/main.rb[]
+----
+
+./lib/sns.rb
+[source, ruby]
+----
+include::./code/03_domain_service/lib/sns.rb[]
+----
+
+./lib/user.rb
+[source, ruby]
+----
+include::./code/03_domain_service/lib/user.rb[]
+----
+
+./lib/user_id.rb
+[source, ruby]
+----
+include::./code/03_domain_service/lib/user_id.rb[]
+----
+
+./lib/user_name.rb
+[source, ruby]
+----
+include::./code/03_domain_service/lib/user_name.rb[]
+----
+
+./lib/user_service.rb
+[source, ruby]
+----
+include::./code/03_domain_service/lib/user_service.rb[]
+----
+
+./test/test_helper.rb
+[source, ruby]
+----
+include::./code/03_domain_service/test/test_helper.rb[]
+----
+
+./test/user_service_test.rb
+[source, ruby]
+----
+include::./code/03_domain_service/test/user_service_test.rb[]
+----
+
+
+./test/user_test.rb
+[source, ruby]
+----
+include::./code/03_domain_service/test/user_test.rb[]
+----
+
+
 === ふりかえり
+
+[%hardbreaks]
+まず、*ユーザーストーリー* から追加の *TODOリスト* を作成しました。
+*TODOリスト* の内容を実装するにあたって今回は *仮実装を経て本実装へ* のアプローチで作業を進めていきました。
+
+[%hardbreaks]
+続いて、 *クラスの抽出* で *ドメインサービス* を抽出して *エンティティ* から対象メソッドを *メソッドの移動* で *ドメインサービス* に移しました。
+
+[%hardbreaks]
+UUIDによる識別子を導入した後 *エンティティ* から *メソッドの移動* をさらに実施した結果 *ドメインモデル貧血症* を起こしてしまったので変更を取り消しました。
+
 
 次回は *リポジトリ* の実装に取り組んでみたいと思います。
