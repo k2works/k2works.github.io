@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>テスト駆動開発から始めるRuby入門</title>
-<date>2020-05-01</date>
+<date>2021-04-01</date>
 </info>
 <simpara>これはとあるプログラマがどのような思考を経てテスト駆動開発でアプリケーションを構築していったかを解説した内容である。隣りに座って話を聞きながらコードを追いかけているイメージで読み進めてみてださい。</simpara>
 <section xml:id="_エピソード1">

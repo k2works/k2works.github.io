@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>環境構築から始めるテスト駆動開発</title>
-<date>2020-05-01</date>
+<date>2021-04-05</date>
 </info>
 <section xml:id="_環境構築から始めるテスト駆動開発">
 <title>環境構築から始めるテスト駆動開発</title>
@@ -391,8 +391,8 @@ Pragmatic Programmer: your journey to mastery
 <title>開発環境のセットアップ</title>
 <section xml:id="_パッケージ管理ツールのインストール">
 <title>パッケージ管理ツールのインストール</title>
-<simpara>アプリケーションの管理にはパッケージ管理ツール <link xl:href="https://chocolatey.org/">The Package Manager for Windows</link> を使います。インストールの方法は <link xl:href="https://qiita.com/konta220/items/95b40b4647a737cb51aa">Chocolateyを使った環境構築の時のメモ</link> を参照してください。</simpara>
-<simpara><literal>Get Started</literal> を選択します。</simpara>
+<simpara>アプリケーションの管理にはパッケージ管理ツール <link xl:href="https://scoop.sh/">Scoop</link> を使います。インストールの詳細は <link xl:href="https://qiita.com/Dooteeen/items/12dc8fb14042888113d0">Scoopを使ったWindows環境構築のススメ - Super!!</link> を参照してください。</simpara>
+<simpara>スタートメニューから <literal>Windows PowerShell</literal> を選択します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -401,46 +401,15 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>pkg 001</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>コードをコピーします。</simpara>
+<simpara>以下のコマンドを入力します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">Set-ExecutionPolicy RemoteSigned -scope CurrentUser
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')</programlisting>
 <informalfigure>
 <mediaobject>
 <imageobject>
 <imagedata fileref="../../images/asciidoc/tdd_env/pkg-002.png"/>
 </imageobject>
 <textobject><phrase>pkg 002</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara>画面左下のスタートボタンを右クリックして <literal>Windows PowerSHell(管理者)(A)</literal> を起動してコピーしたコードを貼り付け実行します。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/pkg-003.png"/>
-</imageobject>
-<textobject><phrase>pkg 003</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/pkg-004.png"/>
-</imageobject>
-<textobject><phrase>pkg 004</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/pkg-005.png"/>
-</imageobject>
-<textobject><phrase>pkg 005</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/pkg-006.png"/>
-</imageobject>
-<textobject><phrase>pkg 006</phrase></textobject>
 </mediaobject>
 </informalfigure>
 </section>
@@ -454,6 +423,19 @@ Pragmatic Programmer: your journey to mastery
 <simpara>Always Use Version Control</simpara>
 <simpara>Vsersion control is a time machine for your work;you can go back.</simpara>
 </blockquote>
+<simpara>スタートメニューから <literal>Windows PowerShell</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-001.png"/>
+</imageobject>
+<textobject><phrase>pkg 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>以下のコマンドを入力します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">scoop install git</programlisting>
+<simpara>追加パッケージをインストールします</simpara>
+<programlisting language="poershell" linenumbering="unnumbered">scoop bucket add extras</programlisting>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -462,27 +444,75 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>git 001</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>画面左下のスタートボタンを右クリックして <literal>Windows PowerSHell(管理者)(A)</literal> を起動して以下のコマンドを入力します。質問には全てYを入力してください。</simpara>
-<screen>choco install git</screen>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/git-002.png"/>
-</imageobject>
-<textobject><phrase>git 002</phrase></textobject>
-</mediaobject>
-</informalfigure>
 </section>
 <section xml:id="_powershellcoreのインストール">
 <title>PowerShellCoreのインストール</title>
-<simpara>続いて、以下のコマンドを入力します。質問には全てYを入力してください。</simpara>
-<screen>choco install powershell-core</screen>
+<simpara>最新バージョンのセットアッププログラムをダウンロードします</simpara>
+<simpara><link xl:href="https://github.com/PowerShell/PowerShell/tags">GitHub</link></simpara>
+<simpara>Previewでない最新バージョンを選択します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
 <imagedata fileref="../../images/asciidoc/tdd_env/pwsh-001.png"/>
 </imageobject>
 <textobject><phrase>pwsh 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-002.png"/>
+</imageobject>
+<textobject><phrase>pwsh 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-003.png"/>
+</imageobject>
+<textobject><phrase>pwsh 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ダウンロードしたセットアッププログラムを実行します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-004.png"/>
+</imageobject>
+<textobject><phrase>pwsh 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-005.png"/>
+</imageobject>
+<textobject><phrase>pwsh 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-006.png"/>
+</imageobject>
+<textobject><phrase>pwsh 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-007.png"/>
+</imageobject>
+<textobject><phrase>pwsh 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pwsh-008.png"/>
+</imageobject>
+<textobject><phrase>pwsh 008</phrase></textobject>
 </mediaobject>
 </informalfigure>
 </section>
@@ -514,55 +544,10 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>terminal 002</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara><literal>入手</literal> を押してアプリケーションをインストールします。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/terminal-003.png"/>
-</imageobject>
-<textobject><phrase>terminal 003</phrase></textobject>
-</mediaobject>
-</informalfigure>
 </section>
 <section xml:id="_wslのインストール">
 <title>WSLのインストール</title>
-<simpara>続いて、検索欄に <literal>ubuntu</literal> と入力して候補の中から <literal>Ubuntu</literal> を選択します。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/wsl-001.png"/>
-</imageobject>
-<textobject><phrase>wsl 001</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara>入手を押してアプリケーションをインストールします。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/wsl-002.png"/>
-</imageobject>
-<textobject><phrase>wsl 002</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara>インストール後に起動を実行しても必要な設定があるため実行できません。一旦アプリケーションを閉じます。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/wsl-003.png"/>
-</imageobject>
-<textobject><phrase>wsl 003</phrase></textobject>
-</mediaobject>
-</informalfigure>
 <simpara>画面左下のスタートメニューから歯車のアイコンを選択してWindowsの設定画面を表示します。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/wsl-004.png"/>
-</imageobject>
-<textobject><phrase>wsl 004</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara><literal>アプリ</literal> を選択します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -571,7 +556,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>wsl 005</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara><literal>アプリと機能</literal> から <literal>プログラミングと機能</literal> を選択します。</simpara>
+<simpara><literal>アプリ</literal> を選択します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -580,7 +565,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>wsl 006</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara><literal>Windows Subsystem for Linux</literal> にチェックを入れてOKボタンを押します。</simpara>
+<simpara><literal>アプリと機能</literal> から <literal>プログラミングと機能</literal> を選択します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -589,25 +574,16 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>wsl 007</phrase></textobject>
 </mediaobject>
 </informalfigure>
+<simpara><literal>Windows Subsystem for Linux</literal> にチェックを入れてOKボタンを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-008.png"/>
+</imageobject>
+<textobject><phrase>wsl 008</phrase></textobject>
+</mediaobject>
+</informalfigure>
 <simpara><literal>今すぐ再起動</literal> を押してWindowsを再起動します。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/wsl-008-1.png"/>
-</imageobject>
-<textobject><phrase>wsl 008 1</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara>画面左下のスタートメニューから <literal>Ubuntu</literal> を選択します。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/wsl-008-2.png"/>
-</imageobject>
-<textobject><phrase>wsl 008 2</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara>セットアップが始まるのでユーザーIDとパスワードを設定してください。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -616,12 +592,144 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>wsl 009</phrase></textobject>
 </mediaobject>
 </informalfigure>
+</section>
+<section xml:id="_dockerのインストール">
+<title>Dockerのインストール</title>
+<simpara><link xl:href="https://www.docker.com/products/docker-desktop">Docker Desktop</link> をインストールします。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/wsl-010.png"/>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-001.png"/>
 </imageobject>
-<textobject><phrase>wsl 010</phrase></textobject>
+<textobject><phrase>docker 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>OKを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-002.png"/>
+</imageobject>
+<textobject><phrase>docker 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>インストールが完了したら再起動します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-003.png"/>
+</imageobject>
+<textobject><phrase>docker 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>再起動後に以下の警告が表示されるのでリンクをクリックします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-004.png"/>
+</imageobject>
+<textobject><phrase>docker 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>Linxuカーネル更新プログラムパッケージをダウンロードして実行します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-005.png"/>
+</imageobject>
+<textobject><phrase>docker 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-006.png"/>
+</imageobject>
+<textobject><phrase>docker 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-007.png"/>
+</imageobject>
+<textobject><phrase>docker 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>完了したら、Restartを押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-008.png"/>
+</imageobject>
+<textobject><phrase>docker 008</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>チュートリアルを実行して動作を確認しておきましょう。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/docker-009.png"/>
+</imageobject>
+<textobject><phrase>docker 009</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_ubuntuのインストール">
+<title>Ubuntuのインストール</title>
+<simpara>スタートメニューから <literal>Windows PowerShell</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-001.png"/>
+</imageobject>
+<textobject><phrase>pkg 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>以下のコマンドを入力します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">wsl --set-default-version 2</programlisting>
+<simpara>画面左下のスタートメニューから <literal>Microsft Store</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-001.png"/>
+</imageobject>
+<textobject><phrase>wsl 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>続いて、検索欄に <literal>ubuntu</literal> と入力して候補の中から <literal>Ubuntu</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-002.png"/>
+</imageobject>
+<textobject><phrase>wsl 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>入手を押してアプリケーションをインストールします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-003.png"/>
+</imageobject>
+<textobject><phrase>wsl 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>インストールが終わるとセットアップが始まるのでユーザーIDとパスワードを設定してください。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-011.png"/>
+</imageobject>
+<textobject><phrase>wsl 011</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/wsl-012.png"/>
+</imageobject>
+<textobject><phrase>wsl 012</phrase></textobject>
 </mediaobject>
 </informalfigure>
 </section>
@@ -807,7 +915,7 @@ Pragmatic Programmer: your journey to mastery
 <section xml:id="_設定の同期">
 <title>設定の同期</title>
 <simpara>エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。</simpara>
-<simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync">Settings Sync</link> をインストールすると以下の画面が表示されるので <literal>LOGIN WITH GITHUB</literal> を選択します。</simpara>
+<simpara>サイドバーから設定の同期をオンにするを選択します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -816,7 +924,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>sync 001</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara><literal>アクセスを許可する</literal> を押します。</simpara>
+<simpara><literal>オンにする</literal> を押します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -825,7 +933,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>sync 002</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara><literal>開く</literal> を押します。</simpara>
+<simpara><literal>サインインしてオンにする</literal> を押します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -834,7 +942,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>sync 003</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>ブラウザが起動するので <literal>Authorize</literal> を押します。</simpara>
+<simpara><literal>GitHubでサインイン</literal> を選択します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -843,6 +951,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>sync 004</phrase></textobject>
 </mediaobject>
 </informalfigure>
+<simpara>ブラウザが起動するので <literal>Continue</literal> を押します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -851,7 +960,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>sync 005</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara><literal>SKIP</literal> を押します。</simpara>
+<simpara>GitHubのアカウントとパスワードを入力します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -860,7 +969,7 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>sync 006</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>エディタメニューの <literal>表示</literal> から <literal>コマンドパレット</literal> を選択して <literal>Sync</literal> と入力して入力候補の中から <literal>アップデート・アップロードの設定</literal> を選択します。</simpara>
+<simpara><literal>Authorize github</literal> を押します。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -869,16 +978,6 @@ Pragmatic Programmer: your journey to mastery
 <textobject><phrase>sync 007</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara><literal>はい</literal> を押して設定をアップロードします。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/sync-008.png"/>
-</imageobject>
-<textobject><phrase>sync 008</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara>エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから <literal>Sync: 設定をダウンロード</literal> を選択します。</simpara>
 <simpara>もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。</simpara>
 <informalfigure>
 <mediaobject>
@@ -1297,6 +1396,7 @@ function HelloWorld($name = "PowerShell") {
 <simpara>以下のコマンドをターミナルに入力します。</simpara>
 <screen>git config --global user.name "newbie4649"
 git config --global user.email newbie4649@outlook.jp</screen>
+<simpara>user.nameとuser.emailには自分のアカウント情報を登録すること。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -1314,13 +1414,13 @@ git config --global user.email newbie4649@outlook.jp</screen>
 <textobject><phrase>hello 033</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>レポジトリの記録内容は <literal>GitLens</literal> から確認することが出来ます。</simpara>
+<simpara>レポジトリの記録内容は <literal>ソース管理</literal> から確認することが出来ます。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/hello-034.png"/>
+<imagedata fileref="../../images/asciidoc/tdd_env/hello-035.png"/>
 </imageobject>
-<textobject><phrase>hello 034</phrase></textobject>
+<textobject><phrase>hello 035</phrase></textobject>
 </mediaobject>
 </informalfigure>
 </section>

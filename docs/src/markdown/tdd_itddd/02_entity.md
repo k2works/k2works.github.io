@@ -1,42 +1,43 @@
 # ユーザーストーリー
 
-前回の **値オブジェクト** に続いて今回は **エンティティ** を作成します。まず **ユーザーストーリー** から追加作業を **TODO リスト** に追加します。
+前回の **値オブジェクト** に続いて今回は **エンティティ** を作成します。まず **ユーザーストーリー** から追加作業を
+**TODOリスト** に追加します。
 
     利用者として
     ユーザーを管理できるようにしたい
     なぜならユーザーはシステムを利用するために必要だから
 
-# TODO リスト
+# TODOリスト
 
-- ❏ ユーザーを管理できるようにする
-
-  - ✓ ユーザーを登録する
-
-    - ✓ ID と名前を持ったユーザーを作成する
-
-    - ✓ ユーザー名が３文字未満の場合はエラー
-
-    - ✓ ユーザー名を指定しない場合はエラー
-
-    - ✓ ユーザー名が４文字の場合は登録される
-
-    - ✓ ID を指定しない場合はエラー
-
-  - ❏ ユーザー名を変更できるようにする
-
-  - ❏ ユーザーの同一性を判断できるようにする
-
-    - ❏ 識別子を追加する
-
-    - ❏ エンティティの比較のを行う
+  - ❏ ユーザーを管理できるようにする
+    
+      - ✓ ユーザーを登録する
+        
+          - ✓ IDと名前を持ったユーザーを作成する
+        
+          - ✓ ユーザー名が３文字未満の場合はエラー
+        
+          - ✓ ユーザー名を指定しない場合はエラー
+        
+          - ✓ ユーザー名が４文字の場合は登録される
+        
+          - ✓ IDを指定しない場合はエラー
+    
+      - ❏ ユーザー名を変更できるようにする
+    
+      - ❏ ユーザーの同一性を判断できるようにする
+        
+          - ❏ 識別子を追加する
+        
+          - ❏ エンティティの比較のを行う
 
 # 明白な実装
 
 ## ユーザー名を変更する
 
-追加した **TODO リスト** を **テストファースト** で片づけるため最初にテストコードの追加から始めます。
+追加した **TODOリスト** を **テストファースト** で片づけるため最初にテストコードの追加から始めます。
 
-```ruby
+``` ruby
 ...
   describe 'ユーザーを更新する' do
     def setup
@@ -55,7 +56,7 @@ end
 
 テストを実行して失敗することを確認します。
 
-```bash
+``` bash
 $ ruby test/user_test.rb
 Started with run options --seed 16647
 
@@ -78,7 +79,7 @@ Finished in 0.00382s
 
 続いて、メソッドの追加します。簡単な実装なので **明白な実装** で片づけるとします。
 
-```ruby
+``` ruby
 class User
   attr_reader :id, :name
 
@@ -97,7 +98,7 @@ end
 
 続いて、テストが通ることを確認します。
 
-```bash
+``` bash
 $ ruby test/user_test.rb
 Started with run options --seed 6624
 
@@ -119,7 +120,7 @@ Finished in 0.00127s
 
 **エンティティ** として同一性を判断するためのテストケースを追加します。
 
-```ruby
+``` ruby
 ...
   describe 'ユーザーの同一性を判断する' do
     def setup
@@ -149,7 +150,7 @@ Finished in 0.00127s
 end
 ```
 
-```bash
+``` bash
 $ ruby test/user_test.rb
 Started with run options --seed 20456
 
@@ -174,7 +175,7 @@ Finished in 0.00166s
 
 比較メソッドを識別子で判定するようにオーバーライドします。
 
-```ruby
+``` ruby
 class User
   attr_reader :id, :name
 
@@ -195,7 +196,7 @@ class User
 end
 ```
 
-```bash
+``` bash
  $ ruby test/user_test.rb
 Started with run options --seed 1326
 
@@ -224,7 +225,7 @@ Finished in 0.00226s
 
 `eql?` メソッドを `==` に委譲します。
 
-```ruby
+``` ruby
 class User
   attr_reader :id, :name
 
@@ -255,7 +256,7 @@ end
 
 変更によりコードが壊れていないことを確認します。
 
-```bash
+``` bash
 $ ruby test/user_test.rb
 Started with run options --seed 37624
 
@@ -284,7 +285,7 @@ Finished in 0.00164s
 
 `test_helper.rb` を作成します。
 
-```ruby
+``` ruby
 require 'simplecov'
 SimpleCov.start
 require 'minitest/reporters'
@@ -294,7 +295,7 @@ require 'minitest/autorun'
 
 `user_test.rb` の先頭部部を変更します。
 
-```ruby
+``` ruby
 require './test/test_helper'
 require './lib/sns.rb'
 
@@ -306,7 +307,7 @@ class UserTest < Minitest::Test
 
 ## 静的コード解析
 
-```bash
+``` bash
 $ rubocop
 The following cops were added to RuboCop, but are not configured. Please set Enabled to either `true` or `false` in your `.rubocop.yml` file:
  - Lint/RaiseException (0.81)
@@ -334,29 +335,29 @@ Inspecting 5 files
 
 ![2020042202](../../images/asciidoc/tdd_itddd/2020042202.png)
 
-## TODO リスト
+## TODOリスト
 
-- ❏ ユーザーを管理できるようにする
-
-  - ✓ ユーザーを登録する
-
-    - ✓ ID と名前を持ったユーザーを作成する
-
-    - ✓ ユーザー名が３文字未満の場合はエラー
-
-    - ✓ ユーザー名を指定しない場合はエラー
-
-    - ✓ ユーザー名が４文字の場合は登録される
-
-    - ✓ ID を指定しない場合はエラー
-
-  - ✓ ユーザー名を変更できるようにする
-
-  - ✓ ユーザーの同一性を判断できるようにする
-
-    - ✓ 識別子を追加する
-
-    - ✓ エンティティの比較のを行う
+  - ❏ ユーザーを管理できるようにする
+    
+      - ✓ ユーザーを登録する
+        
+          - ✓ IDと名前を持ったユーザーを作成する
+        
+          - ✓ ユーザー名が３文字未満の場合はエラー
+        
+          - ✓ ユーザー名を指定しない場合はエラー
+        
+          - ✓ ユーザー名が４文字の場合は登録される
+        
+          - ✓ IDを指定しない場合はエラー
+    
+      - ✓ ユーザー名を変更できるようにする
+    
+      - ✓ ユーザーの同一性を判断できるようにする
+        
+          - ✓ 識別子を追加する
+        
+          - ✓ エンティティの比較のを行う
 
 ## ファイル構成
 
@@ -374,13 +375,13 @@ Inspecting 5 files
 
 **/main.rb.**
 
-```ruby
+``` ruby
 require './test/user_test.rb'
 ```
 
 **/lib/sns.rb.**
 
-```ruby
+``` ruby
 # frozen_string_literal: true
 
 require './lib/user_id.rb'
@@ -388,9 +389,9 @@ require './lib/user_name.rb'
 require './lib/user.rb'
 ```
 
-**/lib/user_id.rb.**
+**/lib/user\_id.rb.**
 
-```ruby
+``` ruby
 # frozen_string_literal: true
 
 # User ID value object
@@ -405,9 +406,9 @@ class UserId
 end
 ```
 
-**/lib/user_name.rb.**
+**/lib/user\_name.rb.**
 
-```ruby
+``` ruby
 # frozen_string_literal: true
 
 # User name value object
@@ -425,7 +426,7 @@ end
 
 **/lib/user.rb.**
 
-```ruby
+``` ruby
 # frozen_string_literal: true
 
 # User
@@ -457,9 +458,9 @@ class User
 end
 ```
 
-**/test/test_helper.rb.**
+**/test/test\_helper.rb.**
 
-```ruby
+``` ruby
 # frozen_string_literal: true
 
 require 'simplecov'
@@ -469,9 +470,9 @@ Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(color: true)]
 require 'minitest/autorun'
 ```
 
-**/test/user_test.rb.**
+**/test/user\_test.rb.**
 
-```ruby
+``` ruby
 # frozen_string_literal: true
 
 require './test/test_helper'
@@ -560,37 +561,39 @@ end
 
 # ふりかえり
 
-まず、**ユーザーストーリー** から追加の **TODO リスト** を作成しました。
+まず、**ユーザーストーリー** から追加の **TODOリスト** を作成しました。  
 **テストファースト** で最初に失敗するテストから始めて **明白な実装** によりユーザ名を更新するメソッドを追加しました。
 
 続いて、**値オブジェクト** であるユーザーオブジェクトを **エンティティ**
-として扱えるようにするためユーザーの同一性を判断するためのメソッドを追加しました。
+として扱えるようにするためユーザーの同一性を判断するためのメソッドを追加しました。  
 そして、メソッドの委譲のリファクタリングを実施後、テストを実行してコードが壊れていないことを確認しました。
 
 仕上げに、ヘルパーファイルを抽出してテストファイルで共有できるようにしました。
 
-今回のテーマである **エンティティ** に関しては、書籍『リファクタリング』第８章　データの再編成　値から参照への変更で言及されています。
+今回のテーマである **エンティティ**
+> に関しては、書籍『リファクタリング』第８章　データの再編成　値から参照への変更で言及されています。
 
 > 多くのシステムにおいて、参照オブジェクトと値オブジェクトを分けて考えることが役立ちます。「参照オブジェクト」とは、顧客とか勘定といったもので、実世界における１個のオブジェクトを表しており、それらが同じものかどうかを調べるには、オブジェクト識別が用いられます。「値オブジェクト」とは、日付やお金のようなもので、もっぱら、それ自体のデータ値によって定義されます。それらのコピーはいくつあってもかまいません。
->
-> — 新装版 リファクタリング
+> 
+> —  新装版 リファクタリング 
 
-**値オブジェクト** と **エンティティ** に関してはリファクタリングカタログで **値から参照への変更** と **参照から値への変更** として解説されています。
+**値オブジェクト** と **エンティティ** に関してはリファクタリングカタログで **値から参照への変更** と
+**参照から値への変更** として解説されています。
 
 > 値から参照への変更
->
+> 
 > 同じインスタンスが多数存在するクラスがある。それらを１つのオブジェクトに置き換えたい。
->
+> 
 > そのオブジェクトを参照オブジェクトに変える。
->
-> — 新装版 リファクタリング
+> 
+> —  新装版 リファクタリング 
 
 > 参照から値への変更
->
+> 
 > 小さくて、不変で、コントロールが煩わしい参照オブジェクトがある。
->
+> 
 > 値オブジェクトに変える。
->
-> — 新装版 リファクタリング
+> 
+> —  新装版 リファクタリング 
 
 次回は **ドメインサービス** の実装に取り組んでみたいと思います。

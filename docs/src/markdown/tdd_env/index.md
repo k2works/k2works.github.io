@@ -242,29 +242,23 @@ Freeプランを選択します
 
 #### パッケージ管理ツールのインストール
 
-アプリケーションの管理にはパッケージ管理ツール [The Package Manager for
-Windows](https://chocolatey.org/) を使います。インストールの方法は
-[Chocolateyを使った環境構築の時のメモ](https://qiita.com/konta220/items/95b40b4647a737cb51aa)
+アプリケーションの管理にはパッケージ管理ツール [Scoop](https://scoop.sh/) を使います。インストールの詳細は
+[Scoopを使ったWindows環境構築のススメ -
+Super\!\!](https://qiita.com/Dooteeen/items/12dc8fb14042888113d0)
 を参照してください。
 
-`Get Started` を選択します。
+スタートメニューから `Windows PowerShell` を選択します。
 
 ![pkg 001](../../images/asciidoc/tdd_env/pkg-001.png)
 
-コードをコピーします。
+以下のコマンドを入力します。
+
+``` powershell
+Set-ExecutionPolicy RemoteSigned -scope CurrentUser
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+```
 
 ![pkg 002](../../images/asciidoc/tdd_env/pkg-002.png)
-
-画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)`
-を起動してコピーしたコードを貼り付け実行します。
-
-![pkg 003](../../images/asciidoc/tdd_env/pkg-003.png)
-
-![pkg 004](../../images/asciidoc/tdd_env/pkg-004.png)
-
-![pkg 005](../../images/asciidoc/tdd_env/pkg-005.png)
-
-![pkg 006](../../images/asciidoc/tdd_env/pkg-006.png)
 
 #### gitのインストール
 
@@ -275,22 +269,49 @@ Windows](https://chocolatey.org/) を使います。インストールの方法�
 > —  Pragmatic Programmer: your journey to mastery 20th Anniversary
 > Edition 
 
+スタートメニューから `Windows PowerShell` を選択します。
+
+![pkg 001](../../images/asciidoc/tdd_env/pkg-001.png)
+
+以下のコマンドを入力します。
+
+``` powershell
+scoop install git
+```
+
+追加パッケージをインストールします
+
+``` poershell
+scoop bucket add extras
+```
+
 ![git 001](../../images/asciidoc/tdd_env/git-001.png)
-
-画面左下のスタートボタンを右クリックして `Windows PowerSHell(管理者)(A)`
-を起動して以下のコマンドを入力します。質問には全てYを入力してください。
-
-    choco install git
-
-![git 002](../../images/asciidoc/tdd_env/git-002.png)
 
 #### PowerShellCoreのインストール
 
-続いて、以下のコマンドを入力します。質問には全てYを入力してください。
+最新バージョンのセットアッププログラムをダウンロードします
 
-    choco install powershell-core
+[GitHub](https://github.com/PowerShell/PowerShell/tags)
+
+Previewでない最新バージョンを選択します。
 
 ![pwsh 001](../../images/asciidoc/tdd_env/pwsh-001.png)
+
+![pwsh 002](../../images/asciidoc/tdd_env/pwsh-002.png)
+
+![pwsh 003](../../images/asciidoc/tdd_env/pwsh-003.png)
+
+ダウンロードしたセットアッププログラムを実行します。
+
+![pwsh 004](../../images/asciidoc/tdd_env/pwsh-004.png)
+
+![pwsh 005](../../images/asciidoc/tdd_env/pwsh-005.png)
+
+![pwsh 006](../../images/asciidoc/tdd_env/pwsh-006.png)
+
+![pwsh 007](../../images/asciidoc/tdd_env/pwsh-007.png)
+
+![pwsh 008](../../images/asciidoc/tdd_env/pwsh-008.png)
 
 #### Windows Terminalのインストール
 
@@ -309,53 +330,92 @@ Windows](https://chocolatey.org/) を使います。インストールの方法�
 
 ![terminal 002](../../images/asciidoc/tdd_env/terminal-002.png)
 
-`入手` を押してアプリケーションをインストールします。
-
-![terminal 003](../../images/asciidoc/tdd_env/terminal-003.png)
-
 #### WSLのインストール
-
-続いて、検索欄に `ubuntu` と入力して候補の中から `Ubuntu` を選択します。
-
-![wsl 001](../../images/asciidoc/tdd_env/wsl-001.png)
-
-入手を押してアプリケーションをインストールします。
-
-![wsl 002](../../images/asciidoc/tdd_env/wsl-002.png)
-
-インストール後に起動を実行しても必要な設定があるため実行できません。一旦アプリケーションを閉じます。
-
-![wsl 003](../../images/asciidoc/tdd_env/wsl-003.png)
 
 画面左下のスタートメニューから歯車のアイコンを選択してWindowsの設定画面を表示します。
 
-![wsl 004](../../images/asciidoc/tdd_env/wsl-004.png)
+![wsl 005](../../images/asciidoc/tdd_env/wsl-005.png)
 
 `アプリ` を選択します。
 
-![wsl 005](../../images/asciidoc/tdd_env/wsl-005.png)
+![wsl 006](../../images/asciidoc/tdd_env/wsl-006.png)
 
 `アプリと機能` から `プログラミングと機能` を選択します。
 
-![wsl 006](../../images/asciidoc/tdd_env/wsl-006.png)
+![wsl 007](../../images/asciidoc/tdd_env/wsl-007.png)
 
 `Windows Subsystem for Linux` にチェックを入れてOKボタンを押します。
 
-![wsl 007](../../images/asciidoc/tdd_env/wsl-007.png)
+![wsl 008](../../images/asciidoc/tdd_env/wsl-008.png)
 
 `今すぐ再起動` を押してWindowsを再起動します。
 
-![wsl 008 1](../../images/asciidoc/tdd_env/wsl-008-1.png)
-
-画面左下のスタートメニューから `Ubuntu` を選択します。
-
-![wsl 008 2](../../images/asciidoc/tdd_env/wsl-008-2.png)
-
-セットアップが始まるのでユーザーIDとパスワードを設定してください。
-
 ![wsl 009](../../images/asciidoc/tdd_env/wsl-009.png)
 
-![wsl 010](../../images/asciidoc/tdd_env/wsl-010.png)
+#### Dockerのインストール
+
+[Docker Desktop](https://www.docker.com/products/docker-desktop)
+をインストールします。
+
+![docker 001](../../images/asciidoc/tdd_env/docker-001.png)
+
+OKを押します。
+
+![docker 002](../../images/asciidoc/tdd_env/docker-002.png)
+
+インストールが完了したら再起動します。
+
+![docker 003](../../images/asciidoc/tdd_env/docker-003.png)
+
+再起動後に以下の警告が表示されるのでリンクをクリックします。
+
+![docker 004](../../images/asciidoc/tdd_env/docker-004.png)
+
+Linxuカーネル更新プログラムパッケージをダウンロードして実行します。
+
+![docker 005](../../images/asciidoc/tdd_env/docker-005.png)
+
+![docker 006](../../images/asciidoc/tdd_env/docker-006.png)
+
+![docker 007](../../images/asciidoc/tdd_env/docker-007.png)
+
+完了したら、Restartを押します。
+
+![docker 008](../../images/asciidoc/tdd_env/docker-008.png)
+
+チュートリアルを実行して動作を確認しておきましょう。
+
+![docker 009](../../images/asciidoc/tdd_env/docker-009.png)
+
+#### Ubuntuのインストール
+
+スタートメニューから `Windows PowerShell` を選択します。
+
+![pkg 001](../../images/asciidoc/tdd_env/pkg-001.png)
+
+以下のコマンドを入力します。
+
+``` powershell
+wsl --set-default-version 2
+```
+
+画面左下のスタートメニューから `Microsft Store` を選択します。
+
+![wsl 001](../../images/asciidoc/tdd_env/wsl-001.png)
+
+続いて、検索欄に `ubuntu` と入力して候補の中から `Ubuntu` を選択します。
+
+![wsl 002](../../images/asciidoc/tdd_env/wsl-002.png)
+
+入手を押してアプリケーションをインストールします。
+
+![wsl 003](../../images/asciidoc/tdd_env/wsl-003.png)
+
+インストールが終わるとセットアップが始まるのでユーザーIDとパスワードを設定してください。
+
+![wsl 011](../../images/asciidoc/tdd_env/wsl-011.png)
+
+![wsl 012](../../images/asciidoc/tdd_env/wsl-012.png)
 
 ### エディタのセットアップ
 
@@ -479,41 +539,33 @@ Code](https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-langu
 
 エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。
 
-[Settings
-Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync)
-をインストールすると以下の画面が表示されるので `LOGIN WITH GITHUB` を選択します。
+サイドバーから設定の同期をオンにするを選択します。
 
 ![sync 001](../../images/asciidoc/tdd_env/sync-001.png)
 
-`アクセスを許可する` を押します。
+`オンにする` を押します。
 
 ![sync 002](../../images/asciidoc/tdd_env/sync-002.png)
 
-`開く` を押します。
+`サインインしてオンにする` を押します。
 
 ![sync 003](../../images/asciidoc/tdd_env/sync-003.png)
 
-ブラウザが起動するので `Authorize` を押します。
+`GitHubでサインイン` を選択します。
 
 ![sync 004](../../images/asciidoc/tdd_env/sync-004.png)
 
+ブラウザが起動するので `Continue` を押します。
+
 ![sync 005](../../images/asciidoc/tdd_env/sync-005.png)
 
-`SKIP` を押します。
+GitHubのアカウントとパスワードを入力します。
 
 ![sync 006](../../images/asciidoc/tdd_env/sync-006.png)
 
-エディタメニューの `表示` から `コマンドパレット` を選択して `Sync` と入力して入力候補の中から
-`アップデート・アップロードの設定` を選択します。
+`Authorize github` を押します。
 
 ![sync 007](../../images/asciidoc/tdd_env/sync-007.png)
-
-`はい` を押して設定をアップロードします。
-
-![sync 008](../../images/asciidoc/tdd_env/sync-008.png)
-
-エディタの設定を変更した際はアップロードすることで最新の設定を保存することができます。保存した設定を読み込む場合はコマンドパレットから
-`Sync: 設定をダウンロード` を選択します。
 
 もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。
 
@@ -791,15 +843,17 @@ F5を押します。
     git config --global user.name "newbie4649"
     git config --global user.email newbie4649@outlook.jp
 
+user.nameとuser.emailには自分のアカウント情報を登録すること。
+
 ![hello 032](../../images/asciidoc/tdd_env/hello-032.png)
 
 再度 `コミット` を押してレポジトリに保存します。
 
 ![hello 033](../../images/asciidoc/tdd_env/hello-033.png)
 
-レポジトリの記録内容は `GitLens` から確認することが出来ます。
+レポジトリの記録内容は `ソース管理` から確認することが出来ます。
 
-![hello 034](../../images/asciidoc/tdd_env/hello-034.png)
+![hello 035](../../images/asciidoc/tdd_env/hello-035.png)
 
 ### 開発言語のセットアップ
 
