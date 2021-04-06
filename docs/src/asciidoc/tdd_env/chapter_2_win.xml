@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Ruby環境のセットアップ(Windows版)</title>
-<date>2021-04-01</date>
+<date>2021-04-06</date>
 </info>
 <section xml:id="_ruby環境のセットアップ_windows版">
 <title>Ruby環境のセットアップ(Windows版)</title>
@@ -12,7 +12,21 @@
 </section>
 <section xml:id="_インストール">
 <title>インストール</title>
-<simpara><link xl:href="https://rubyinstaller.org/downloads/">RubyInstaller</link>からWITH DEVKITをインストールします。</simpara>
+<simpara>スタートメニューから <literal>Windows PowerShell</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/pkg-001.png"/>
+</imageobject>
+<textobject><phrase>pkg 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>以下のコマンドを入力します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">scoop install ruby</programlisting>
+<simpara>インストール完了後に MSYS2 のインストールを促されるのでインストールします。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">scoop install msys2</programlisting>
+<simpara>続いて、以下のコマンドを入力して <literal>3</literal> を指定して実行します。</simpara>
+<programlisting language="powershell" linenumbering="unnumbered">ridk install</programlisting>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -21,51 +35,10 @@
 <textobject><phrase>ruby win install 001</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>インストラーの指示に従います。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-install-002.png"/>
-</imageobject>
-<textobject><phrase>ruby win install 002</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-install-003.png"/>
-</imageobject>
-<textobject><phrase>ruby win install 003</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-install-004.png"/>
-</imageobject>
-<textobject><phrase>ruby win install 004</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-install-005.png"/>
-</imageobject>
-<textobject><phrase>ruby win install 005</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<simpara>3を入力してエンターキーを押します。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-install-006.png"/>
-</imageobject>
-<textobject><phrase>ruby win install 006</phrase></textobject>
-</mediaobject>
-</informalfigure>
 </section>
 <section xml:id="_追加パッケージのインストール">
 <title>追加パッケージのインストール</title>
+<simpara>続いて、VSCodeにRuby開発用のパッケージを追加します。</simpara>
 <simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby">Ruby for Visual Studio Code</link></simpara>
 <simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=castwide.solargraph">Ruby Solargraph</link></simpara>
 <simpara><link xl:href="https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise">vscode-endwise</link></simpara>
@@ -75,28 +48,11 @@
 </section>
 <section xml:id="_設定">
 <title>設定</title>
-<simpara>既定のシェルをPowerShell Coreに変更します。</simpara>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-vscode-001.png"/>
-</imageobject>
-<textobject><phrase>ruby win vscode 001</phrase></textobject>
-</mediaobject>
-</informalfigure>
-<informalfigure>
-<mediaobject>
-<imageobject>
-<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-vscode-002.png"/>
-</imageobject>
-<textobject><phrase>ruby win vscode 002</phrase></textobject>
-</mediaobject>
-</informalfigure>
 <simpara>新しいターミナルを開いて以下のコマンドを入力します。</simpara>
 <programlisting language="bash" linenumbering="unnumbered">gem install rubocop
-gem install debase
 gem install ruby-debug-ide
-gem install solargraph</programlisting>
+gem install solargraph
+gem install minitest</programlisting>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -451,7 +407,7 @@ end</programlisting>
 <textobject><phrase>ruby win git 003</phrase></textobject>
 </mediaobject>
 </informalfigure>
-<simpara>変更内容は <literal>GitLens</literal> から確認できます。</simpara>
+<simpara>変更内容は <literal>ソース管理</literal> から確認できます。</simpara>
 <informalfigure>
 <mediaobject>
 <imageobject>
@@ -461,5 +417,172 @@ end</programlisting>
 </mediaobject>
 </informalfigure>
 </section>
+</section>
+<section xml:id="_githubに公開する">
+<title>GitHubに公開する</title>
+<simpara>続いて、GitHubを使ってレポジトリを外部に公開できるようにしてみましょう。</simpara>
+<simpara>まず、GitHubでレポジトリを作成します。</simpara>
+<simpara>画面右上の+マークから <literal>New repository</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-001.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 001</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>レポジトリ名は <literal>hello-ruby</literal> として <literal>Public</literal> で公開します。 公開したくない場合は <literal>Private</literal> を選択します。 <literal>Add a README file</literal> にもチェックを入れておきます。</simpara>
+<simpara>最後に <literal>Create repository</literal> を押して公開レポジトリを作成します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-002.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 002</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>公開レポジトリが作成されたらVSCodeから読み込めるようにするためリンク先の情報を取得します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-003.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 003</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>クリップボードのアイコンをクリックするとレポジトリのURLがコピーできます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-004.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 004</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>続いてVSCodeに戻り、<literal>表示</literal> メニューから <literal>コマンドパレット</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-005.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 005</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>clone</literal> と入力して <literal>Git クローン</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-006.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 006</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>リポジトリのURLへ先ほどコピーした公開レポジトリのURLを貼り付けます。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-007.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 007</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>公開レポジトリの保存場所を指定する必要があるのでここでは <literal>Projects</literal> フォルダに <literal>GitHub</literal> フォルダを追加してそこに保存することにします。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-008.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 008</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>チェックアウトが終わると画面左下に通知が出ますので <literal>開く</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-009.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 009</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>準備ができましたので先ほどやった <literal>HelloWorld</literal> プログラムをもう一度作成して先ほどと同様にローカルレポジトリに保存します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-010.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 010</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>ローカルレポジトリの内容をGitHubの公開レポジトリに登録します。<literal>表示</literal> メニューから <literal>コマンドパレット</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-011.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 011</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>push</literal> と入力して <literal>Git プッシュ</literal> を選択します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-012.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 012</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>以下のGitHub認証画面が表示された場合は <literal>Sign in with your browser</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-013.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 013</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara><literal>Authorize GitCrendtialManager</literal> を押します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-014.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 014</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>GitHubアカウントのパスワードを入力します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-015.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 015</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-016.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 016</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>認証が完了してローカルレポジトリの内容が公開レポジトリに登録されました。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-017.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 017</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara>内容が反映されているかをブラウザ画面から確認します。</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="../../images/asciidoc/tdd_env/ruby-win-github-018.png"/>
+</imageobject>
+<textobject><phrase>ruby win github 018</phrase></textobject>
+</mediaobject>
+</informalfigure>
 </section>
 </article>

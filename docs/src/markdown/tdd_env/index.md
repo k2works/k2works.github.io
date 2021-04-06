@@ -144,7 +144,7 @@ Engineering Dayboks
 | WSL      | newbie4649              |
 
 また、パスワードに関しては **セキュリティ**
-を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は
+を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自信が無い場合は
 **エンジニアリングデイブックス**
 に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ
 **保存する場所は一箇所**
@@ -918,32 +918,34 @@ chapter\_1.adoc - include::episode\_0\_wsl.adoc\[\]
 
 ## インストール
 
-[RubyInstaller](https://rubyinstaller.org/downloads/)からWITH
-DEVKITをインストールします。
+スタートメニューから `Windows PowerShell` を選択します。
+
+![pkg 001](../../images/asciidoc/tdd_env/pkg-001.png)
+
+以下のコマンドを入力します。
+
+``` powershell
+scoop install ruby
+```
+
+インストール完了後に MSYS2 のインストールを促されるのでインストールします。
+
+``` powershell
+scoop install msys2
+```
+
+続いて、以下のコマンドを入力して `3` を指定して実行します。
+
+``` powershell
+ridk install
+```
 
 ![ruby win install
 001](../../images/asciidoc/tdd_env/ruby-win-install-001.png)
 
-インストラーの指示に従います。
-
-![ruby win install
-002](../../images/asciidoc/tdd_env/ruby-win-install-002.png)
-
-![ruby win install
-003](../../images/asciidoc/tdd_env/ruby-win-install-003.png)
-
-![ruby win install
-004](../../images/asciidoc/tdd_env/ruby-win-install-004.png)
-
-![ruby win install
-005](../../images/asciidoc/tdd_env/ruby-win-install-005.png)
-
-3を入力してエンターキーを押します。
-
-![ruby win install
-006](../../images/asciidoc/tdd_env/ruby-win-install-006.png)
-
 ## 追加パッケージのインストール
+
+続いて、VSCodeにRuby開発用のパッケージを追加します。
 
 [Ruby for Visual Studio
 Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
@@ -963,21 +965,13 @@ Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-
 
 ## 設定
 
-既定のシェルをPowerShell Coreに変更します。
-
-![ruby win vscode
-001](../../images/asciidoc/tdd_env/ruby-win-vscode-001.png)
-
-![ruby win vscode
-002](../../images/asciidoc/tdd_env/ruby-win-vscode-002.png)
-
 新しいターミナルを開いて以下のコマンドを入力します。
 
 ``` bash
 gem install rubocop
-gem install debase
 gem install ruby-debug-ide
 gem install solargraph
+gem install minitest
 ```
 
 ![ruby win vscode
@@ -1247,9 +1241,107 @@ end
 
 ![ruby win git 003](../../images/asciidoc/tdd_env/ruby-win-git-003.png)
 
-変更内容は `GitLens` から確認できます。
+変更内容は `ソース管理` から確認できます。
 
 ![ruby win git 004](../../images/asciidoc/tdd_env/ruby-win-git-004.png)
+
+## GitHubに公開する
+
+続いて、GitHubを使ってレポジトリを外部に公開できるようにしてみましょう。
+
+まず、GitHubでレポジトリを作成します。
+
+画面右上の+マークから `New repository` を選択します。
+
+![ruby win github
+001](../../images/asciidoc/tdd_env/ruby-win-github-001.png)
+
+レポジトリ名は `hello-ruby` として `Public` で公開します。 公開したくない場合は `Private` を選択します。
+`Add a README file` にもチェックを入れておきます。
+
+最後に `Create repository` を押して公開レポジトリを作成します。
+
+![ruby win github
+002](../../images/asciidoc/tdd_env/ruby-win-github-002.png)
+
+公開レポジトリが作成されたらVSCodeから読み込めるようにするためリンク先の情報を取得します。
+
+![ruby win github
+003](../../images/asciidoc/tdd_env/ruby-win-github-003.png)
+
+クリップボードのアイコンをクリックするとレポジトリのURLがコピーできます。
+
+![ruby win github
+004](../../images/asciidoc/tdd_env/ruby-win-github-004.png)
+
+続いてVSCodeに戻り、`表示` メニューから `コマンドパレット` を選択します。
+
+![ruby win github
+005](../../images/asciidoc/tdd_env/ruby-win-github-005.png)
+
+`clone` と入力して `Git クローン` を選択します。
+
+![ruby win github
+006](../../images/asciidoc/tdd_env/ruby-win-github-006.png)
+
+リポジトリのURLへ先ほどコピーした公開レポジトリのURLを貼り付けます。
+
+![ruby win github
+007](../../images/asciidoc/tdd_env/ruby-win-github-007.png)
+
+公開レポジトリの保存場所を指定する必要があるのでここでは `Projects` フォルダに `GitHub`
+フォルダを追加してそこに保存することにします。
+
+![ruby win github
+008](../../images/asciidoc/tdd_env/ruby-win-github-008.png)
+
+チェックアウトが終わると画面左下に通知が出ますので `開く` を押します。
+
+![ruby win github
+009](../../images/asciidoc/tdd_env/ruby-win-github-009.png)
+
+準備ができましたので先ほどやった `HelloWorld` プログラムをもう一度作成して先ほどと同様にローカルレポジトリに保存します。
+
+![ruby win github
+010](../../images/asciidoc/tdd_env/ruby-win-github-010.png)
+
+ローカルレポジトリの内容をGitHubの公開レポジトリに登録します。`表示` メニューから `コマンドパレット` を選択します。
+
+![ruby win github
+011](../../images/asciidoc/tdd_env/ruby-win-github-011.png)
+
+`push` と入力して `Git プッシュ` を選択します。
+
+![ruby win github
+012](../../images/asciidoc/tdd_env/ruby-win-github-012.png)
+
+以下のGitHub認証画面が表示された場合は `Sign in with your browser` を押します。
+
+![ruby win github
+013](../../images/asciidoc/tdd_env/ruby-win-github-013.png)
+
+`Authorize GitCrendtialManager` を押します。
+
+![ruby win github
+014](../../images/asciidoc/tdd_env/ruby-win-github-014.png)
+
+GitHubアカウントのパスワードを入力します。
+
+![ruby win github
+015](../../images/asciidoc/tdd_env/ruby-win-github-015.png)
+
+![ruby win github
+016](../../images/asciidoc/tdd_env/ruby-win-github-016.png)
+
+認証が完了してローカルレポジトリの内容が公開レポジトリに登録されました。
+
+![ruby win github
+017](../../images/asciidoc/tdd_env/ruby-win-github-017.png)
+
+内容が反映されているかをブラウザ画面から確認します。
+
+![ruby win github
+018](../../images/asciidoc/tdd_env/ruby-win-github-018.png)
 
 # Ruby開発環境を構築する(WSL版)
 

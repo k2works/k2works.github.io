@@ -4,7 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>環境構築から始めるテスト駆動開発</title>
-<date>2021-04-05</date>
+<date>2021-04-06</date>
 </info>
 <section xml:id="_環境構築から始めるテスト駆動開発">
 <title>環境構築から始めるテスト駆動開発</title>
@@ -178,7 +178,7 @@ https://t-wada.hatenablog.jp/entry/clean-code-that-works
 </tbody>
 </tgroup>
 </informaltable>
-<simpara>また、パスワードに関しては <emphasis role="strong">セキュリティ</emphasis> を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自身が無い場合は <emphasis role="strong">エンジニアリングデイブックス</emphasis> に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ <emphasis role="strong">保存する場所は一箇所</emphasis> が原則です。</simpara>
+<simpara>また、パスワードに関しては <emphasis role="strong">セキュリティ</emphasis> を参考に設定してください。アカウントIDに関しては可能な限り共通のID名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自信が無い場合は <emphasis role="strong">エンジニアリングデイブックス</emphasis> に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ <emphasis role="strong">保存する場所は一箇所</emphasis> が原則です。</simpara>
 <section xml:id="_microsoftアカウントを作成する">
 <title>Microsoftアカウントを作成する</title>
 <simpara><link xl:href="https://signup.live.com/signup?wa=wsignin1.0&amp;rpsnv=13&amp;rver=7.3.6963.0&amp;wp=MBI_SSL&amp;wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&amp;id=74335&amp;aadredir=1&amp;contextid=E56866F842F4E143&amp;bk=1584685585&amp;uiflavor=web&amp;lic=1&amp;mkt=JA-JP&amp;lc=1041&amp;uaid=491fc017de0f48c5c67a3833e7aca9ee">アカウントの作成</link> から新しいメールアドレスを取得を選択します。</simpara>
