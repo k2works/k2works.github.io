@@ -10,7 +10,7 @@
     "start": "nf start -j Procfile",
     "docs:asciidocs:proxy": "browser-sync start --config src/asciidoc/bs-config.js",
     "docs:asciidocs:build": "gradle asciidoctor",
-    "docs:asciidocs:watch": "watch 'npm-run-all docs:asciidocs:build' ./src",
+    "docs:asciidocs:watch": "chokidar \"**/*.adoc\" -c \"npm-run-all docs:asciidocs:build\"",
     "docs:asciidocs:local": "gradle livereload",
     "docs:slide:build": "marp ./slides/PITCHME.md -o slides/index.html",
     "docs:slide:deploy": "cpx './slide/PITCHME.md' ./",
@@ -49,6 +49,7 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
+    "chokidar-cli": "^2.1.0",
     "hexo-generator-index-pin-top": "^0.2.2"
   }
 }
