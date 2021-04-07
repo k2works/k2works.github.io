@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="アジャイル開発モデル"><meta name="keywords" content="アジャイル開発"><meta name="author" content="k2works"><meta name="copyright" content="k2works"><title>アジャイル開発モデル | １つの価値３つの領域 思想と技術</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-48713941-1', 'auto');
+ga('send', 'pageview');</script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#構成"><span class="toc-number">1.</span> <span class="toc-text">構成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概要"><span class="toc-number">2.</span> <span class="toc-text">概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#マネジメント"><span class="toc-number">3.</span> <span class="toc-text">マネジメント</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#マネジメント領域概要"><span class="toc-number">3.1.</span> <span class="toc-text">マネジメント領域概要</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#方針"><span class="toc-number">3.1.1.</span> <span class="toc-text">方針</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#インセプションデッキ"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">インセプションデッキ</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#全体像を捉える"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">全体像を捉える</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#具現化させる"><span class="toc-number">3.1.1.3.</span> <span class="toc-text">具現化させる</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#何を諦めるのかはっきりさせる"><span class="toc-number">3.1.1.4.</span> <span class="toc-text">何を諦めるのかはっきりさせる</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#何がどれだけ必要なのか"><span class="toc-number">3.1.1.5.</span> <span class="toc-text">何がどれだけ必要なのか</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#計画"><span class="toc-number">3.1.2.</span> <span class="toc-text">計画</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#アジャイルな計画づくりとは"><span class="toc-number">3.1.2.1.</span> <span class="toc-text">アジャイルな計画づくりとは</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ユーザーストーリー"><span class="toc-number">3.1.2.2.</span> <span class="toc-text">ユーザーストーリー</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ストーリー収集ワークショップ"><span class="toc-number">3.1.2.3.</span> <span class="toc-text">ストーリー収集ワークショップ</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#見積もり"><span class="toc-number">3.1.2.4.</span> <span class="toc-text">見積もり</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#計画の立て方"><span class="toc-number">3.1.2.5.</span> <span class="toc-text">計画の立て方</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#初回の計画づくり"><span class="toc-number">3.1.2.6.</span> <span class="toc-text">初回の計画づくり</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#運営"><span class="toc-number">3.1.3.</span> <span class="toc-text">運営</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#価値ある成果を毎週届ける"><span class="toc-number">3.1.3.1.</span> <span class="toc-text">価値ある成果を毎週届ける</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#アジャイルな意思疎通の作戦"><span class="toc-number">3.1.3.2.</span> <span class="toc-text">アジャイルな意思疎通の作戦</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#現場の状況を目に見えるようにする"><span class="toc-number">3.1.3.3.</span> <span class="toc-text">現場の状況を目に見えるようにする</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#組織"><span class="toc-number">3.1.4.</span> <span class="toc-text">組織</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#アジャイルチーム"><span class="toc-number">3.1.4.1.</span> <span class="toc-text">アジャイルチーム</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#エンジニアリング"><span class="toc-number">4.</span> <span class="toc-text">エンジニアリング</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#エンジニアリング領域概要"><span class="toc-number">4.1.</span> <span class="toc-text">エンジニアリング領域概要</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ユニットテスト"><span class="toc-number">4.1.1.</span> <span class="toc-text">ユニットテスト</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#リファクタリング"><span class="toc-number">4.1.2.</span> <span class="toc-text">リファクタリング</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#テスト駆動開発"><span class="toc-number">4.1.3.</span> <span class="toc-text">テスト駆動開発</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#継続的インテグレーション"><span class="toc-number">4.1.4.</span> <span class="toc-text">継続的インテグレーション</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#まとめ"><span class="toc-number">5.</span> <span class="toc-text">まとめ</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考リンク"><span class="toc-number">6.</span> <span class="toc-text">参考リンク</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">7.</span> <span class="toc-text">参考文献</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://avatars1.githubusercontent.com/u/3236312?s=400&amp;u=e1bde5f87a640284db5e7bde55b7ecb2aa0f1eac&amp;v=4"></div><div class="author-info__name text-center">k2works</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">23</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">12</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">6</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">１つの価値３つの領域 思想と技術</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">アジャイル開発モデル</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2014-03-06</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E3%83%9E%E3%83%8D%E3%82%B8%E3%83%A1%E3%83%B3%E3%83%88/">マネジメント</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E3%83%9E%E3%83%8D%E3%82%B8%E3%83%A1%E3%83%B3%E3%83%88/%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0/">エンジニアリング</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><div style="position:relative;height:300px;width:640px;padding:1px;background:#333;"><a href="http://www.flickr.com/photos/seattlemunicipalarchives/4818952324/" target="_blank"><img src="http://farm5.static.flickr.com/4120/4818952324_a2cce9be1b_z.jpg?zz=1" alt="Engineering Department employees, 1962" style="position:absolute;clip:rect(102px 899px 402px -1px);margin:-102px 0 0 1px;padding-bottom:5px;" /></a><span style="position:absolute;bottom:0;right:0;background:#333;color:#DDD;font-size:10px;padding:3px;">Engineering Department employees, 1962 / Seattle Municipal Archives</span></div>
+<hr>
+アジャイル開発は２つの領域に分けられる。  
+ひとつめは主にプロジェクトの計画・運営に関わるマネジメント領域。  
+ふたつめは設計・開発に関わるエンジニアリング領域である。
+<a id="more"></a>
+
+<h2 id="構成"><a href="#構成" class="headerlink" title="構成"></a>構成</h2><ul>
+<li><a href="#1">概要</a></li>
+<li><a href="#2">マネジメント</a></li>
+<li><a href="#3">エンジニアリング</a></li>
+<li><a href="#4">まとめ</a></li>
+<li><a href="#5">参考リンク</a></li>
+<li><a href="#6">参考文献</a></li>
+</ul>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a><a name="1">概要</a></h2><h2 id="マネジメント"><a href="#マネジメント" class="headerlink" title="マネジメント"></a><a name="2">マネジメント</a></h2><h3 id="マネジメント領域概要"><a href="#マネジメント領域概要" class="headerlink" title="マネジメント領域概要"></a>マネジメント領域概要</h3><p><a href="http://www.flickr.com/photos/k2works/12945694205/" target="_blank" rel="noopener" title="agile_adaption_02 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7337/12945694205_57475f777f.jpg" width="500" height="308" alt="agile_adaption_02"></a></p>
+<h4 id="方針"><a href="#方針" class="headerlink" title="方針"></a>方針</h4><h5 id="インセプションデッキ"><a href="#インセプションデッキ" class="headerlink" title="インセプションデッキ"></a>インセプションデッキ</h5><p><a href="http://www.flickr.com/photos/k2works/12962680524/" target="_blank" rel="noopener" title="inseption_deck_01 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7340/12962680524_52e6b611d1.jpg" width="500" height="290" alt="inseption_deck_01"></a></p>
+<h5 id="全体像を捉える"><a href="#全体像を捉える" class="headerlink" title="全体像を捉える"></a>全体像を捉える</h5><ul>
+<li><p>我々はなぜここにいるのか？</p>
+</li>
+<li><p>エレベーターピッチを作る</p>
+</li>
+<li><p>パッケージデザインを作る</p>
+</li>
+<li><p>やらないことリストを作る</p>
+</li>
+<li><p>「ご近所さん」を探せ</p>
+</li>
+</ul>
+<h5 id="具現化させる"><a href="#具現化させる" class="headerlink" title="具現化させる"></a>具現化させる</h5><ul>
+<li><p>解決策を描く</p>
+</li>
+<li><p>夜も眠れなくなるような問題は何だろう？</p>
+</li>
+<li><p>期間を見極める</p>
+</li>
+<li><p>何を諦めるのかはっきりさせる</p>
+</li>
+<li><p>何がどれだけ必要なのか</p>
+</li>
+</ul>
+<h5 id="何を諦めるのかはっきりさせる"><a href="#何を諦めるのかはっきりさせる" class="headerlink" title="何を諦めるのかはっきりさせる"></a>何を諦めるのかはっきりさせる</h5><ul>
+<li>時間</li>
+<li>予算</li>
+<li>品質</li>
+<li>スコープ</li>
+</ul>
+<h5 id="何がどれだけ必要なのか"><a href="#何がどれだけ必要なのか" class="headerlink" title="何がどれだけ必要なのか"></a>何がどれだけ必要なのか</h5><ul>
+<li><p>いつ完了するのか？</p>
+</li>
+<li><p>いくらかかるのか？</p>
+</li>
+</ul>
+<h4 id="計画"><a href="#計画" class="headerlink" title="計画"></a>計画</h4><h5 id="アジャイルな計画づくりとは"><a href="#アジャイルな計画づくりとは" class="headerlink" title="アジャイルな計画づくりとは"></a>アジャイルな計画づくりとは</h5><blockquote>
+<p>チームの開発速度を測定して、その速度をもとに、いつ頃すべて完了させられるのかプロジェクトの完了時期を見通せるようにすることでしかない</p>
+</blockquote>
+<blockquote>
+<p>『アジャイルサムライ』</p>
+</blockquote>
+<h5 id="ユーザーストーリー"><a href="#ユーザーストーリー" class="headerlink" title="ユーザーストーリー"></a>ユーザーストーリー</h5><ul>
+<li><p>顧客にとって何かしらの価値で書かれていること</p>
+<ul>
+<li><p>誰のためのストーリーで</p>
+</li>
+<li><p>何をしたいか</p>
+</li>
+<li><p>なぜそうしたいのか</p>
+<pre><code>&lt;ユーザーの種類&gt;として
+&lt;達成したいゴール&gt;をしたい
+なぜなら&lt;理由&gt;だからだ</code></pre></li>
+</ul>
+</li>
+<li><p>INVEST</p>
+<ul>
+<li>独立していること</li>
+<li>交渉の余地がある</li>
+<li>テストができる</li>
+<li>小さい、見積もれる</li>
+</ul>
+</li>
+</ul>
+<h5 id="ストーリー収集ワークショップ"><a href="#ストーリー収集ワークショップ" class="headerlink" title="ストーリー収集ワークショップ"></a>ストーリー収集ワークショップ</h5><ol>
+<li><p>大きくて見通しのよい部屋を用意する</p>
+</li>
+<li><p>図をたくさん書く</p>
+</li>
+<li><p>ユーザーストーリーをたくさん書く</p>
+</li>
+<li><p>その他もろもろをプレインストーミング</p>
+</li>
+<li><p>リストを磨きあげる</p>
+</li>
+</ol>
+<h5 id="見積もり"><a href="#見積もり" class="headerlink" title="見積もり"></a>見積もり</h5><ul>
+<li><p>相対図を見積もる</p>
+</li>
+<li><p>ポイントで見積もる</p>
+</li>
+<li><p>見積もり技法</p>
+<ul>
+<li>三角測量</li>
+<li>プランニングポーカー</li>
+</ul>
+</li>
+</ul>
+<h5 id="計画の立て方"><a href="#計画の立て方" class="headerlink" title="計画の立て方"></a>計画の立て方</h5><ul>
+<li><p>顧客にとって価値ある成果を届けられる計画</p>
+</li>
+<li><p>わかりやすくありのままを伝える誠実な計画</p>
+</li>
+<li><p>約束したことを守り続けられる計画</p>
+</li>
+<li><p>必要に応じて変更できる計画</p>
+</li>
+</ul>
+<h5 id="初回の計画づくり"><a href="#初回の計画づくり" class="headerlink" title="初回の計画づくり"></a>初回の計画づくり</h5><ol>
+<li><p>リリースを定義する</p>
+</li>
+<li><p>プロジェクト規模を見極める</p>
+</li>
+<li><p>優先順位をつける</p>
+</li>
+<li><p>チームのベロシティを見積もる</p>
+</li>
+<li><p>期日を仮決めする</p>
+</li>
+</ol>
+<h4 id="運営"><a href="#運営" class="headerlink" title="運営"></a>運営</h4><p><a href="http://www.flickr.com/photos/k2works/12962343063/" target="_blank" rel="noopener" title="agile_operation_01 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7420/12962343063_5a93dab828.jpg" width="500" height="188" alt="agile_operation_01"></a></p>
+<h5 id="価値ある成果を毎週届ける"><a href="#価値ある成果を毎週届ける" class="headerlink" title="価値ある成果を毎週届ける"></a>価値ある成果を毎週届ける</h5><ol>
+<li><p>分析と設計：作業の段取りをする</p>
+<ul>
+<li>「必要な分だけを、必要なときに」分析する</li>
+<li>それからペルソナを作ろう</li>
+<li>ペーパープロトタイプでいろんなデザインをどんどん作ろう</li>
+<li>受け入れテストを書いて、ストーリーの満足条件を定義しよう</li>
+</ul>
+</li>
+<li><p>開発：作業する</p>
+<ul>
+<li>自動化されたテストを書く</li>
+<li>設計を継続的に発見させていき、改善し続ける</li>
+<li>ちゃんと動くソフトウエアであり続けるために、コードを継続的にインテグレーションする</li>
+<li>顧客がシステムについて語る言葉に合わせてコードを書く</li>
+</ul>
+</li>
+<li><p>テスト：作業の結果を確認する</p>
+<ul>
+<li>カンバン・・・仕掛り(WIP:Work In Progress)にできる作業の上限を設けていること</li>
+<li>イテレーションのプレッシャーから開放される</li>
+<li>１回のイテレーションに収まらない仕事にも取り組める</li>
+<li>期待をマネジメントしやすい</li>
+</ul>
+</li>
+</ol>
+<h5 id="アジャイルな意思疎通の作戦"><a href="#アジャイルな意思疎通の作戦" class="headerlink" title="アジャイルな意思疎通の作戦"></a>アジャイルな意思疎通の作戦</h5><ul>
+<li>今回のイテレーションの作業に備える(ストーリー計画ミーティング)</li>
+<li>今回のイテレーションのフィードバックを得る(ショーケース)</li>
+<li>次回のイテレーション計画を立てる(イテレーション計画ミーティング)</li>
+<li>次回のイテレーションで改善できる余地を探す(ミニふりかえり)</li>
+</ul>
+<h5 id="現場の状況を目に見えるようにする"><a href="#現場の状況を目に見えるようにする" class="headerlink" title="現場の状況を目に見えるようにする"></a>現場の状況を目に見えるようにする</h5><ul>
+<li>ストーリーボード</li>
+<li>リリースボード</li>
+<li>ベロシティとバーンダウンチャート</li>
+<li>インセプションデッキ(壁のスペースに余裕があれば)</li>
+<li>チームの約束(Working Agreements)</li>
+<li>チームが大事にすること(Shared Values)</li>
+</ul>
+<h4 id="組織"><a href="#組織" class="headerlink" title="組織"></a>組織</h4><h5 id="アジャイルチーム"><a href="#アジャイルチーム" class="headerlink" title="アジャイルチーム"></a>アジャイルチーム</h5><ul>
+<li><p>きっちり区別しない役割分担。継続的な開発工程。チームで成果責任を果たそうする態度</p>
+</li>
+<li><p>チームをアジャイルにするためのコツ</p>
+<ul>
+<li>同じ仕事場で働く</li>
+<li>積極的に深く関わる顧客の存在</li>
+<li>自己組織化</li>
+<li>成果責任と権限移譲</li>
+<li>職能横断型チーム</li>
+</ul>
+</li>
+<li><p>顧客</p>
+<ul>
+<li>何を作るか決める</li>
+<li>優先順位をつける</li>
+<li>スコープについて厳しい決断を下す</li>
+</ul>
+</li>
+<li><p>開発チーム</p>
+<ul>
+<li>アナリスト</li>
+<li>プログラム</li>
+<li>テスター</li>
+<li>UXデザイナ</li>
+<li>プロジェクトマネージャー  </li>
+</ul>
+</li>
+</ul>
+<h2 id="エンジニアリング"><a href="#エンジニアリング" class="headerlink" title="エンジニアリング"></a><a name="3">エンジニアリング</a></h2><h3 id="エンジニアリング領域概要"><a href="#エンジニアリング領域概要" class="headerlink" title="エンジニアリング領域概要"></a>エンジニアリング領域概要</h3><p><a href="http://www.flickr.com/photos/k2works/12946099604/" target="_blank" rel="noopener" title="agile_adaption_03 by k2works, on Flickr"><img src="https://farm3.staticflickr.com/2870/12946099604_9c44e46329.jpg" width="500" height="307" alt="agile_adaption_03"></a></p>
+<h4 id="ユニットテスト"><a href="#ユニットテスト" class="headerlink" title="ユニットテスト"></a>ユニットテスト</h4><ul>
+<li>メソッドレベルの粒度で書く</li>
+<li>目的は変更の結果が期待通りになっていることをあきらかにすること</li>
+<li>テスコードはプロダクトコードには含めない</li>
+<li>メリット<ul>
+<li>素早いフィードバックが得られる</li>
+<li>極めて低コストにリグレッションテストを実行できる</li>
+<li>デバック時間を大幅に削減できる</li>
+<li>自身を持ってデプロイできる</li>
+</ul>
+</li>
+</ul>
+<h4 id="リファクタリング"><a href="#リファクタリング" class="headerlink" title="リファクタリング"></a>リファクタリング</h4><p>ソフトウエアの整合性を保ちながら、設計を少しずつ改善していける方法</p>
+<ul>
+<li>変数の名前変更</li>
+<li>メソッドの名前変更</li>
+<li>コードをシンプルに</li>
+<li>メソッドの抽出</li>
+<li>変数のインライン化</li>
+</ul>
+<h4 id="テスト駆動開発"><a href="#テスト駆動開発" class="headerlink" title="テスト駆動開発"></a>テスト駆動開発</h4><p>以下のサイクルを回しながら、開発をすすめていく方法</p>
+<ol>
+<li>レッド</li>
+<li>グリーン</li>
+<li>リファクタリング</li>
+</ol>
+<p>ルールその１:失敗するテストをひとつ書くまでは、新しいコードを一切書かない</p>
+<p>ルールその２:「危なっかしい所」をすべてテストする</p>
+<blockquote>
+<p>プログラマはまず、あたかもテスト対象のプロダクトコードが既に存在しているかのように考える。そして、それを呼び出して使うのに必要な、最低限のコードをテストコードとして表現する。</p>
+</blockquote>
+<blockquote>
+<p>『アジャイルサムライ』</p>
+</blockquote>
+<h4 id="継続的インテグレーション"><a href="#継続的インテグレーション" class="headerlink" title="継続的インテグレーション"></a>継続的インテグレーション</h4><ul>
+<li>ソースコードリポジトリ</li>
+<li>チェックイン手順</li>
+<li>ビルドの自動化</li>
+<li>作業単位を小さくしようとする姿勢</li>
+</ul>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a><a name="4">まとめ</a></h2><p>以上、２つの領域からアジャイル開発モデルを整理したがその目的は『毎週、価値のある成果を届ける』ことであり方法論はその目的を実現する手段にすぎない。目的を達成できなければいくら方法論をなぞったとしてそれはアジャイルでないし逆に方法論と違っていても目的を達成できればそれはアジャイルであるといえる。</p>
+<h2 id="参考リンク"><a href="#参考リンク" class="headerlink" title="参考リンク"></a><a name="5">参考リンク</a></h2><ul>
+<li><p><a href="http://www.agilemanifesto.org/iso/ja/" target="_blank" rel="noopener">アジャイルソフトウエア開発宣言</a></p>
+</li>
+<li><p><a href="http://www.agilemanifesto.org/iso/ja/principles.html" target="_blank" rel="noopener">アジャイルソフトウェアの12の原則</a></p>
+</li>
+</ul>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><a name="6">参考文献</a></h2><iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=k2works0c-22&o=9&p=8&l=as1&asins=1934356581&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=k2works0c-22&o=9&p=8&l=as1&asins=4274068560&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">k2works</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://k2works.github.io/2014/03/06/2014-03-06-agile-development-model/">https://k2works.github.io/2014/03/06/2014-03-06-agile-development-model/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E3%82%A2%E3%82%B8%E3%83%A3%E3%82%A4%E3%83%AB%E9%96%8B%E7%99%BA/">アジャイル開発</a></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e9e7853f8eb0c4e" async></script><nav id="pagination"><div class="prev-post pull-left"><a href="/2014/03/06/2014-03-06-agile-scrum/"><i class="fa fa-chevron-left">  </i><span>アジャイルプロジェクトマネジメント Scrum</span></a></div><div class="next-post pull-right"><a href="/2014/03/05/2014-03-05-what-is-agile-development/"><span>アジャイル開発</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2021 By k2works</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

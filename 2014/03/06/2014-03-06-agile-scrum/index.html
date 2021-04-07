@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="アジャイルプロジェクトマネジメント Scrum"><meta name="keywords" content="アジャイル開発"><meta name="author" content="k2works"><meta name="copyright" content="k2works"><title>アジャイルプロジェクトマネジメント Scrum | １つの価値３つの領域 思想と技術</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-48713941-1', 'auto');
+ga('send', 'pageview');</script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#構成"><span class="toc-number">1.</span> <span class="toc-text">構成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#全体像"><span class="toc-number">2.</span> <span class="toc-text">全体像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作業"><span class="toc-number">3.</span> <span class="toc-text">作業</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#スプリント"><span class="toc-number">3.1.</span> <span class="toc-text">スプリント</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会議"><span class="toc-number">4.</span> <span class="toc-text">会議</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#スプリント計画ミーティング"><span class="toc-number">4.1.</span> <span class="toc-text">スプリント計画ミーティング</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#デイリースクラム"><span class="toc-number">4.2.</span> <span class="toc-text">デイリースクラム</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#スプリントレビュー"><span class="toc-number">4.3.</span> <span class="toc-text">スプリントレビュー</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#スプリントレトロスペクティブ"><span class="toc-number">4.4.</span> <span class="toc-text">スプリントレトロスペクティブ</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#成果物"><span class="toc-number">5.</span> <span class="toc-text">成果物</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#プロダクトバックログ"><span class="toc-number">5.1.</span> <span class="toc-text">プロダクトバックログ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#スプリントバックログ"><span class="toc-number">5.2.</span> <span class="toc-text">スプリントバックログ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#リリース判断可能なプロダクト"><span class="toc-number">5.3.</span> <span class="toc-text">リリース判断可能なプロダクト</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完了の定義"><span class="toc-number">5.4.</span> <span class="toc-text">完了の定義</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ロール"><span class="toc-number">6.</span> <span class="toc-text">ロール</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#プロダクトオーナー"><span class="toc-number">6.1.</span> <span class="toc-text">プロダクトオーナー</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#開発チーム"><span class="toc-number">6.2.</span> <span class="toc-text">開発チーム</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#スクラムマスター"><span class="toc-number">6.3.</span> <span class="toc-text">スクラムマスター</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">7.</span> <span class="toc-text">参考文献</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://avatars1.githubusercontent.com/u/3236312?s=400&amp;u=e1bde5f87a640284db5e7bde55b7ecb2aa0f1eac&amp;v=4"></div><div class="author-info__name text-center">k2works</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">23</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">12</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">6</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">１つの価値３つの領域 思想と技術</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">アジャイルプロジェクトマネジメント Scrum</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2014-03-06</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E3%83%9E%E3%83%8D%E3%82%B8%E3%83%A1%E3%83%B3%E3%83%88/">マネジメント</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E3%83%9E%E3%83%8D%E3%82%B8%E3%83%A1%E3%83%B3%E3%83%88/%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0/">エンジニアリング</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><div style="position:relative;height:300px;width:640px;padding:1px;background:#333;"><a href="http://www.flickr.com/photos/18091975@N00/3654141771/" target="_blank"><img src="http://farm4.static.flickr.com/3391/3654141771_22fe87c875_z.jpg?zz=1" alt="Scrum to England" style="position:absolute;clip:rect(30px 900px 330px 0px);margin:-30px 0 0 0px;padding-bottom:5px;" /></a><span style="position:absolute;bottom:0;right:0;background:#333;color:#DDD;font-size:10px;padding:3px;">Scrum to England / EoinGardiner</span></div>
+<hr>
+
+<p>Scrumとは、アジャイル開発手法の１つ。常に進む方向を調整しながら目的を達成できるプロダクトをつくるために、全員が一丸となって行うべき作業、会議、成果物を定めたもの。アジャイル開発における位置づけとしては主にマネジメント領域をカバーする。</p>
+<a id="more"></a>
+
+<p><a href="../agile-development-model">アジャイル開発</a></p>
+<p><a href="http://www.flickr.com/photos/k2works/12964368824/" target="_blank" rel="noopener" title="agile_adaption_scrum_01 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7337/12964368824_1169557e59.jpg" width="500" height="320" alt="agile_adaption_scrum_01"></a></p>
+<h2 id="構成"><a href="#構成" class="headerlink" title="構成"></a>構成</h2><ul>
+<li><a href="#1">全体像</a></li>
+<li><a href="#2">作業</a></li>
+<li><a href="#3">会議</a></li>
+<li><a href="#4">成果物</a></li>
+<li><a href="#5">ロール</a></li>
+<li><a href="#6">参考文献</a></li>
+</ul>
+<h2 id="全体像"><a href="#全体像" class="headerlink" title="全体像"></a><a name="1">全体像</a></h2><p><a href="http://www.flickr.com/photos/k2works/12964201004/" target="_blank" rel="noopener" title="agile-scrum-001 by k2works, on Flickr"><img src="https://farm3.staticflickr.com/2454/12964201004_6fe6bb616a.jpg" width="500" height="375" alt="agile-scrum-001"></a></p>
+<h2 id="作業"><a href="#作業" class="headerlink" title="作業"></a><a name="2">作業</a></h2><h3 id="スプリント"><a href="#スプリント" class="headerlink" title="スプリント"></a>スプリント</h3><p><a href="http://www.flickr.com/photos/k2works/12963773205/" target="_blank" rel="noopener" title="agile-scrum-002 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7384/12963773205_5d45263e94.jpg" width="500" height="236" alt="agile-scrum-002"></a></p>
+<p>Scrumでは最長1ヶ月までの固定の期間に区切って、くりかえし開発をおこなう。この固定の期間のことをスプリントと呼ぶ。<br>開発チームはこの期間の中で、計画、設計、開発、テストなどプロダクトのリリース判断に必要なすべてのことを行う<br>期間は延長しない。</p>
+<h2 id="会議"><a href="#会議" class="headerlink" title="会議"></a><a name="3">会議</a></h2><h3 id="スプリント計画ミーティング"><a href="#スプリント計画ミーティング" class="headerlink" title="スプリント計画ミーティング"></a>スプリント計画ミーティング</h3><p><a href="http://www.flickr.com/photos/k2works/12964200884/" target="_blank" rel="noopener" title="agile-scrum-003 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7338/12964200884_7178154e39.jpg" width="391" height="500" alt="agile-scrum-003"></a></p>
+<ul>
+<li>スプリントで開発するためには計画が必要。</li>
+<li>プロダクトーナーは何を欲しいのか（第一部）。</li>
+<li>開発チームはどれくらいできそうか（第一部）。</li>
+<li>開発チームはどうやってそれを実現するのか（第二部）。</li>
+</ul>
+<h3 id="デイリースクラム"><a href="#デイリースクラム" class="headerlink" title="デイリースクラム"></a>デイリースクラム</h3><p><a href="http://www.flickr.com/photos/k2works/12963917493/" target="_blank" rel="noopener" title="agile-scrum-004 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7445/12963917493_9fdfd3e824.jpg" width="281" height="185" alt="agile-scrum-004"></a></p>
+<ul>
+<li>開発チームの状況を毎日確認する。<ul>
+<li>毎日15分程度</li>
+<li>前回のデイリースクラムからやったこと</li>
+<li>次回のデイリースクラムまでにやること</li>
+<li>困っていること</li>
+</ul>
+</li>
+</ul>
+<h3 id="スプリントレビュー"><a href="#スプリントレビュー" class="headerlink" title="スプリントレビュー"></a>スプリントレビュー</h3><p><a href="http://www.flickr.com/photos/k2works/12963917553/" target="_blank" rel="noopener" title="agile-scrum-005 by k2works, on Flickr"><img src="https://farm3.staticflickr.com/2529/12963917553_a846b07960_s.jpg" width="75" height="75" alt="agile-scrum-005"></a></p>
+<ul>
+<li>開発チームの成果物をプロダクトオーナーが確認する。<ul>
+<li>1ヶ月のスプリントであれば4時間、2週間スプリントであれば2時間程</li>
+<li>開発チームが完了できなかったプロダクトバックログの項目について説明する。</li>
+<li>プロダクトオーナーがプロダクトの状況やビジネスの環境について説明する。</li>
+<li>プロダクトバックログに追加すべき項目の有無について議論する。</li>
+<li>現状の進捗を踏まえて、リリース日や完了日を予測する。</li>
+</ul>
+</li>
+</ul>
+<h3 id="スプリントレトロスペクティブ"><a href="#スプリントレトロスペクティブ" class="headerlink" title="スプリントレトロスペクティブ"></a>スプリントレトロスペクティブ</h3><p><a href="http://www.flickr.com/photos/k2works/12963917413/" target="_blank" rel="noopener" title="agile-scrum-006 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7311/12963917413_0337452207_s.jpg" width="75" height="75" alt="agile-scrum-006"></a></p>
+<ul>
+<li>1ヶ月のスプリントであれば4時間、2週間スプリントであれば2時間程</li>
+<li>プロセスやツールなどの観点で今回のスプリントを検査する。</li>
+<li>うまくいったこと、今後改善すべき点を整理する。</li>
+<li>今後のアクションプランをつくる。</li>
+</ul>
+<h2 id="成果物"><a href="#成果物" class="headerlink" title="成果物"></a><a name="4">成果物</a></h2><h3 id="プロダクトバックログ"><a href="#プロダクトバックログ" class="headerlink" title="プロダクトバックログ"></a>プロダクトバックログ</h3><p><a href="http://www.flickr.com/photos/k2works/12964200884/" target="_blank" rel="noopener" title="agile-scrum-003 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7338/12964200884_7178154e39.jpg" width="391" height="500" alt="agile-scrum-003"></a></p>
+<ul>
+<li>実現したい要求をリストにして並び替える。</li>
+<li>常にメンテナンスして最新に保つ</li>
+</ul>
+<h3 id="スプリントバックログ"><a href="#スプリントバックログ" class="headerlink" title="スプリントバックログ"></a>スプリントバックログ</h3><p><a href="http://www.flickr.com/photos/k2works/12963917373/" target="_blank" rel="noopener" title="agile-scrum-007 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7326/12963917373_aedf01828a.jpg" width="500" height="367" alt="agile-scrum-007"></a></p>
+<ul>
+<li>プロダクトバックログを具体的なタスクに分割する。</li>
+<li>タスクは後から増えることもある。</li>
+</ul>
+<h3 id="リリース判断可能なプロダクト"><a href="#リリース判断可能なプロダクト" class="headerlink" title="リリース判断可能なプロダクト"></a>リリース判断可能なプロダクト</h3><p><a href="http://www.flickr.com/photos/k2works/12963917153/" target="_blank" rel="noopener" title="agile-scrum-012 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7319/12963917153_6ba2f88afb_s.jpg" width="75" height="75" alt="agile-scrum-012"></a></p>
+<ul>
+<li>開発チームはリリース判断可能なプロダクトをつくる。</li>
+</ul>
+<h3 id="完了の定義"><a href="#完了の定義" class="headerlink" title="完了の定義"></a>完了の定義</h3><p><a href="http://www.flickr.com/photos/k2works/12963917323/" target="_blank" rel="noopener" title="agile-scrum-008 by k2works, on Flickr"><img src="https://farm3.staticflickr.com/2308/12963917323_32c895420c.jpg" width="500" height="157" alt="agile-scrum-008"></a></p>
+<ul>
+<li>完了の定義によって、何をもってリリース判断可能かを定める。</li>
+</ul>
+<h2 id="ロール"><a href="#ロール" class="headerlink" title="ロール"></a><a name="5">ロール</a></h2><h3 id="プロダクトオーナー"><a href="#プロダクトオーナー" class="headerlink" title="プロダクトオーナー"></a>プロダクトオーナー</h3><p><a href="http://www.flickr.com/photos/k2works/12963917303/" target="_blank" rel="noopener" title="agile-scrum-009 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7320/12963917303_1e1842437c_s.jpg" width="75" height="75" alt="agile-scrum-009"></a></p>
+<ul>
+<li>プロダクトの結果責任を取る。</li>
+<li>プロダクトバックログの管理者で、並び順の最終決定権限を持つ。</li>
+<li>プロジェクトに必ず1人必要。</li>
+<li>開発チームを活用して、プロダクトの価値を最大化する。</li>
+<li>開発チームに相談できるが、干渉はできない</li>
+</ul>
+<h3 id="開発チーム"><a href="#開発チーム" class="headerlink" title="開発チーム"></a>開発チーム</h3><p><a href="http://www.flickr.com/photos/k2works/12963772725/" target="_blank" rel="noopener" title="agile-scrum-010 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7297/12963772725_e27fa68bf7_s.jpg" width="75" height="75" alt="agile-scrum-010"></a></p>
+<ul>
+<li>リリース判断可能なプロダクトをつくる。</li>
+<li>3人～9人で構成する。</li>
+<li>全員揃えばプロダクトをつくれる。</li>
+<li>上下関係はない。</li>
+</ul>
+<h3 id="スクラムマスター"><a href="#スクラムマスター" class="headerlink" title="スクラムマスター"></a>スクラムマスター</h3><p><a href="http://www.flickr.com/photos/k2works/12963917173/" target="_blank" rel="noopener" title="agile-scrum-011 by k2works, on Flickr"><img src="https://farm8.staticflickr.com/7360/12963917173_f69333dbba_s.jpg" width="75" height="75" alt="agile-scrum-011"></a></p>
+<ul>
+<li>このプロセスがうまくまわるようにする。</li>
+<li>妨害を排除する。</li>
+<li>支援と奉仕をする。</li>
+<li>教育、ファシリテート、コーチ、推進役。</li>
+</ul>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><a name="6">参考文献</a></h2><iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=k2works0c-22&o=9&p=8&l=as1&asins=4798129712&ref=tf_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=k2works0c-22&o=9&p=8&l=as1&asins=4274068560&ref=tf_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">k2works</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://k2works.github.io/2014/03/06/2014-03-06-agile-scrum/">https://k2works.github.io/2014/03/06/2014-03-06-agile-scrum/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E3%82%A2%E3%82%B8%E3%83%A3%E3%82%A4%E3%83%AB%E9%96%8B%E7%99%BA/">アジャイル開発</a></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e9e7853f8eb0c4e" async></script><nav id="pagination"><div class="prev-post pull-left"><a href="/2014/03/06/2014-03-06-what-is-lean-startup/"><i class="fa fa-chevron-left">  </i><span>リーンスタートアップ</span></a></div><div class="next-post pull-right"><a href="/2014/03/06/2014-03-06-agile-development-model/"><span>アジャイル開発モデル</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2021 By k2works</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

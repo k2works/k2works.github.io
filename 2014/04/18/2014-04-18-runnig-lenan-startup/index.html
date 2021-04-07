@@ -1,0 +1,651 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="実践リーンスタートアップ"><meta name="keywords" content="リーンスタートアップ"><meta name="author" content="k2works"><meta name="copyright" content="k2works"><title>実践リーンスタートアップ | １つの価値３つの領域 思想と技術</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-48713941-1', 'auto');
+ga('send', 'pageview');</script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#構成"><span class="toc-number">1.</span> <span class="toc-text">構成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Running-Leanとは"><span class="toc-number">2.</span> <span class="toc-text">Running Leanとは</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#プロセス"><span class="toc-number">3.</span> <span class="toc-text">プロセス</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#プランAを文書化する"><span class="toc-number">3.1.</span> <span class="toc-text">プランAを文書化する</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#プランで最もリスクの高い部分をみつける"><span class="toc-number">3.2.</span> <span class="toc-text">プランで最もリスクの高い部分をみつける</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#スタートアップの３つのステージ"><span class="toc-number">3.2.1.</span> <span class="toc-text">スタートアップの３つのステージ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#製品-市場フィットの前にピボット、それから最適化"><span class="toc-number">3.2.2.</span> <span class="toc-text">製品&#x2F;市場フィットの前にピボット、それから最適化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#資金調達について"><span class="toc-number">3.2.3.</span> <span class="toc-text">資金調達について</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#プランを体系的にテストする"><span class="toc-number">3.3.</span> <span class="toc-text">プランを体系的にテストする</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#検証による学習のループが実験"><span class="toc-number">3.3.1.</span> <span class="toc-text">検証による学習のループが実験</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#イテレーションのメタパターン"><span class="toc-number">3.3.2.</span> <span class="toc-text">イテレーションのメタパターン</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#プランAを文書化する-1"><span class="toc-number">4.</span> <span class="toc-text">プランAを文書化する</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#顧客を考える"><span class="toc-number">4.1.</span> <span class="toc-text">顧客を考える</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#見込み客を考える"><span class="toc-number">4.1.1.</span> <span class="toc-text">見込み客を考える</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#リーンキャンパスを作る"><span class="toc-number">4.2.</span> <span class="toc-text">リーンキャンパスを作る</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#リーンキャンパスをスケッチする"><span class="toc-number">4.2.1.</span> <span class="toc-text">リーンキャンパスをスケッチする</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#課題と顧客セグメント"><span class="toc-number">4.2.2.</span> <span class="toc-text">課題と顧客セグメント</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UVP-独自の価値提案"><span class="toc-number">4.2.3.</span> <span class="toc-text">UVP(独自の価値提案)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#UVPの作り方"><span class="toc-number">4.2.3.1.</span> <span class="toc-text">UVPの作り方</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ソリューション"><span class="toc-number">4.2.4.</span> <span class="toc-text">ソリューション</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#チャネル"><span class="toc-number">4.2.5.</span> <span class="toc-text">チャネル</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#収益とコスト構造"><span class="toc-number">4.2.6.</span> <span class="toc-text">収益とコスト構造</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#収益の流れ"><span class="toc-number">4.2.6.1.</span> <span class="toc-text">収益の流れ</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#コスト構造"><span class="toc-number">4.2.6.2.</span> <span class="toc-text">コスト構造</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主要指標"><span class="toc-number">4.2.7.</span> <span class="toc-text">主要指標</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#海賊指標-AARRR"><span class="toc-number">4.2.7.1.</span> <span class="toc-text">海賊指標(AARRR)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#圧倒的な優位性"><span class="toc-number">4.2.8.</span> <span class="toc-text">圧倒的な優位性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最後に"><span class="toc-number">4.2.9.</span> <span class="toc-text">最後に</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#プランで最もリスクの高い部分を見つける"><span class="toc-number">5.</span> <span class="toc-text">プランで最もリスクの高い部分を見つける</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#リスクの優先順位をつける"><span class="toc-number">5.1.</span> <span class="toc-text">リスクの優先順位をつける</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#スタートアップのリスク"><span class="toc-number">5.1.1.</span> <span class="toc-text">スタートアップのリスク</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ビジネスモデルインタビュー"><span class="toc-number">5.2.</span> <span class="toc-text">ビジネスモデルインタビュー</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ビジネスモデルの比較"><span class="toc-number">5.2.1.</span> <span class="toc-text">ビジネスモデルの比較</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外部の意見を求める"><span class="toc-number">5.2.2.</span> <span class="toc-text">外部の意見を求める</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#実験の準備"><span class="toc-number">5.2.3.</span> <span class="toc-text">実験の準備</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#課題チームと解決チームを作る"><span class="toc-number">5.2.3.1.</span> <span class="toc-text">課題チームと解決チームを作る</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#効果的な実験"><span class="toc-number">5.2.3.2.</span> <span class="toc-text">効果的な実験</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#イテレーションのメタパターンをリスクに適用する"><span class="toc-number">5.2.4.</span> <span class="toc-text">イテレーションのメタパターンをリスクに適用する</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#製品リスク：正しい製品を作る"><span class="toc-number">5.2.4.1.</span> <span class="toc-text">製品リスク：正しい製品を作る</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#顧客リスク：顧客への経路を作る"><span class="toc-number">5.2.4.2.</span> <span class="toc-text">顧客リスク：顧客への経路を作る</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#市場リスク：実現可能なビジネスを作る"><span class="toc-number">5.2.4.3.</span> <span class="toc-text">市場リスク：実現可能なビジネスを作る</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#プランを体系的にテストする-1"><span class="toc-number">6.</span> <span class="toc-text">プランを体系的にテストする</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#課題を理解する"><span class="toc-number">6.1.</span> <span class="toc-text">課題を理解する</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#顧客インタビューの準備"><span class="toc-number">6.1.1.</span> <span class="toc-text">顧客インタビューの準備</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#見込み客を見つける"><span class="toc-number">6.1.2.</span> <span class="toc-text">見込み客を見つける</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#課題インタビュー"><span class="toc-number">6.1.3.</span> <span class="toc-text">課題インタビュー</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#学習すべきこと"><span class="toc-number">6.1.3.1.</span> <span class="toc-text">学習すべきこと</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#課題インタビューの実施"><span class="toc-number">6.1.3.2.</span> <span class="toc-text">課題インタビューの実施</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#課題インタビューの終了条件"><span class="toc-number">6.1.3.3.</span> <span class="toc-text">課題インタビューの終了条件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ソリューションを決定する"><span class="toc-number">6.2.</span> <span class="toc-text">ソリューションを決定する</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#学習すべきこと-1"><span class="toc-number">6.2.1.</span> <span class="toc-text">学習すべきこと</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#デモを構築する"><span class="toc-number">6.2.2.</span> <span class="toc-text">デモを構築する</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ソリューションインタビュー"><span class="toc-number">6.2.3.</span> <span class="toc-text">ソリューションインタビュー</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#価格のテスト"><span class="toc-number">6.2.3.1.</span> <span class="toc-text">価格のテスト</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ソリューションインタビューの実施"><span class="toc-number">6.2.3.2.</span> <span class="toc-text">ソリューションインタビューの実施</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ソリューションインタビューの終了条件"><span class="toc-number">6.2.3.3.</span> <span class="toc-text">ソリューションインタビューの終了条件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MVPを構築する"><span class="toc-number">6.2.4.</span> <span class="toc-text">MVPを構築する</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#バージョン1-0をリリース"><span class="toc-number">6.2.4.1.</span> <span class="toc-text">バージョン1.0をリリース</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#アクティベーションの流れを定義する"><span class="toc-number">6.2.4.2.</span> <span class="toc-text">アクティベーションの流れを定義する</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#マーケティング用のサイトを構築する"><span class="toc-number">6.2.4.3.</span> <span class="toc-text">マーケティング用のサイトを構築する</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定性的に検証する"><span class="toc-number">6.3.</span> <span class="toc-text">定性的に検証する</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ダッシュボードを構築する"><span class="toc-number">6.3.1.</span> <span class="toc-text">ダッシュボードを構築する</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#計測の準備"><span class="toc-number">6.3.1.1.</span> <span class="toc-text">計測の準備</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#コンバージョンダッシュボードの作り方"><span class="toc-number">6.3.1.2.</span> <span class="toc-text">コンバージョンダッシュボードの作り方</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#データの収集方法"><span class="toc-number">6.3.1.2.1.</span> <span class="toc-text">データの収集方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#コンバージョンダッシュボードの可視化方法"><span class="toc-number">6.3.1.2.2.</span> <span class="toc-text">コンバージョンダッシュボードの可視化方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#定着の追跡方法"><span class="toc-number">6.3.1.2.3.</span> <span class="toc-text">定着の追跡方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MVPインタビュー"><span class="toc-number">6.3.2.</span> <span class="toc-text">MVPインタビュー</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#学習すべきこと-2"><span class="toc-number">6.3.2.1.</span> <span class="toc-text">学習すべきこと</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#テスト可能な仮説"><span class="toc-number">6.3.2.2.</span> <span class="toc-text">テスト可能な仮説</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MVPインタビューの実施"><span class="toc-number">6.3.2.3.</span> <span class="toc-text">MVPインタビューの実施</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UVPを実現する"><span class="toc-number">6.3.3.</span> <span class="toc-text">UVPを実現する</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#顧客ライフサイクルを検証する"><span class="toc-number">6.3.4.</span> <span class="toc-text">顧客ライフサイクルを検証する</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#フィードバックを楽にする"><span class="toc-number">6.3.4.1.</span> <span class="toc-text">フィードバックを楽にする</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#試用期間中に問題を解決する"><span class="toc-number">6.3.4.2.</span> <span class="toc-text">試用期間中に問題を解決する</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#獲得とアクティベーション"><span class="toc-number">6.3.4.2.1.</span> <span class="toc-text">獲得とアクティベーション</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#定着"><span class="toc-number">6.3.4.2.2.</span> <span class="toc-text">定着</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#収益"><span class="toc-number">6.3.4.2.3.</span> <span class="toc-text">収益</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#紹介"><span class="toc-number">6.3.4.2.4.</span> <span class="toc-text">紹介</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ローンチの準備はできましたか？"><span class="toc-number">6.3.4.3.</span> <span class="toc-text">ローンチの準備はできましたか？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ローンチ条件"><span class="toc-number">6.3.4.4.</span> <span class="toc-text">ローンチ条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#３・２・１・・・・ローンチ！"><span class="toc-number">6.3.4.5.</span> <span class="toc-text">３・２・１・・・・ローンチ！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定量的に検証する"><span class="toc-number">6.4.</span> <span class="toc-text">定量的に検証する</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#機能を制限する"><span class="toc-number">6.4.1.</span> <span class="toc-text">機能を制限する</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#機能は押し付けずに引っ張ってもらう"><span class="toc-number">6.4.1.1.</span> <span class="toc-text">機能は押し付けずに引っ張ってもらう</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#80-20ルールを実施する"><span class="toc-number">6.4.1.2.</span> <span class="toc-text">80&#x2F;20ルールを実施する</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#機能の流れを制御する"><span class="toc-number">6.4.1.3.</span> <span class="toc-text">機能の流れを制御する</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#機能要求を処理する"><span class="toc-number">6.4.1.4.</span> <span class="toc-text">機能要求を処理する</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#機能ライフサイクル"><span class="toc-number">6.4.1.5.</span> <span class="toc-text">機能ライフサイクル</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#かんばんボードで機能を追跡する"><span class="toc-number">6.4.1.5.1.</span> <span class="toc-text">かんばんボードで機能を追跡する</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#各手順の説明"><span class="toc-number">6.4.1.5.2.</span> <span class="toc-text">各手順の説明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#進捗を計測する"><span class="toc-number">6.4.2.</span> <span class="toc-text">進捗を計測する</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#製品／市場フィットとは"><span class="toc-number">6.4.2.1.</span> <span class="toc-text">製品／市場フィットとは</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初期のトラクションを達成する"><span class="toc-number">6.4.3.</span> <span class="toc-text">初期のトラクションを達成する</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ショーン／エリスのテスト"><span class="toc-number">6.4.3.1.</span> <span class="toc-text">ショーン／エリスのテスト</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#「適切な」マクロ指標に集中する"><span class="toc-number">6.4.3.2.</span> <span class="toc-text">「適切な」マクロ指標に集中する</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#人が欲しがるものを作ったか"><span class="toc-number">6.4.3.3.</span> <span class="toc-text">人が欲しがるものを作ったか</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#初期トラクションの終了条件"><span class="toc-number">6.4.3.3.1.</span> <span class="toc-text">初期トラクションの終了条件</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#製品／市場フィットにおける市場"><span class="toc-number">6.4.3.4.</span> <span class="toc-text">製品／市場フィットにおける市場</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#成長エンジンの特定"><span class="toc-number">6.4.3.4.1.</span> <span class="toc-text">成長エンジンの特定</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#まとめ"><span class="toc-number">6.4.3.5.</span> <span class="toc-text">まとめ</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ネットワーク効果のある製品のデザインパターン"><span class="toc-number">6.4.3.5.1.</span> <span class="toc-text">ネットワーク効果のある製品のデザインパターン</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#マルチサイド（マーケットプレイス）製品のデザインパターン"><span class="toc-number">6.4.3.5.2.</span> <span class="toc-text">マルチサイド（マーケットプレイス）製品のデザインパターン</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拡大する"><span class="toc-number">6.4.4.</span> <span class="toc-text">拡大する</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考リンク"><span class="toc-number">7.</span> <span class="toc-text">参考リンク</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文献"><span class="toc-number">8.</span> <span class="toc-text">参考文献</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://avatars1.githubusercontent.com/u/3236312?s=400&amp;u=e1bde5f87a640284db5e7bde55b7ecb2aa0f1eac&amp;v=4"></div><div class="author-info__name text-center">k2works</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">23</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">12</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">6</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">１つの価値３つの領域 思想と技術</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">実践リーンスタートアップ</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2014-04-18</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E3%83%9E%E3%83%8D%E3%82%B8%E3%83%A1%E3%83%B3%E3%83%88/">マネジメント</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E3%83%9E%E3%83%8D%E3%82%B8%E3%83%A1%E3%83%B3%E3%83%88/%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9/">ビジネス</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><div style="position:relative;height:300px;width:640px;padding:1px;background:#333;"><a href="http://www.flickr.com/photos/smerikal/7732670428/" target="_blank"><img src="http://farm9.static.flickr.com/8422/7732670428_7dd738a696_z.jpg?zz=1" alt="3 Jari-Matti Latvala ja Miikka Anttila, FIN FIN, Ford World Rally Team Ford Fiesta RS WRC" style="position:absolute;clip:rect(5px 902px 305px 2px);margin:-5px 0 0 -2px;padding-bottom:5px;" /></a><span style="position:absolute;bottom:0;right:0;background:#333;color:#DDD;font-size:10px;padding:3px;">3 Jari-Matti Latvala ja Miikka Anttila, FIN FIN, Ford World Rally Team Ford Fiesta RS WRC / smerikal</span></div>
+<hr>
+>Life's too short to build something nobody wants.
+
+<blockquote>
+<p>(誰も欲しがらないものを作るほど人生は長くない)</p>
+<blockquote>
+<p>『Running Lean』</p>
+</blockquote>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="構成"><a href="#構成" class="headerlink" title="構成"></a>構成</h1><ol>
+<li><a href="#1">Running Leanとは</a></li>
+<li><a href="#2">プロセス</a></li>
+<li><a href="#3">プランAを文書化する</a></li>
+<li><a href="#4">プランで最もリスクの高い部分をみつける</a></li>
+<li><a href="#5">プランを体系的にテストする</a></li>
+<li><a href="#6">参考リンク</a></li>
+<li><a href="#7">参考文献</a></li>
+</ol>
+<h1 id="Running-Leanとは"><a href="#Running-Leanとは" class="headerlink" title="Running Leanとは"></a><a name="1">Running Leanとは</a></h1><p>顧客に何が欲しいかを聞くことはできない。</p>
+<blockquote>
+<p>If I had asked people what they wanted,then would have said faster horse.</p>
+</blockquote>
+<blockquote>
+<p>(顧客に欲しい物を聞いていたら、彼らは「もっと速い馬が欲しい」と答えていただろう。)</p>
+<blockquote>
+<p>Henry Ford</p>
+</blockquote>
+</blockquote>
+<p>適切な状況にいれば、顧客は自分の課題をはっきりと説明できる。</p>
+<blockquote>
+<p>It is not the customer’s job to know what they want.</p>
+</blockquote>
+<blockquote>
+<p>(欲しいものを知るというのは顧客の仕事ではない。)</p>
+<blockquote>
+<p>Steve Jobs</p>
+</blockquote>
+</blockquote>
+<p>顧客が本当に欲しい物を作るための方法論。</p>
+<ul>
+<li>顧客開発</li>
+<li>リーンスタートアップ</li>
+<li>ブートストラッピング</li>
+</ul>
+<p>そして、具体的なプロセス。</p>
+<blockquote>
+<p>Running Lean is a systematic process for iterating from Plan A to a plan that works, before running out of resources.</p>
+</blockquote>
+<blockquote>
+<p>(Running Leanとは、リソースを使い切る前にプランAからうまくいくプランへと反復的に移行する体系的なプロセスです。)</p>
+<blockquote>
+<p>『Running Lean』</p>
+</blockquote>
+</blockquote>
+<p><strong>Running Leanの方法論</strong></p>
+<p><img src="https://farm8.staticflickr.com/7188/13946744205_cd6d6cb37c.jpg" alt="runnig-lean-011 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>プランAを文書化する<ul>
+<li>顧客を考える</li>
+<li>リーンキャンパスを作る</li>
+</ul>
+</li>
+<li>プランで最もリスクの高い部分を見つける<ul>
+<li>リスクの優先順位ををつける</li>
+<li>ビジネスモデルインタビュー</li>
+</ul>
+</li>
+<li>プランを体系的にテストする<ul>
+<li>課題を理解する</li>
+<li>ソリューションを決定する</li>
+<li>定性的に検証する</li>
+<li>定量的に検証する</li>
+</ul>
+</li>
+</ul>
+<h1 id="プロセス"><a href="#プロセス" class="headerlink" title="プロセス"></a><a name="2">プロセス</a></h1><p><img src="https://farm3.staticflickr.com/2924/13898291692_53036ef35f.jpg" alt="runnig-lean-005 by Katuyuki Kakigi, on Flickr"></p>
+<h2 id="プランAを文書化する"><a href="#プランAを文書化する" class="headerlink" title="プランAを文書化する"></a>プランAを文書化する</h2><p>Running Leanを使えば最初のビジョンを体系的にテストして改善していくことが可能。最初の手順はビジョンを書き出して、少なくとも一人の人間と共有すること。</p>
+<p>あなたの「製品」は製品では「ない」。<br>あなたの仕事は、最高のソリューションを構築するだけでなく、ビジネスモデルの全体像を把握して、各要素をうまくまとめること。<br>そして、ビジョンを実現するビジネスモデルの仮説を捕まえるためにリーンキャンパスを使う。<br>リーンキャンパスとは、ビジネスモデルを９つの部品に分解し、リスクの高いものから体系的にテストするもの。</p>
+<p>リーンキャンパスの特徴</p>
+<ul>
+<li>高速性</li>
+<li>簡潔性</li>
+<li>携帯性</li>
+</ul>
+<h2 id="プランで最もリスクの高い部分をみつける"><a href="#プランで最もリスクの高い部分をみつける" class="headerlink" title="プランで最もリスクの高い部分をみつける"></a>プランで最もリスクの高い部分をみつける</h2><h3 id="スタートアップの３つのステージ"><a href="#スタートアップの３つのステージ" class="headerlink" title="スタートアップの３つのステージ"></a>スタートアップの３つのステージ</h3><p><img src="https://farm8.staticflickr.com/7360/13920083344_e31df3c80b.jpg" alt="runnig-lean-001 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li><p>第１ステージ：課題／解決フィット(Problem/Solution Fit)</p>
+</li>
+<li><p>第２ステージ：製品／市場フィット(Product/Market Fit)</p>
+</li>
+<li><p>第３ステージ：拡大(Scale)</p>
+</li>
+</ul>
+<h3 id="製品-市場フィットの前にピボット、それから最適化"><a href="#製品-市場フィットの前にピボット、それから最適化" class="headerlink" title="製品/市場フィットの前にピボット、それから最適化"></a>製品/市場フィットの前にピボット、それから最適化</h3><p><img src="https://farm8.staticflickr.com/7105/13920083294_84e6d6bdab.jpg" alt="runnig-lean-002 by Katuyuki Kakigi, on Flickr"></p>
+<p>最初の目標は、軌道修正（またはピボット）。次の目標は、効率化（または拡大）。<br>最も学習できるのは、期待する成果の見込みが５０％の時です。つまり、何が期待できるかよくわからない時。</p>
+<h3 id="資金調達について"><a href="#資金調達について" class="headerlink" title="資金調達について"></a>資金調達について</h3><p><img src="https://farm4.staticflickr.com/3761/13919678125_d3485ba26d.jpg" alt="runnig-lean-003 by Katuyuki Kakigi, on Flickr"></p>
+<p>資金調達に適した時期は製品／市場フィット後。最初の目標は、ビジネスモデルを顧客とテスト・検証できるように、必要十分な滑走路を構築すること。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ブートストラッピング+リーンスタートアップ&#x3D;低燃費スタートアップ</span><br></pre></td></tr></table></figure>
+
+<h2 id="プランを体系的にテストする"><a href="#プランを体系的にテストする" class="headerlink" title="プランを体系的にテストする"></a>プランを体系的にテストする</h2><h3 id="検証による学習のループが実験"><a href="#検証による学習のループが実験" class="headerlink" title="検証による学習のループが実験"></a>検証による学習のループが実験</h3><p><img src="https://farm3.staticflickr.com/2517/12965447694_45e1dce970_n.jpg" alt="lean-startup-003 by Katuyuki Kakigi, on Flickr"></p>
+<h3 id="イテレーションのメタパターン"><a href="#イテレーションのメタパターン" class="headerlink" title="イテレーションのメタパターン"></a>イテレーションのメタパターン</h3><p><img src="https://farm8.staticflickr.com/7418/13897003711_c0f885278b.jpg" alt="runnig-lean-004 by Katuyuki Kakigi, on Flickr"></p>
+<h1 id="プランAを文書化する-1"><a href="#プランAを文書化する-1" class="headerlink" title="プランAを文書化する"></a><a name="3">プランAを文書化する</a></h1><h2 id="顧客を考える"><a href="#顧客を考える" class="headerlink" title="顧客を考える"></a>顧客を考える</h2><p>いきなりソリューションを構築したり早い段階から顧客セグメントやビジネスモデルを選択することによる「選択バイアス」を回避するため最初から複数のモデルを同時にテストする。<br>まずは製品の見込み客のブレインストーミングから始める。</p>
+<h3 id="見込み客を考える"><a href="#見込み客を考える" class="headerlink" title="見込み客を考える"></a>見込み客を考える</h3><ul>
+<li>顧客とユーザーを区別する。</li>
+<li>顧客セグメントを細かくわける。</li>
+<li>最初はすべてを一枚のキャンパスにまとめる。</li>
+</ul>
+<h2 id="リーンキャンパスを作る"><a href="#リーンキャンパスを作る" class="headerlink" title="リーンキャンパスを作る"></a>リーンキャンパスを作る</h2><h3 id="リーンキャンパスをスケッチする"><a href="#リーンキャンパスをスケッチする" class="headerlink" title="リーンキャンパスをスケッチする"></a>リーンキャンパスをスケッチする</h3><p><img src="https://farm8.staticflickr.com/7164/13931958394_549d534efb.jpg" alt="lean-canvas-001 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>一気にスケッチする。</li>
+<li>空欄があっても構わない。</li>
+<li>簡潔に書く。</li>
+<li>今わかる範囲で考える。</li>
+<li>顧客主導型を使う。</li>
+</ul>
+<h3 id="課題と顧客セグメント"><a href="#課題と顧客セグメント" class="headerlink" title="課題と顧客セグメント"></a>課題と顧客セグメント</h3><p><img src="https://farm3.staticflickr.com/2900/13931524895_4a1cf1ea8f.jpg" alt="lean-canvas-002 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>上位１〜３位の課題を挙げる</li>
+<li>既存の代替品を列挙する</li>
+<li>ユーザーを特定する</li>
+<li>アーリーアダプターに狙いを定める</li>
+</ul>
+<h3 id="UVP-独自の価値提案"><a href="#UVP-独自の価値提案" class="headerlink" title="UVP(独自の価値提案)"></a>UVP(独自の価値提案)</h3><p><img src="https://farm4.staticflickr.com/3828/13908393591_40dace4960.jpg" alt="lean-canvas-003 by Katuyuki Kakigi, on Flickr"></p>
+<blockquote>
+<p>Unique Value Proposition: Why you are different and worth <del>buying</del> getting attention.</p>
+</blockquote>
+<blockquote>
+<p>(UVP(独自の価値提案)：あなたが他とは違っていて、<del>対価を支払う</del>注目する価値がある理由)</p>
+<blockquote>
+<p>『Running Lean』</p>
+</blockquote>
+</blockquote>
+<h4 id="UVPの作り方"><a href="#UVPの作り方" class="headerlink" title="UVPの作り方"></a>UVPの作り方</h4><ul>
+<li><p>変わったものにする。ただし、その違いが重要なものに限る。</p>
+</li>
+<li><p>アーリーアダプターをターゲットにする。</p>
+</li>
+<li><p>成功ストーリーに注目する。<br><strong>効果的なUVPを作る公式</strong>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">即効性のある明快な見出し &#x3D; 顧客が望む結果 + 明確な起源 + それが達成されなかった場合の代替案</span><br></pre></td></tr></table></figure></li>
+<li><p>言葉をよく選んで使う。</p>
+</li>
+<li><p>誰が・何を・なぜに答える。</p>
+</li>
+<li><p>優れたUVPを調べてみる。</p>
+</li>
+<li><p>ハイコンセプトピッチを作る。<br>ハイコンセプトピットをUVPと混同してはいけない。<br>ハイコンセプトピットはランディングページで使うものではない。</p>
+</li>
+</ul>
+<h3 id="ソリューション"><a href="#ソリューション" class="headerlink" title="ソリューション"></a>ソリューション</h3><p><img src="https://farm4.staticflickr.com/3824/13908402956_82321d77b3.jpg" alt="lean-canvas-004 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>課題とソリューションの結合はできるだけ遅らせる。</li>
+</ul>
+<h3 id="チャネル"><a href="#チャネル" class="headerlink" title="チャネル"></a>チャネル</h3><p><img src="https://farm8.staticflickr.com/7146/13931524765_1e112685b7.jpg" alt="lean-canvas-005 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>無料と有料</li>
+<li>インバウンドとアウトバウンド<ul>
+<li>インバウンドチャネル（プル型メッセージ）<ul>
+<li>ブログ</li>
+<li>SEO</li>
+<li>Ebook</li>
+<li>小冊子</li>
+<li>オンラインセミナー</li>
+</ul>
+</li>
+<li>アウトバウンドチャネル（プッシュ型メッセージ）<ul>
+<li>SEM</li>
+<li>印刷広告やTV CM</li>
+<li>展示会</li>
+<li>営業電話  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>直販と自動化</li>
+<li>直接と間接</li>
+<li>紹介の前に定着</li>
+</ul>
+<h3 id="収益とコスト構造"><a href="#収益とコスト構造" class="headerlink" title="収益とコスト構造"></a>収益とコスト構造</h3><p><img src="https://farm8.staticflickr.com/7251/13908402886_3a71c0a6be.jpg" alt="lean-canvas-006 by Katuyuki Kakigi, on Flickr"></p>
+<h4 id="収益の流れ"><a href="#収益の流れ" class="headerlink" title="収益の流れ"></a>収益の流れ</h4><ul>
+<li>価格は製品の一部</li>
+<li>価格が顧客を決定する</li>
+<li>課金は最初の検証</li>
+</ul>
+<h4 id="コスト構造"><a href="#コスト構造" class="headerlink" title="コスト構造"></a>コスト構造</h4><ul>
+<li>３０〜５０人にインタビューしてかかるコストは？</li>
+<li>MVPを構築してローンチするのにかかるコストは？</li>
+<li>固定費と変動費の両面から見たバーンレート（資本金の消費率）は？</li>
+</ul>
+<h3 id="主要指標"><a href="#主要指標" class="headerlink" title="主要指標"></a>主要指標</h3><p><img src="https://farm8.staticflickr.com/7035/13931524685_1d3d9ebc45.jpg" alt="lean-canvas-007 by Katuyuki Kakigi, on Flickr"></p>
+<h4 id="海賊指標-AARRR"><a href="#海賊指標-AARRR" class="headerlink" title="海賊指標(AARRR)"></a>海賊指標(AARRR)</h4><p><img src="https://farm4.staticflickr.com/3831/13908404282_4003fcbdc7.jpg" alt="aarrr-001 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>獲得</li>
+<li>活性化（アクティベーション）</li>
+<li>定着</li>
+<li>収益</li>
+<li>紹介</li>
+</ul>
+<h3 id="圧倒的な優位性"><a href="#圧倒的な優位性" class="headerlink" title="圧倒的な優位性"></a>圧倒的な優位性</h3><p><img src="https://farm8.staticflickr.com/7077/13931565593_1c0eee0e50.jpg" alt="lean-canvas-008 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>内部情報</li>
+<li>正当な「専門家」の支持</li>
+<li>ドリームチーム</li>
+<li>その人の信頼性</li>
+<li>巨大なネットワーク効果</li>
+<li>コミュニティ</li>
+<li>既存顧客</li>
+<li>SEOランキング</li>
+</ul>
+<h3 id="最後に"><a href="#最後に" class="headerlink" title="最後に"></a>最後に</h3><p>大切なのは、リーンキャンパスを書き終えたあとに、<strong>最低でも誰か１人と共有する</strong>こと。</p>
+<h1 id="プランで最もリスクの高い部分を見つける"><a href="#プランで最もリスクの高い部分を見つける" class="headerlink" title="プランで最もリスクの高い部分を見つける"></a><a name="4">プランで最もリスクの高い部分を見つける</a></h1><h2 id="リスクの優先順位をつける"><a href="#リスクの優先順位をつける" class="headerlink" title="リスクの優先順位をつける"></a>リスクの優先順位をつける</h2><p>可能性のあるビジネスモデルが複数できたら、次は優先順位をつける。<br>リスクの優先順位を間違えるのは最もムダなこと。</p>
+<h3 id="スタートアップのリスク"><a href="#スタートアップのリスク" class="headerlink" title="スタートアップのリスク"></a>スタートアップのリスク</h3><p><img src="https://farm3.staticflickr.com/2926/13909380222_ab43f05202.jpg" alt="runnig-lean-009 by Katuyuki Kakigi, on Flickr"></p>
+<ul>
+<li>製品リスク(P:Product risk)<br>正しい製品を作る</li>
+<li>顧客リスク(C:Customer risk)<br>顧客への経路を作る</li>
+<li>市場リスク(M:Market risk)<br>実現可能なビジネスを作る</li>
+</ul>
+<h2 id="ビジネスモデルインタビュー"><a href="#ビジネスモデルインタビュー" class="headerlink" title="ビジネスモデルインタビュー"></a>ビジネスモデルインタビュー</h2><p>初期の学習は反復的かつ定性的なので、仮説の検証には時間がかかる。また、顧客セグメントが広すぎたり狭すぎたり、場合によっては間違った顧客セグメントをターゲットにしていることもある。<br>なのでまずリスクに優先順位をつけて、他のビジネスモデルの可能性を顧客以外の誰か（アドバイザーなど）と一緒にブレインストーミングする。「正しい」アドバイザーとは、「プラン全体」のリスクを特定してくれたり、モデルの改良やダメ出しを手伝ってくれるような人。「アドバイザー」に厳密な定義はない。</p>
+<h3 id="ビジネスモデルの比較"><a href="#ビジネスモデルの比較" class="headerlink" title="ビジネスモデルの比較"></a>ビジネスモデルの比較</h3><ol>
+<li>顧客の不満レベル(課題)  </li>
+<li>近づきやすさ(チャネル)</li>
+<li>価格と粗利益(収益の流れとコスト構造)</li>
+<li>市場規模(顧客セグメント)</li>
+<li>技術的実現可能性(ソリューション)</li>
+</ol>
+<h3 id="外部の意見を求める"><a href="#外部の意見を求める" class="headerlink" title="外部の意見を求める"></a>外部の意見を求める</h3><ul>
+<li>スライドを１０枚以上にするのはやめる。</li>
+<li>２０％を準備に、８０％を対話に使う。</li>
+<li>具体的な質問をする。</li>
+</ul>
+<h3 id="実験の準備"><a href="#実験の準備" class="headerlink" title="実験の準備"></a>実験の準備</h3><h4 id="課題チームと解決チームを作る"><a href="#課題チームと解決チームを作る" class="headerlink" title="課題チームと解決チームを作る"></a>課題チームと解決チームを作る</h4><ul>
+<li>小規模ではなく最小のチームで開始する。</li>
+<li>絶対に必要な３つの要素：開発・デザイン・マーケティング。<ul>
+<li>開発</li>
+<li>デザイン</li>
+<li>マーケティング</li>
+</ul>
+</li>
+<li>課題／解決チームの外部委託は慎重に。</li>
+</ul>
+<h4 id="効果的な実験"><a href="#効果的な実験" class="headerlink" title="効果的な実験"></a>効果的な実験</h4><ul>
+<li><p>速度・学習・集中を最大化する。</p>
+<ul>
+<li>速度と集中</li>
+<li>学習と集中</li>
+<li>速度と学習</li>
+</ul>
+</li>
+<li><p>主要指標と目標を特定する。</p>
+</li>
+<li><p>学習は必要な最も小さいことをやる。</p>
+</li>
+<li><p>反証可能な仮説<br><strong>反証可能な仮説を作る公式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">反証可能な仮説 &#x3D; 具体的で反復可能な行動 → 期待する計測可能な成果</span><br></pre></td></tr></table></figure></li>
+<li><p>定性的検証と定量的検証</p>
+</li>
+<li><p>結果を具体的な行動に結びつける</p>
+</li>
+<li><p>わかりやすいダッシュボードを作る</p>
+</li>
+<li><p>学習を早めにしょっちゅう伝える</p>
+</li>
+</ul>
+<h3 id="イテレーションのメタパターンをリスクに適用する"><a href="#イテレーションのメタパターンをリスクに適用する" class="headerlink" title="イテレーションのメタパターンをリスクに適用する"></a>イテレーションのメタパターンをリスクに適用する</h3><blockquote>
+<p>Your business model is not a dartboard</p>
+</blockquote>
+<blockquote>
+<p>(ビジネスモデルはダーツのボードではありません)  </p>
+<blockquote>
+<p>『Running Lean』</p>
+</blockquote>
+</blockquote>
+<ul>
+<li>ステージ１：課題を理解する</li>
+<li>ステージ２：ソリューションを決定する</li>
+<li>ステージ３：定性的に検証する</li>
+<li>ステージ４：定量的に検証する</li>
+</ul>
+<h4 id="製品リスク：正しい製品を作る"><a href="#製品リスク：正しい製品を作る" class="headerlink" title="製品リスク：正しい製品を作る"></a>製品リスク：正しい製品を作る</h4><p><img src="https://farm4.staticflickr.com/3753/13908966602_78f9d7dd82.jpg" alt="runnig-lean-006 by Katuyuki Kakigi, on Flickr"></p>
+<ol>
+<li>解決に値する課題かどうか確認する。</li>
+<li>最小限のソリューション(MVP)を決定する。</li>
+<li>MVPを構築して、小規模に検証する(UVPデモ)。</li>
+<li>大規模に検証する。</li>
+</ol>
+<h4 id="顧客リスク：顧客への経路を作る"><a href="#顧客リスク：顧客への経路を作る" class="headerlink" title="顧客リスク：顧客への経路を作る"></a>顧客リスク：顧客への経路を作る</h4><p><img src="https://farm8.staticflickr.com/7227/13908967316_d8d54541c3.jpg" alt="runnig-lean-007 by Katuyuki Kakigi, on Flickr"></p>
+<ol>
+<li>不満を持っている人を特定する。</li>
+<li>製品を今すぐにほしいと思うアーリーアダプターに範囲を狭める。</li>
+<li>アウトバウンドチャネルから開始しても構わない。</li>
+<li>ただし、少しずつ拡大可能なインバウンドチャネルも構築／開発する。早ければ早いほどよい。</li>
+</ol>
+<h4 id="市場リスク：実現可能なビジネスを作る"><a href="#市場リスク：実現可能なビジネスを作る" class="headerlink" title="市場リスク：実現可能なビジネスを作る"></a>市場リスク：実現可能なビジネスを作る</h4><p><img src="https://farm8.staticflickr.com/7099/13908967276_041ebbf184.jpg" alt="runnig-lean-008 by Katuyuki Kakigi, on Flickr"></p>
+<ol>
+<li>既存の代替品から競合他社を特定し、ソリューションの価格を設定する。</li>
+<li>顧客の声を聞いて、価格をテストする（口約束）。</li>
+<li>顧客の行動を見て、価格をテストする。</li>
+<li>ビジネスモデルがうまくいくように、コスト構造を最適化する。</li>
+</ol>
+<h1 id="プランを体系的にテストする-1"><a href="#プランを体系的にテストする-1" class="headerlink" title="プランを体系的にテストする"></a><a name="5">プランを体系的にテストする</a></h1><h2 id="課題を理解する"><a href="#課題を理解する" class="headerlink" title="課題を理解する"></a>課題を理解する</h2><h3 id="顧客インタビューの準備"><a href="#顧客インタビューの準備" class="headerlink" title="顧客インタビューの準備"></a>顧客インタビューの準備</h3><ul>
+<li>ビッチーではなく学習を中心に考える。</li>
+<li>顧客に何が欲しいのかを聞いてはいけない。行動を観察する。</li>
+<li>台本に合わせて会話をする。</li>
+<li>網を広く投げる。</li>
+<li>直接面会してインタビューする。</li>
+<li>知り合いから始める。</li>
+<li>誰かと一緒に行く。</li>
+<li>中立的な場所を選ぶ。</li>
+<li>十分な時間をもらう。</li>
+<li>謝礼や贈り物をしないようにする。</li>
+<li>インタビューを録音しないようにする。</li>
+<li>インタビュー後すぐに文書化する。</li>
+<li>３０〜６０人にインタビューする。</li>
+<li>インタビューのスケジュール調整を委託する。</li>
+</ul>
+<h3 id="見込み客を見つける"><a href="#見込み客を見つける" class="headerlink" title="見込み客を見つける"></a>見込み客を見つける</h3><ul>
+<li>近しい人から始める。</li>
+<li>紹介をお願いする。</li>
+<li>地元で探す。</li>
+<li>予告ページで探す。</li>
+<li>予告ページでメールアドレスを登録してもらう。</li>
+<li>何らかの形でお返しをする。</li>
+<li>電話・メール・LinkedInを使って依頼する。</li>
+</ul>
+<h3 id="課題インタビュー"><a href="#課題インタビュー" class="headerlink" title="課題インタビュー"></a>課題インタビュー</h3><h4 id="学習すべきこと"><a href="#学習すべきこと" class="headerlink" title="学習すべきこと"></a>学習すべきこと</h4><ul>
+<li>製品リスク：何を解決するのか？（課題）</li>
+<li>市場リスク：競合は誰なのか？（既存の代替品）</li>
+<li>顧客リスク：誰が困っているのか？（顧客セグメント）</li>
+</ul>
+<h4 id="課題インタビューの実施"><a href="#課題インタビューの実施" class="headerlink" title="課題インタビューの実施"></a>課題インタビューの実施</h4><ol>
+<li>歓迎</li>
+<li>顧客情報の収集</li>
+<li>ストーリーの伝達</li>
+<li>課題の優先順位</li>
+<li>顧客の世界観の探求</li>
+<li>まとめ</li>
+<li>結果の文書化</li>
+</ol>
+<h4 id="課題インタビューの終了条件"><a href="#課題インタビューの終了条件" class="headerlink" title="課題インタビューの終了条件"></a>課題インタビューの終了条件</h4><ul>
+<li>アーリーアダプターとなる顧客が特定できた。</li>
+<li>「絶対に必要」な課題が見つかった。</li>
+<li>現在の顧客の解決方法がわかった。</li>
+</ul>
+<h2 id="ソリューションを決定する"><a href="#ソリューションを決定する" class="headerlink" title="ソリューションを決定する"></a>ソリューションを決定する</h2><h3 id="学習すべきこと-1"><a href="#学習すべきこと-1" class="headerlink" title="学習すべきこと"></a>学習すべきこと</h3><ul>
+<li>顧客リスク：誰が困っているのか？（アーリーアダプター）</li>
+<li>製品リスク：課題をどのように解決するのか？（ソリューション）</li>
+<li>市場リスク：どのような価格モデルにするのか？（収益の流れ）</li>
+</ul>
+<h3 id="デモを構築する"><a href="#デモを構築する" class="headerlink" title="デモを構築する"></a>デモを構築する</h3><ul>
+<li>デモは実現可能でなければならない。</li>
+<li>デモは本物に見えなければならない。</li>
+<li>デモは高速に反復する必要がある。</li>
+<li>デモはムダを最小化にする。</li>
+<li>デモは本物に見えるデータを使わなければならない。</li>
+</ul>
+<h3 id="ソリューションインタビュー"><a href="#ソリューションインタビュー" class="headerlink" title="ソリューションインタビュー"></a>ソリューションインタビュー</h3><h4 id="価格のテスト"><a href="#価格のテスト" class="headerlink" title="価格のテスト"></a>価格のテスト</h4><ul>
+<li>価格のことは顧客に聞かず、ただ伝えるだけ。</li>
+<li>登録の障壁を下げずに上げる。</li>
+<li>ソリューションインタビューのAIDA</li>
+<li>ピットどこが違うのか</li>
+<li>テスト可能な仮説</li>
+</ul>
+<h4 id="ソリューションインタビューの実施"><a href="#ソリューションインタビューの実施" class="headerlink" title="ソリューションインタビューの実施"></a>ソリューションインタビューの実施</h4><ol>
+<li>歓迎</li>
+<li>顧客情報の収集</li>
+<li>ストーリーの伝達</li>
+<li>デモ</li>
+<li>価格の検証</li>
+<li>まとめ</li>
+<li>結果の文書化</li>
+</ol>
+<h4 id="ソリューションインタビューの終了条件"><a href="#ソリューションインタビューの終了条件" class="headerlink" title="ソリューションインタビューの終了条件"></a>ソリューションインタビューの終了条件</h4><ul>
+<li>アーリーアダプターの顧客情報が特定できた。</li>
+<li>「絶対に必要」な課題がわかった。</li>
+<li>課題を解決するのに必要な最小限の機能が定義できた。</li>
+<li>顧客が支払ってくれる価格がわかった。</li>
+<li>（概算で）うまくいきそうなビジネスが構築できた。</li>
+</ul>
+<h3 id="MVPを構築する"><a href="#MVPを構築する" class="headerlink" title="MVPを構築する"></a>MVPを構築する</h3><h4 id="バージョン1-0をリリース"><a href="#バージョン1-0をリリース" class="headerlink" title="バージョン1.0をリリース"></a>バージョン1.0をリリース</h4><ul>
+<li>製品開発は学習の邪魔</li>
+<li>MVPの縮小化</li>
+<li>継続的デプロイを始める</li>
+</ul>
+<h4 id="アクティベーションの流れを定義する"><a href="#アクティベーションの流れを定義する" class="headerlink" title="アクティベーションの流れを定義する"></a>アクティベーションの流れを定義する</h4><ul>
+<li>登録の障害は下げても学習の犠牲にしてはいけません。</li>
+<li>手順を減らしても学習を犠牲にしてはいけません。</li>
+<li>UVPを届けましょう。</li>
+<li>うまくいかなかったときのことを考えておきましょう。</li>
+</ul>
+<h4 id="マーケティング用のサイトを構築する"><a href="#マーケティング用のサイトを構築する" class="headerlink" title="マーケティング用のサイトを構築する"></a>マーケティング用のサイトを構築する</h4><ul>
+<li>マーケティング用のサイトの解剖<ul>
+<li>概要ページ</li>
+<li>サービス利用規約とプライバシーポリシーページ</li>
+<li>製品ツアーページ(動画やスクリーンショット)</li>
+</ul>
+</li>
+<li>ランディングページの分解<ul>
+<li>独自の価値提案</li>
+<li>ビジュアルの支援</li>
+<li>明確な誘導</li>
+<li>もっと詳しく知るための情報</li>
+<li>社会的証明</li>
+</ul>
+</li>
+</ul>
+<h2 id="定性的に検証する"><a href="#定性的に検証する" class="headerlink" title="定性的に検証する"></a>定性的に検証する</h2><h3 id="ダッシュボードを構築する"><a href="#ダッシュボードを構築する" class="headerlink" title="ダッシュボードを構築する"></a>ダッシュボードを構築する</h3><h4 id="計測の準備"><a href="#計測の準備" class="headerlink" title="計測の準備"></a>計測の準備</h4><ul>
+<li>行動につながる指標が必要</li>
+<li>指標は人が重要</li>
+<li>単純なファンネルレポートは十分ではない</li>
+<li>コホートによろしく</li>
+</ul>
+<h4 id="コンバージョンダッシュボードの作り方"><a href="#コンバージョンダッシュボードの作り方" class="headerlink" title="コンバージョンダッシュボードの作り方"></a>コンバージョンダッシュボードの作り方</h4><h5 id="データの収集方法"><a href="#データの収集方法" class="headerlink" title="データの収集方法"></a>データの収集方法</h5><ul>
+<li>指標とイベントを一致させる。</li>
+<li>生のイベントを監視する。</li>
+<li>すべてのログをとる。</li>
+</ul>
+<h5 id="コンバージョンダッシュボードの可視化方法"><a href="#コンバージョンダッシュボードの可視化方法" class="headerlink" title="コンバージョンダッシュボードの可視化方法"></a>コンバージョンダッシュボードの可視化方法</h5><ul>
+<li>ファンネルを掘り下げる。</li>
+<li>数字の理由を調べる。</li>
+</ul>
+<h5 id="定着の追跡方法"><a href="#定着の追跡方法" class="headerlink" title="定着の追跡方法"></a>定着の追跡方法</h5><ul>
+<li>アクティブユーザーの定義する。</li>
+<li>コンバージョンダッシュボードの定着を可視化する。</li>
+<li>詳細なビューを提供する。</li>
+</ul>
+<h3 id="MVPインタビュー"><a href="#MVPインタビュー" class="headerlink" title="MVPインタビュー"></a>MVPインタビュー</h3><h4 id="学習すべきこと-2"><a href="#学習すべきこと-2" class="headerlink" title="学習すべきこと"></a>学習すべきこと</h4><ul>
+<li>製品リスク：製品の魅力は何か？(独自の価値提案)</li>
+<li>顧客リスク：十分な顧客はいるか？（チャネル）</li>
+<li>市場リスク：価格は適正化？(収益の流れ)</li>
+</ul>
+<h4 id="テスト可能な仮説"><a href="#テスト可能な仮説" class="headerlink" title="テスト可能な仮説"></a>テスト可能な仮説</h4><h4 id="MVPインタビューの実施"><a href="#MVPインタビューの実施" class="headerlink" title="MVPインタビューの実施"></a>MVPインタビューの実施</h4><ol>
+<li>歓迎</li>
+<li>ランディングページの提示</li>
+<li>価格ページの提示</li>
+<li>登録とアクティベーション</li>
+<li>まとめ</li>
+<li>結果の文書化</li>
+</ol>
+<h3 id="UVPを実現する"><a href="#UVPを実現する" class="headerlink" title="UVPを実現する"></a>UVPを実現する</h3><h3 id="顧客ライフサイクルを検証する"><a href="#顧客ライフサイクルを検証する" class="headerlink" title="顧客ライフサイクルを検証する"></a>顧客ライフサイクルを検証する</h3><h4 id="フィードバックを楽にする"><a href="#フィードバックを楽にする" class="headerlink" title="フィードバックを楽にする"></a>フィードバックを楽にする</h4><blockquote>
+<p>The fastest way to learn from customers is to talk to them.</p>
+</blockquote>
+<blockquote>
+<p>(顧客から学習する近道は、顧客に話しかけることです)</p>
+<blockquote>
+<p>『Running Lean』</p>
+</blockquote>
+</blockquote>
+<ul>
+<li>気にかけていることが伝わる。</li>
+<li>問い合わせが多すぎるという問題はない。</li>
+<li>テクニカルサポートは継続的な学習のフィードバックループ。</li>
+<li>テクニカルサポートは顧客開発。</li>
+<li>テクニカルサポートはマーケティング。</li>
+<li>投票ツールによるフィードバックは使わない。</li>
+</ul>
+<h4 id="試用期間中に問題を解決する"><a href="#試用期間中に問題を解決する" class="headerlink" title="試用期間中に問題を解決する"></a>試用期間中に問題を解決する</h4><h5 id="獲得とアクティベーション"><a href="#獲得とアクティベーション" class="headerlink" title="獲得とアクティベーション"></a>獲得とアクティベーション</h5><ul>
+<li>優先事項：学習できるだけのトラフィックを稼ぐ。<ul>
+<li>ファンネルを掘り下げる。</li>
+<li>ユーザーに連絡する。</li>
+<li>予期しないエラーをキャッチして通知する。</li>
+</ul>
+</li>
+</ul>
+<h5 id="定着"><a href="#定着" class="headerlink" title="定着"></a>定着</h5><ul>
+<li>優先事項：試用期間中にユーザーに戻ってきてもらって、製品を使ってもらう  <ul>
+<li>丁寧なリマインダーを送信する。</li>
+<li>インタビュー相手に協力を求める。</li>
+</ul>
+</li>
+</ul>
+<h5 id="収益"><a href="#収益" class="headerlink" title="収益"></a>収益</h5><ul>
+<li>優先事項：お金をはらってもらう<ul>
+<li>決済システムを実装する。</li>
+<li>支払った顧客に電話する。<ul>
+<li>この製品をどのようにして知りましたか？（あなたが知らない場合）</li>
+<li>この製品をなぜ購入しようと思いましたか？</li>
+<li>何か改善できる点はありますか？</li>
+</ul>
+</li>
+<li>「売り損ねた」見込み客に話を聞きましょう。</li>
+</ul>
+</li>
+</ul>
+<h5 id="紹介"><a href="#紹介" class="headerlink" title="紹介"></a>紹介</h5><ul>
+<li>優先事項：推薦の声をもらう<ul>
+<li>推薦の声をお願いする。</li>
+</ul>
+</li>
+</ul>
+<h4 id="ローンチの準備はできましたか？"><a href="#ローンチの準備はできましたか？" class="headerlink" title="ローンチの準備はできましたか？"></a>ローンチの準備はできましたか？</h4><ul>
+<li>結果を頻繁にレビューする。</li>
+<li>最も重要な課題から着手する。</li>
+<li>可能な限り小さなことをやる。</li>
+<li>確実に改善する。</li>
+<li>コンバージョンダッシュボードを監視する。</li>
+</ul>
+<h4 id="ローンチ条件"><a href="#ローンチ条件" class="headerlink" title="ローンチ条件"></a>ローンチ条件</h4><ul>
+<li>独自の価値提案(UVP)を明確に理解している。</li>
+<li>本サービスに登録するつもりがある。</li>
+<li>価格モデルを受け入れている。</li>
+<li>アクティベーションの流れをうまく通り抜けている。</li>
+<li>好意的な推薦の声を提供してくれる。</li>
+</ul>
+<h4 id="３・２・１・・・・ローンチ！"><a href="#３・２・１・・・・ローンチ！" class="headerlink" title="３・２・１・・・・ローンチ！"></a>３・２・１・・・・ローンチ！</h4><p>学習に「ちょうど十分」なトラフィックを獲得するのが目的。</p>
+<h2 id="定量的に検証する"><a href="#定量的に検証する" class="headerlink" title="定量的に検証する"></a>定量的に検証する</h2><h3 id="機能を制限する"><a href="#機能を制限する" class="headerlink" title="機能を制限する"></a>機能を制限する</h3><h4 id="機能は押し付けずに引っ張ってもらう"><a href="#機能は押し付けずに引っ張ってもらう" class="headerlink" title="機能は押し付けずに引っ張ってもらう"></a>機能は押し付けずに引っ張ってもらう</h4><ul>
+<li>追加機能は独自の価値提案（UVP）を薄める。<br>シンプルな製品ならシンプルに理解できる。</li>
+<li>すぐにMVPに見切りをつけてはいけない。</li>
+<li>機能には隠れたコストがある。</li>
+<li>顧客は本当に欲しい物をわかっていない。</li>
+</ul>
+<h4 id="80-20ルールを実施する"><a href="#80-20ルールを実施する" class="headerlink" title="80/20ルールを実施する"></a>80/20ルールを実施する</h4><h4 id="機能の流れを制御する"><a href="#機能の流れを制御する" class="headerlink" title="機能の流れを制御する"></a>機能の流れを制御する</h4><p>かんばんボード（見える化ボード）を使う。<br>コンバージョンダッシュボードを指標の追跡に使うように、かんばんボードは機能の追跡に使う。どちらもマクロ的視点に焦点を当てている。</p>
+<ol>
+<li>バックログ<ul>
+<li>既存機能の改善（例：登録の流れの改良）</li>
+<li>顧客の機能要求</li>
+<li>自分たちの機能要求（例：あとでやることにした「あればうれしい」機能）</li>
+<li>MMF(市場価値最小限の機能：Minimum Marketable Feature)単位</li>
+<li>MMFは小さな作業項目（タスク）で構成されている。</li>
+<li>タスクのバッチとなる小さな機能・バグ修正・作業項目についてはタスクボードで管理する。  </li>
+</ul>
+</li>
+<li>作業中<br>かんばんの大切な原則は、作業中の機能数を制限すること。</li>
+<li>完了</li>
+<li>検証による学習</li>
+</ol>
+<h4 id="機能要求を処理する"><a href="#機能要求を処理する" class="headerlink" title="機能要求を処理する"></a>機能要求を処理する</h4><ol>
+<li>作業の必要性や優先順位を確認する。</li>
+<li>それが小さな機能やバグ修正なのか、より大きなMMFなのかを判断する。<ul>
+<li>小さな作業項目かつ緊急ならすぐ対応する。  </li>
+<li>そうでなければタスクボードのバックログに追加する。</li>
+<li>MMFならばカンバンボードのバックログに追加する。</li>
+</ul>
+</li>
+</ol>
+<h4 id="機能ライフサイクル"><a href="#機能ライフサイクル" class="headerlink" title="機能ライフサイクル"></a>機能ライフサイクル</h4><h5 id="かんばんボードで機能を追跡する"><a href="#かんばんボードで機能を追跡する" class="headerlink" title="かんばんボードで機能を追跡する"></a>かんばんボードで機能を追跡する</h5><ul>
+<li>目標</li>
+<li>仕掛品の上限</li>
+<li>バッファレーン</li>
+<li>機能はいつでも中止可能</li>
+<li>継続的デプロイ</li>
+<li>２段階検証</li>
+</ul>
+<h5 id="各手順の説明"><a href="#各手順の説明" class="headerlink" title="各手順の説明"></a>各手順の説明</h5><ul>
+<li>課題を理解する<ol>
+<li>バックログ<ul>
+<li>顧客からの要望</li>
+<li>内部からの要望</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>ソリューションを決定する<ol>
+<li>モックアップ</li>
+<li>デモ</li>
+<li>コード</li>
+</ol>
+</li>
+<li>定性的に検証する<ol>
+<li>部分的展開</li>
+<li>定性的検証</li>
+</ol>
+</li>
+<li>定量的に検証する<ol>
+<li>全面展開</li>
+<li>定量的検証</li>
+</ol>
+</li>
+</ul>
+<h3 id="進捗を計測する"><a href="#進捗を計測する" class="headerlink" title="進捗を計測する"></a>進捗を計測する</h3><h4 id="製品／市場フィットとは"><a href="#製品／市場フィットとは" class="headerlink" title="製品／市場フィットとは"></a>製品／市場フィットとは</h4><blockquote>
+<p>Product/Market fit means being in a good market with a product that can satisfy that market.<br>(製品／市場フィットとは、市場を満足できる製品がある状態のことだ。)<br>You can always feel when product/market fit isn’t happening. The customers aren’t quite getting value out of the product,word of mouth isn’t spreading, usage isn’t growing that fast,press reviews are kind of “blah,” the sales cycle takes too long, and lots of deals never close.<br>(製品／市場フィットがないとすぐわかる。製品の価値が顧客に伝わらない。口コミが広がらない。利用が加速しない。メディアの評判は「最低」。販売サイクルに時間がかかる。商談がまとまらない。)<br>And you can always feel product/market fit when it’s happening.The customers are buying the product just as fast as you can make it - or usage is growing just as fast as you can add more servers. Money from customers is piling up in your company checking account.You’re hiring sales and customer support staff as fast as you can.Reporters are calling because they’ve heard about your hot new thing and they want to talk to you about it.<br>(製品／市場フィットがあるとすぐわかる。製品を作ると顧客が買いに来る。サービスを追加すると利用が拡大する。銀行口座にお金がたまる。営業や顧客サポートのスタッフが雇える。記者から新製品のことを聞きたいと電話がかかってくる。)</p>
+<blockquote>
+<p>Marc Andreessen,”The Pmarca Guide to Startups”</p>
+</blockquote>
+</blockquote>
+<h3 id="初期のトラクションを達成する"><a href="#初期のトラクションを達成する" class="headerlink" title="初期のトラクションを達成する"></a>初期のトラクションを達成する</h3><h4 id="ショーン／エリスのテスト"><a href="#ショーン／エリスのテスト" class="headerlink" title="ショーン／エリスのテスト"></a>ショーン／エリスのテスト</h4><p>４０％以上のユーザーが「非常に残念」と答えたのであれば、この「絶対に必要」な製品は今後も継続的に顧客を獲得できる。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">【製品名】が使えなくなった時にどう思いますか？</span><br><span class="line">  1.非常に残念</span><br><span class="line">  2.少し残念</span><br><span class="line">  3.残念ではない（役に立たなかった）</span><br><span class="line">  4.すでに【製品名】をつかっていない</span><br></pre></td></tr></table></figure>
+<p>アンケート調査は、学習より検証に効果的。</p>
+<h4 id="「適切な」マクロ指標に集中する"><a href="#「適切な」マクロ指標に集中する" class="headerlink" title="「適切な」マクロ指標に集中する"></a>「適切な」マクロ指標に集中する</h4><p>アクティベーションの済んだユーザーが毎日４０％以上いれば、初期のトラクションがあるといえる。</p>
+<h4 id="人が欲しがるものを作ったか"><a href="#人が欲しがるものを作ったか" class="headerlink" title="人が欲しがるものを作ったか"></a>人が欲しがるものを作ったか</h4><ol>
+<li>コンバージョンダッシュボードを毎週レビューする。</li>
+<li>目標とバックログの優先順位をつける。</li>
+<li>大胆な仮説を作る。</li>
+<li>機能を追加／削除する。</li>
+<li>価値指標を監視する。</li>
+<li>ショーン・エリスのテストを実施する。</li>
+</ol>
+<h5 id="初期トラクションの終了条件"><a href="#初期トラクションの終了条件" class="headerlink" title="初期トラクションの終了条件"></a>初期トラクションの終了条件</h5><ul>
+<li>ユーザーの４０％が定着した。</li>
+<li>ショーン・エリスのテストを通過した。</li>
+</ul>
+<h4 id="製品／市場フィットにおける市場"><a href="#製品／市場フィットにおける市場" class="headerlink" title="製品／市場フィットにおける市場"></a>製品／市場フィットにおける市場</h4><p>初期のトラクションを実証する前に、ビジネスの拡大に集中するのはムダ</p>
+<h5 id="成長エンジンの特定"><a href="#成長エンジンの特定" class="headerlink" title="成長エンジンの特定"></a>成長エンジンの特定</h5><ul>
+<li><p>粘着型：高い定着率<br>解約率とは、製品を使わなくなって一定期間がたった顧客の割合。<br>「顧客獲得率＞解約率」であれば、ビジネスが成長していると言える。</p>
+</li>
+<li><p>ウィルス型：高い紹介率<br>ウィルス係数とは、顧客１人あたりの紹介数を計測したもの<br>「ウィルス係数＞１」（顧客が最低１人以上紹介している）であれば、ビジネスが成長していると言える。</p>
+</li>
+<li><p>支出型：高い利益率<br>「顧客生涯価値（LTV:Life Time Value) &gt; 顧客獲得コスト(COCA:Cost of Customer Acquisition)」を続けているのであれば、ビジネスが成長していると言える。</p>
+</li>
+<li><p>成長エンジンを選択するガイドライン</p>
+<ol>
+<li>価値指標の検証から着手する。</li>
+<li>顧客の製品に対する態度を理解する。</li>
+<li>調整するエンジンを選択する。</li>
+</ol>
+</li>
+</ul>
+<h4 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h4><h5 id="ネットワーク効果のある製品のデザインパターン"><a href="#ネットワーク効果のある製品のデザインパターン" class="headerlink" title="ネットワーク効果のある製品のデザインパターン"></a>ネットワーク効果のある製品のデザインパターン</h5><ul>
+<li>注目は換金可能な資産。</li>
+<li>定着は王様。</li>
+<li>成長エンジンはウィルス型。</li>
+</ul>
+<h5 id="マルチサイド（マーケットプレイス）製品のデザインパターン"><a href="#マルチサイド（マーケットプレイス）製品のデザインパターン" class="headerlink" title="マルチサイド（マーケットプレイス）製品のデザインパターン"></a>マルチサイド（マーケットプレイス）製品のデザインパターン</h5><ul>
+<li>両サイドのキャンバスを作る。</li>
+<li>アーリーアダプターのマーケットプレイスで価値を検証する。</li>
+<li>仲介処理は自動化しない。</li>
+<li>両サイドに適切な成長エンジンを選びましょう。</li>
+</ul>
+<h3 id="拡大する"><a href="#拡大する" class="headerlink" title="拡大する"></a>拡大する</h3><p><img src="https://farm3.staticflickr.com/2917/13923637052_b44a281816.jpg" alt="runnig-lean-010 by Katuyuki Kakigi, on Flickr"></p>
+<blockquote>
+<p>Every process works well until you add people.<br>The key is to build a continuous learning culture of experimenters versus specialist, where it’s everyone’s job to be accountable toward creating and capturing customer value.</p>
+<p>（あらゆるプロセスは、人を増やすまではうまくいくのです。<br>したがって、各自が専門家になるのではなく、実験を通じた継続的な学習の文化を作ることが大切になります。つまり、顧客価値の創造や理解は、みんなの責任ということです。）</p>
+<blockquote>
+<p>『Running Lean』</p>
+</blockquote>
+</blockquote>
+<h1 id="参考リンク"><a href="#参考リンク" class="headerlink" title="参考リンク"></a><a name="6">参考リンク</a></h1><p><a href="http://www.venturenow.jp/column/ogawa/20110124009635.html" target="_blank" rel="noopener">外部から資金調達をしない「ブートストラッピング」という起業スタイル</a></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><a name="7">参考文献</a></h1><iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=k2works0c-22&o=9&p=8&l=as1&asins=4873115914&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=k2works0c-22&o=9&p=8&l=as1&asins=1449305172&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?t=k2works0c-22&o=9&p=8&l=as1&asins=B006UKFFE0&ref=qf_sp_asin_til&fc1=000000&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=000000&bg1=FFFFFF&f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">k2works</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://k2works.github.io/2014/04/18/2014-04-18-runnig-lenan-startup/">https://k2works.github.io/2014/04/18/2014-04-18-runnig-lenan-startup/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88%E3%82%A2%E3%83%83%E3%83%97/">リーンスタートアップ</a></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e9e7853f8eb0c4e" async></script><nav id="pagination"><div class="prev-post pull-left"><a href="/2014/04/23/2014-04-23-what-is-business-model-generation/"><i class="fa fa-chevron-left">  </i><span>ビジネスモデルキャンパス</span></a></div><div class="next-post pull-right"><a href="/2014/04/09/2014-04-09-what-is-bdd/"><span>ビヘイビア駆動開発</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2021 By k2works</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

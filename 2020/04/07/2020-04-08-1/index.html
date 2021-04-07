@@ -1,0 +1,496 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="環境構築から始めるテスト駆動開発 ~プログラミング環境の共通基盤を構築する~"><meta name="keywords" content="テスト駆動開発,VisualStudioCode"><meta name="author" content="k2works"><meta name="copyright" content="k2works"><title>環境構築から始めるテスト駆動開発 ~プログラミング環境の共通基盤を構築する~ | １つの価値３つの領域 思想と技術</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-48713941-1', 'auto');
+ga('send', 'pageview');</script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#はじめに"><span class="toc-number">1.</span> <span class="toc-text">はじめに</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6S"><span class="toc-number">2.</span> <span class="toc-text">6S</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5S"><span class="toc-number">2.1.</span> <span class="toc-text">5S</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#セキュリティ-Security"><span class="toc-number">2.2.</span> <span class="toc-text">セキュリティ(Security)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IT-リテラシ"><span class="toc-number">2.3.</span> <span class="toc-text">IT リテラシ</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#アカウントの登録"><span class="toc-number">3.</span> <span class="toc-text">アカウントの登録</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Microsoft-アカウントを作成する"><span class="toc-number">3.1.</span> <span class="toc-text">Microsoft アカウントを作成する</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Google-アカウントを作成する"><span class="toc-number">3.2.</span> <span class="toc-text">Google アカウントを作成する</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GitHub-アカウントを作成する"><span class="toc-number">3.3.</span> <span class="toc-text">GitHub アカウントを作成する</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#アカウントにサインインする"><span class="toc-number">3.4.</span> <span class="toc-text">アカウントにサインインする</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#クラウドストレージのセットアップ"><span class="toc-number">4.</span> <span class="toc-text">クラウドストレージのセットアップ</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#開発環境のセットアップ"><span class="toc-number">5.</span> <span class="toc-text">開発環境のセットアップ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#パッケージ管理ツールのインストール"><span class="toc-number">5.1.</span> <span class="toc-text">パッケージ管理ツールのインストール</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gitのインストール"><span class="toc-number">5.2.</span> <span class="toc-text">gitのインストール</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PowerShellCoreのインストール"><span class="toc-number">5.3.</span> <span class="toc-text">PowerShellCoreのインストール</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-Terminalのインストール"><span class="toc-number">5.4.</span> <span class="toc-text">Windows Terminalのインストール</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WSLのインストール"><span class="toc-number">5.5.</span> <span class="toc-text">WSLのインストール</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerのインストール"><span class="toc-number">5.6.</span> <span class="toc-text">Dockerのインストール</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntuのインストール"><span class="toc-number">5.7.</span> <span class="toc-text">Ubuntuのインストール</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#エディタのセットアップ"><span class="toc-number">6.</span> <span class="toc-text">エディタのセットアップ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#インストール"><span class="toc-number">6.1.</span> <span class="toc-text">インストール</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#設定"><span class="toc-number">6.2.</span> <span class="toc-text">設定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拡張機能の追加"><span class="toc-number">6.3.</span> <span class="toc-text">拡張機能の追加</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#設定の同期"><span class="toc-number">6.4.</span> <span class="toc-text">設定の同期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-world"><span class="toc-number">6.5.</span> <span class="toc-text">Hello world</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#プログラムを作成する"><span class="toc-number">6.5.1.</span> <span class="toc-text">プログラムを作成する</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#プログラムをデバッグする"><span class="toc-number">6.5.2.</span> <span class="toc-text">プログラムをデバッグする</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#プログラムをレポジトリに保存する"><span class="toc-number">6.5.3.</span> <span class="toc-text">プログラムをレポジトリに保存する</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#開発言語のセットアップ"><span class="toc-number">7.</span> <span class="toc-text">開発言語のセットアップ</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ruby-環境のセットアップ"><span class="toc-number">7.1.</span> <span class="toc-text">Ruby 環境のセットアップ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ruby-環境のセットアップ-WSL-版"><span class="toc-number">7.2.</span> <span class="toc-text">Ruby 環境のセットアップ(WSL 版)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参照"><span class="toc-number">8.</span> <span class="toc-text">参照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考図書"><span class="toc-number">9.</span> <span class="toc-text">参考図書</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://avatars1.githubusercontent.com/u/3236312?s=400&amp;u=e1bde5f87a640284db5e7bde55b7ecb2aa0f1eac&amp;v=4"></div><div class="author-info__name text-center">k2works</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">23</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">12</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">6</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">１つの価値３つの領域 思想と技術</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">環境構築から始めるテスト駆動開発 ~プログラミング環境の共通基盤を構築する~</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-04-07</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E8%A1%93/">技術</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E8%A1%93/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/">プログラミング</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h2 id="はじめに"><a href="#はじめに" class="headerlink" title="はじめに"></a>はじめに</h2><p>この記事はソフトウェア開発者を目指す入門者を対象に、IT リテラシの基本とプログラミング学習とソフトウェア開発の基盤となる環境構築の手順を解説しています。以下の構成の Windows マシンで作業を進めていきます。</p>
+<img width="1072" alt="os-version.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/20035/7a534d8b-33b3-060f-68a4-4b276e88466d.png">
+
+<a id="more"></a>
+
+<h2 id="6S"><a href="#6S" class="headerlink" title="6S"></a>6S</h2><p>本記事では <strong>5S</strong> + セキュリティの <strong>6S</strong> の考えを基本とします。<br>まず <strong>5S</strong> について、それからセキュリティについて解説します。</p>
+<h3 id="5S"><a href="#5S" class="headerlink" title="5S"></a>5S</h3><blockquote>
+<p>5S（ごエス、ごーエス）とは、製造業・サービス業などの職場環境の維持改善で用いられるスローガンである。各職場において徹底されるべき事項を 5 つにまとめたもので、4S 運動に「躾」（習慣化の場合もある）を加えた 5 項。</p>
+<p>— Wikipedia <a href="https://ja.wikipedia.org/wiki/5S" target="_blank" rel="noopener">https://ja.wikipedia.org/wiki/5S</a></p>
+</blockquote>
+<p>具体的には、</p>
+<ul>
+<li><p>整理（せいり、Seiri） いらないものを捨てる</p>
+</li>
+<li><p>整頓（せいとん、Seiton） 決められた物を決められた場所に置き、いつでも取り出せる状態にしておく</p>
+</li>
+<li><p>清掃（せいそう、Seisou） 常に掃除をする</p>
+</li>
+<li><p>清潔（せいけつ、Seiketsu） 3S（上の整理・整頓・清掃）を維持し職場の衛生を保つ</p>
+</li>
+<li><p>躾（しつけ、Shitsuke） 決められたルール・手順を正しく守る習慣をつける</p>
+</li>
+</ul>
+<p>これがソフトウェア開発とどのように関係していくのでしょうか？まずは、いらないものを捨てるのが <strong>整理</strong> ですがそもそもいらないものが何なのかを決めなければなりません。プログラミングで扱う対象はモノではなく情報です。ではどうやって情報を扱っていけばよいでしょう？ここは、<strong>分類するな。ひたすら並べよ</strong> の考えに従い一箇所に記録をまとめていきましょう。そのためのテクニックとして <strong>エンジニアリングデイブックス</strong> があります。これは何をやったか何を学んだかをノートに時系列に記録していくことです。</p>
+<p>Engineering Dayboks</p>
+<blockquote>
+<p>Eventually Dave asked the obvious question. It turned out that they’d been trained to keep an engineering daybook, a kind of journal in which they recorded what they did, things they’d learned, sketches of ideas, readings from meters: basically anything to do with their work.<br>When the notebook became full, they’d write the date range on the spine, then stick it on the shelf next to previous daybooks. …​</p>
+<p>— Pragmatic Programmer: your journey to mastery 20th Anniversary Edition</p>
+</blockquote>
+<p>ノートは市販のものならどれでも構いませんがおすすめは <a href="https://www.kokuyo-st.co.jp/stationery/softring-note/" target="_blank" rel="noopener">ソフトリングノード</a> の B5 サイズが手元に置いてもかさばらず使いやすいです。情報を一箇所に集めて必要なものと不要なものを分ける準備が出来ました。次は必要なものをすぐに取り出せるようにする <strong>整頓</strong> をどのように実践していくかを解説します。</p>
+<p><strong>整頓</strong> の基本は <strong>分類するな。ひたすら並べよ</strong> です。デジタルデータも一箇所に保存していきましょう。具体的に保存する場所は後で解説します。また、分類するなといっても分類をする必要は当然発生します。分類にあたっては一貫したネーミングルールを適用していきます。</p>
+<blockquote>
+<p>Name Well; Rename When Needed.</p>
+<p>Name to express your intent to readers, and rename as soon as that intent shifts.</p>
+<p>— Pragmatic Programmer: your journey to mastery 20th Anniversary Edition</p>
+</blockquote>
+<p>基本は実践しなければ意味がありません。そして習慣にすることで初めてものにできるものです。そのためには自ら躾けて習慣化していかなければなりません。</p>
+<blockquote>
+<p>私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機会的に反復可能になるということだ。</p>
+<p>— テスト駆動開発</p>
+</blockquote>
+<blockquote>
+<p>ここで、Kent Beck が自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。</p>
+<p>— リファクタリング(第 2 版)</p>
+</blockquote>
+<h3 id="セキュリティ-Security"><a href="#セキュリティ-Security" class="headerlink" title="セキュリティ(Security)"></a>セキュリティ(Security)</h3><p><strong>5S</strong> に続いてセキュリティに関してですがここで扱う内容は <strong>情報セキュリティ</strong> に関する内容です。</p>
+<blockquote>
+<p>情報セキュリティ（じょうほうセキュリティ、英: information security）とは、情報の機密性、完全性、可用性を維持すること。</p>
+<p>— Wikipedia<br><a href="https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3" target="_blank" rel="noopener">https://ja.wikipedia.org/wiki/%E6%83%85%E5%A0%B1%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3</a></p>
+</blockquote>
+<p>ここではパスワードに関する基本だけ抑えておいてください。</p>
+<blockquote>
+<ul>
+<li><p>誕生日や電話番号など、親が見てパッと理解できる文字列はダメ</p>
+</li>
+<li><p>1 単語で“読めてしまう”文字列はダメ</p>
+</li>
+<li><p>8 文字以下の文字列は短すぎるからダメ</p>
+</li>
+</ul>
+<p>— 子どもに「パスワード」の付け方を教えられますか？<br><a href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html" target="_blank" rel="noopener">子どもを守る IT リテラシー学</a></p>
+</blockquote>
+<p>実際にパスワードを設定するときは</p>
+<blockquote>
+<ul>
+<li><p>サービスごとに、3 単語以上の英文字を並べる（例：pekinese-optimal-start）</p>
+</li>
+<li><p>なるべく長いパスワードを用意する（例：nagai-pasuwa-do-wo-youi-suru-amari-iirei-deha-naiga）</p>
+</li>
+<li><p>辞書に載っていないような文字列を用意する（例：Itags80vZyMp）</p>
+</li>
+</ul>
+<p>— 子どもに「パスワード」の付け方を教えられますか？<br><a href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html" target="_blank" rel="noopener">子どもを守る IT リテラシー学</a></p>
+</blockquote>
+<p>を参考にしてください。</p>
+<h3 id="IT-リテラシ"><a href="#IT-リテラシ" class="headerlink" title="IT リテラシ"></a>IT リテラシ</h3><p>以上が基本となる考えです。この記事では 6S を軸としたソフトウェア開発のための <strong>IT リテラシ</strong> 習得のベースとなる環境構築をすることを目的としています。</p>
+<blockquote>
+<p>今日のソフトウェア開発の世界において絶対になければならない 3 つの技術的な柱があります。<br>三本柱と言ったり、三種の神器と言ったりしていますが、それらは</p>
+<ul>
+<li><p>バージョン管理</p>
+</li>
+<li><p>テスティング</p>
+</li>
+<li><p>自動化</p>
+</li>
+</ul>
+<p>の 3 つです。</p>
+<p>— <a href="https://t-wada.hatenablog.jp/entry/clean-code-that-works" target="_blank" rel="noopener">https://t-wada.hatenablog.jp/entry/clean-code-that-works</a></p>
+</blockquote>
+<h2 id="アカウントの登録"><a href="#アカウントの登録" class="headerlink" title="アカウントの登録"></a>アカウントの登録</h2><p>まず各種サービスのアカウントを登録します。ここでは以下のアカウント設定で作業を進めていきますが各自作業の際は読み替えてください。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Microsft</td>
+<td><a href="mailto:&#x6e;&#x65;&#119;&#98;&#x69;&#101;&#52;&#x36;&#52;&#57;&#x40;&#x6f;&#x75;&#x74;&#108;&#x6f;&#x6f;&#107;&#46;&#106;&#112;">&#x6e;&#x65;&#119;&#98;&#x69;&#101;&#52;&#x36;&#52;&#57;&#x40;&#x6f;&#x75;&#x74;&#108;&#x6f;&#x6f;&#107;&#46;&#106;&#112;</a></td>
+</tr>
+<tr>
+<td>Google</td>
+<td><a href="mailto:&#110;&#x65;&#x77;&#98;&#105;&#101;&#x34;&#x36;&#52;&#x39;&#64;&#103;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#110;&#x65;&#x77;&#98;&#105;&#101;&#x34;&#x36;&#52;&#x39;&#64;&#103;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a></td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td>newbie4649</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><a href="mailto:&#x6e;&#101;&#x77;&#98;&#x69;&#101;&#x34;&#x36;&#x34;&#x39;&#x40;&#111;&#117;&#116;&#108;&#111;&#111;&#107;&#46;&#x6a;&#112;">&#x6e;&#101;&#x77;&#98;&#x69;&#101;&#x34;&#x36;&#x34;&#x39;&#x40;&#111;&#117;&#116;&#108;&#111;&#111;&#107;&#46;&#x6a;&#112;</a></td>
+</tr>
+<tr>
+<td>WSL</td>
+<td>newbie4649</td>
+</tr>
+</tbody></table>
+<p>また、パスワードに関しては <strong>セキュリティ</strong> を参考に設定してください。アカウント ID に関しては可能な限り共通の ID 名を設定すると管理しやすくなります。登録アカウントとパスワードは一箇所に記録していつでも確認できるようにして置いてください。理想はパスワードマネージャーの使用ですがクラウドストレージでもいいです。他人にみられることがないように注意して管理しましょう。クラウドストレージで安全に保存する自信が無い場合は <strong>エンジニアリングデイブックス</strong> に記録しておきましょう。その際、もし落として他人にみられてもわからないような工夫をしておきましょう。手段はどうあれ <strong>保存する場所は一箇所</strong> が原則です。</p>
+<h3 id="Microsoft-アカウントを作成する"><a href="#Microsoft-アカウントを作成する" class="headerlink" title="Microsoft アカウントを作成する"></a>Microsoft アカウントを作成する</h3><p><a href="https://signup.live.com/signup?wa=wsignin1.0&rpsnv=13&rver=7.3.6963.0&wp=MBI_SSL&wreply=https%3a%2f%2fwww.microsoft.com%2fja-jp%2f&id=74335&aadredir=1&contextid=E56866F842F4E143&bk=1584685585&uiflavor=web&lic=1&mkt=JA-JP&lc=1041&uaid=491fc017de0f48c5c67a3833e7aca9ee" target="_blank" rel="noopener">アカウントの作成</a> から新しいメールアドレスを取得を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ms-001.png?raw=true?raw=true" alt="ms 001"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ms-002.png?raw=true?raw=true" alt="ms 002"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ms-003.png?raw=true?raw=true" alt="ms 003"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ms-004.png?raw=true?raw=true" alt="ms 004"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ms-005.png?raw=true?raw=true" alt="ms 005"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ms-006.png?raw=true?raw=true" alt="ms 006"></p>
+<h3 id="Google-アカウントを作成する"><a href="#Google-アカウントを作成する" class="headerlink" title="Google アカウントを作成する"></a>Google アカウントを作成する</h3><p><a href="https://support.google.com/accounts/answer/27441?hl=ja" target="_blank" rel="noopener">Google アカウントの作成</a> から <code>Googleアカウントを作成する</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ggl-001.png?raw=true?raw=true" alt="ggl 001"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ggl-002.png?raw=true?raw=true" alt="ggl 002"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ggl-003.png?raw=true?raw=true" alt="ggl 003"></p>
+<h3 id="GitHub-アカウントを作成する"><a href="#GitHub-アカウントを作成する" class="headerlink" title="GitHub アカウントを作成する"></a>GitHub アカウントを作成する</h3><p><a href="https://github.co.jp/" target="_blank" rel="noopener">GitHub に登録する</a> から <code>GitHubに登録する</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ghb-001.png?raw=true?raw=true" alt="ghb 001"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ghb-002.png?raw=true?raw=true" alt="ghb 002"></p>
+<p>Free プランを選択します</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ghb-003.png?raw=true?raw=true" alt="ghb 003"></p>
+<h3 id="アカウントにサインインする"><a href="#アカウントにサインインする" class="headerlink" title="アカウントにサインインする"></a>アカウントにサインインする</h3><p><a href="https://support.microsoft.com/ja-jp/help/4028195" target="_blank" rel="noopener">Microsoft アカウントにサインインする方法</a>を参考にしてローカルアカウントから Microsoft アカウントに切り替えます。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/login-001.png?raw=true?raw=true" alt="login 001"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/login-002.png?raw=true?raw=true" alt="login 002"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/login-003.png?raw=true?raw=true" alt="login 003"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/login-004.png?raw=true?raw=true" alt="login 004"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/login-005.png?raw=true?raw=true" alt="login 005"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/login-006.png?raw=true?raw=true" alt="login 006"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/login-007.png?raw=true?raw=true" alt="login 007"></p>
+<h2 id="クラウドストレージのセットアップ"><a href="#クラウドストレージのセットアップ" class="headerlink" title="クラウドストレージのセットアップ"></a>クラウドストレージのセットアップ</h2><blockquote>
+<p>Keep Knowledge in Plain Text</p>
+<p>Plain text won’t become obsolete.It helps leverage your work and simplifies debugging and testing.</p>
+<p>— Pragmatic Programmer: your journey to mastery 20th Anniversary Edition</p>
+</blockquote>
+<p><a href="https://products.office.com/ja-jp/home?SilentAuth=1" target="_blank" rel="noopener">Office365</a> から OneDrive の設定を確認します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/drive-001.png?raw=true?raw=true" alt="drive 001"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/drive-002.png?raw=true?raw=true" alt="drive 002"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/drive-003.png?raw=true?raw=true" alt="drive 003"></p>
+<p>アカウントのパスワードなど機密情報は <a href="https://support.office.com/ja-jp/article/personal-vault-で-onedrive-ファイルを保護する-6540ef37-e9bf-4121-a773-56f98dce78c4" target="_blank" rel="noopener">Personal Vault で OneDrive ファイルを保護する</a> を使って管理すると良いでしょう。もしくは <a href="https://1password.com/jp/" target="_blank" rel="noopener">1Password</a> などパスワード管理ツールの導入を検討してください。</p>
+<p><a href="https://support.microsoft.com/ja-jp/help/17184/windows-10-onedrive" target="_blank" rel="noopener">PC の OneDrive</a> にあるようにデータはローカルとクラウドの両方にあるので破損・紛失をしても復旧することが出来ます。</p>
+<h2 id="開発環境のセットアップ"><a href="#開発環境のセットアップ" class="headerlink" title="開発環境のセットアップ"></a>開発環境のセットアップ</h2><h3 id="パッケージ管理ツールのインストール"><a href="#パッケージ管理ツールのインストール" class="headerlink" title="パッケージ管理ツールのインストール"></a>パッケージ管理ツールのインストール</h3><p>アプリケーションの管理にはパッケージ管理ツール <a href="https://scoop.sh/" target="_blank" rel="noopener">Scoop</a> を使います。インストールの詳細は<a href="https://qiita.com/Dooteeen/items/12dc8fb14042888113d0" target="_blank" rel="noopener">Scoopを使ったWindows環境構築のススメ -Super!!</a>を参照してください。</p>
+<p>スタートメニューから <code>Windows PowerShell</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pkg-001.png?raw=true" alt="pkg 001"><br>以下のコマンドを入力します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ExecutionPolicy</span> RemoteSigned <span class="literal">-scope</span> CurrentUser</span><br><span class="line"><span class="built_in">Invoke-Expression</span> (<span class="built_in">New-Object</span> System.Net.WebClient).DownloadString(<span class="string">'https://get.scoop.sh'</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pkg-002.png?raw=true" alt="pkg 002"></p>
+<h3 id="gitのインストール"><a href="#gitのインストール" class="headerlink" title="gitのインストール"></a>gitのインストール</h3><blockquote>
+<p>Always Use Version Control</p>
+<p>Vsersion control is a time machine for your work;you can go back.</p>
+<p>—  Pragmatic Programmer: your journey to mastery 20th Anniversary<br>Edition </p>
+</blockquote>
+<p>スタートメニューから <code>Windows PowerShell</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pkg-001.png?raw=true" alt="pkg 001"></p>
+<p>以下のコマンドを入力します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop install git</span><br></pre></td></tr></table></figure>
+
+<p>追加パッケージをインストールします</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop bucket add extras</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/git-001.png?raw=true" alt="git 001"></p>
+<h3 id="PowerShellCoreのインストール"><a href="#PowerShellCoreのインストール" class="headerlink" title="PowerShellCoreのインストール"></a>PowerShellCoreのインストール</h3><p>最新バージョンのセットアッププログラムをダウンロードします</p>
+<p><a href="https://github.com/PowerShell/PowerShell/tags" target="_blank" rel="noopener">GitHub</a></p>
+<p>Previewでない最新バージョンを選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-001.png?raw=true" alt="pwsh 001"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-002.png?raw=true" alt="pwsh 002"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-003.png?raw=true" alt="pwsh 003"></p>
+<p>ダウンロードしたセットアッププログラムを実行します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-004.png?raw=true" alt="pwsh 004"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-005.png?raw=true" alt="pwsh 005"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-006.png?raw=true" alt="pwsh 006"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-007.png?raw=true" alt="pwsh 007"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pwsh-008.png?raw=true" alt="pwsh 008"></p>
+<h3 id="Windows-Terminalのインストール"><a href="#Windows-Terminalのインストール" class="headerlink" title="Windows Terminalのインストール"></a>Windows Terminalのインストール</h3><blockquote>
+<p>Use the Power of Command Shells</p>
+<p>Use the shell when graphical user interfaces don’t cut it.</p>
+<p>—  Pragmatic Programmer: your journey to mastery 20th Anniversary<br>Edition </p>
+</blockquote>
+<p>画面左下のスタートメニューから <code>Microsft Store</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/terminal-001.png?raw=true" alt="terminal 001"></p>
+<p>検索欄に <code>terminal</code> と入力したら表示されられる候補の中から <code>Windows Terminal</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/terminal-002.png?raw=true" alt="terminal 002"></p>
+<h3 id="WSLのインストール"><a href="#WSLのインストール" class="headerlink" title="WSLのインストール"></a>WSLのインストール</h3><p>画面左下のスタートメニューから歯車のアイコンを選択してWindowsの設定画面を表示します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-005.png?raw=true" alt="wsl 005"></p>
+<p><code>アプリ</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-006.png?raw=true" alt="wsl 006"></p>
+<p><code>アプリと機能</code> から <code>プログラミングと機能</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-007.png?raw=true" alt="wsl 007"></p>
+<p><code>Windows Subsystem for Linux</code> にチェックを入れてOKボタンを押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-008.png?raw=true" alt="wsl 008"></p>
+<p><code>今すぐ再起動</code> を押してWindowsを再起動します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-009.png?raw=true" alt="wsl 009"></p>
+<h3 id="Dockerのインストール"><a href="#Dockerのインストール" class="headerlink" title="Dockerのインストール"></a>Dockerのインストール</h3><p><a href="https://www.docker.com/products/docker-desktop" target="_blank" rel="noopener">Docker Desktop</a><br>をインストールします。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-001.png?raw=true" alt="docker 001"></p>
+<p>OKを押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-002.png?raw=true" alt="docker 002"></p>
+<p>インストールが完了したら再起動します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-003.png?raw=true" alt="docker 003"></p>
+<p>再起動後に以下の警告が表示されるのでリンクをクリックします。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-004.png?raw=true" alt="docker 004"></p>
+<p>Linxuカーネル更新プログラムパッケージをダウンロードして実行します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-005.png?raw=true" alt="docker 005"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-006.png?raw=true" alt="docker 006"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-007.png?raw=true" alt="docker 007"></p>
+<p>完了したら、Restartを押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-008.png?raw=true" alt="docker 008"></p>
+<p>チュートリアルを実行して動作を確認しておきましょう。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/docker-009.png?raw=true" alt="docker 009"></p>
+<h3 id="Ubuntuのインストール"><a href="#Ubuntuのインストール" class="headerlink" title="Ubuntuのインストール"></a>Ubuntuのインストール</h3><p>スタートメニューから <code>Windows PowerShell</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pkg-001.png?raw=true" alt="pkg 001"></p>
+<p>以下のコマンドを入力します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -<span class="literal">-set</span><span class="literal">-default</span><span class="literal">-version</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>画面左下のスタートメニューから <code>Microsft Store</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-001.png?raw=true" alt="wsl 001"></p>
+<p>続いて、検索欄に <code>ubuntu</code> と入力して候補の中から <code>Ubuntu</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-002.png?raw=true" alt="wsl 002"></p>
+<p>入手を押してアプリケーションをインストールします。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-003.png?raw=true" alt="wsl 003"></p>
+<p>インストールが終わるとセットアップが始まるのでユーザーIDとパスワードを設定してください。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-011.png?raw=true" alt="wsl 011"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/wsl-012.png?raw=true" alt="wsl 012"></p>
+<h2 id="エディタのセットアップ"><a href="#エディタのセットアップ" class="headerlink" title="エディタのセットアップ"></a>エディタのセットアップ</h2><blockquote>
+<p>Achieve Editor Fluency</p>
+<p>An editor is your most important tool. Know how to make it do what you<br>need, quickly and accurately.</p>
+<p>—  Pragmatic Programmer: your journey to mastery 20th Anniversary<br>Edition </p>
+</blockquote>
+<h3 id="インストール"><a href="#インストール" class="headerlink" title="インストール"></a>インストール</h3><p><a href="https://aka.ms/vscode-java-installer-win" target="_blank" rel="noopener">Download Visual Studio Code Java Pack Installer</a> からVSCodeをダウンロードしてセットアッププログラムを実行します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/vscode-001.png?raw=true" alt="vscode 001"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/vscode-002.png?raw=true" alt="vscode 002"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/vscode-003.png?raw=true" alt="vscode 003"></p>
+<h3 id="設定"><a href="#設定" class="headerlink" title="設定"></a>設定</h3><p>エディタが起動すると画面右下にWSL拡張機能インストールのポップアップが表示されるので <code>Install</code> を押して拡張機能をインストールします。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/setting-001.png?raw=true" alt="setting 001"></p>
+<p>続いて画面左下の歯車を選択してメニューから <code>Settings</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/setting-002.png?raw=true" alt="setting 002"></p>
+<p>検索欄に <code>trim</code> と入力します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/setting-003.png?raw=true" alt="setting 003"></p>
+<p>チェックをオンにします。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/setting-004.png?raw=true" alt="setting 004"></p>
+<p>同様に検索欄に <code>format on save</code> と入力してチェックをオンにします。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/setting-005.png?raw=true" alt="setting 005"></p>
+<p>必要に応じてキーバインドなども自分が使いやすいようにカスタマイズします。</p>
+<ul>
+<li><p><a href="https://qiita.com/kinchiki/items/dabb5c890d9c57907503" target="_blank" rel="noopener">Visual Studio<br>Codeで簡単にショートカットキーを変更する方法</a></p>
+</li>
+<li><p><a href="https://loumo.jp/wp/archive/20191125120000/" target="_blank" rel="noopener">VSCode 内蔵ターミナルで ctrl-p<br>などのショートカットキーを利用する方法</a></p>
+</li>
+</ul>
+<h3 id="拡張機能の追加"><a href="#拡張機能の追加" class="headerlink" title="拡張機能の追加"></a>拡張機能の追加</h3><p>エディタのメニューが英語なので日本語に変更する拡張機能をインストールします。</p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja" target="_blank" rel="noopener">Japanese Language Pack for Visual Studio Code</a></p>
+<p>画面左のExtensionアイコンを選択して検索欄に <code>japanese</code> と入力したら日本語拡張パッケージが表示されるので <code>Install</code> を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/package-001.png?raw=true" alt="package 001"></p>
+<p><code>Restart Now</code> を押してエディタを再起動します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/package-002.png?raw=true" alt="package 002"></p>
+<p>メニューが日本語になりました。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/package-003.png?raw=true" alt="package 003"></p>
+<p>同様の手順で以下の拡張機能をインストールします。</p>
+<ol>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons" target="_blank" rel="noopener">vscode-icons</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens" target="_blank" rel="noopener">GitLens</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode" target="_blank" rel="noopener">Prettier</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory" target="_blank" rel="noopener">Git History</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer" target="_blank" rel="noopener">Bracket Pair Colorizer</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks" target="_blank" rel="noopener">Bookmarks</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight" target="_blank" rel="noopener">TODO Highlight</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=ionutvmi.path-autocomplete" target="_blank" rel="noopener">Path Autocomplete</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv" target="_blank" rel="noopener">Rainbow CSV</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=ryu1kn.partial-diff" target="_blank" rel="noopener">Partial Diff</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-duplicate" target="_blank" rel="noopener">Duplicate action</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github" target="_blank" rel="noopener">GitHub Pull Requests</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore" target="_blank" rel="noopener">gitignore</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus" target="_blank" rel="noopener">Todo+</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer" target="_blank" rel="noopener">Output Colorizer</a></p>
+</li>
+<li><p><a href="https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces" target="_blank" rel="noopener">Trailing Spaces</a></p>
+</li>
+</ol>
+<h3 id="設定の同期"><a href="#設定の同期" class="headerlink" title="設定の同期"></a>設定の同期</h3><p>エディタの設定をして拡張機能をインストールしました。再インストールなどでエディタを再インストールする場合に上記の作業を再度するのは手間なので設定をオンライに保存してすぐにセットアップできるようにしておきます。</p>
+<p>サイドバーから設定の同期をオンにするを選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-001.png?raw=true" alt="sync 001"></p>
+<p><code>オンにする</code> を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-002.png?raw=true" alt="sync 002"></p>
+<p><code>サインインしてオンにする</code> を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-003.png?raw=true" alt="sync 003"></p>
+<p><code>GitHubでサインイン</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-004.png?raw=true" alt="sync 004"></p>
+<p>ブラウザが起動するので <code>Continue</code> を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-005.png?raw=true" alt="sync 005"></p>
+<p>GitHubのアカウントとパスワードを入力します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-006.png?raw=true" alt="sync 006"></p>
+<p><code>Authorize github</code> を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-007.png?raw=true" alt="sync 007"></p>
+<p>もし、GitHub連携で以下のような画面になった場合は登録メールアドレスに認証コードが送られているので確認してください。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-009.png?raw=true" alt="sync 009"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/sync-010.png?raw=true" alt="sync 010"></p>
+<h3 id="Hello-world"><a href="#Hello-world" class="headerlink" title="Hello world"></a>Hello world</h3><h4 id="プログラムを作成する"><a href="#プログラムを作成する" class="headerlink" title="プログラムを作成する"></a>プログラムを作成する</h4><p>エディタのセットアップが出来たのでかんたんなプログラムを作ってみましょう。 お題は <a href="https://ja.wikipedia.org/wiki/Hello_world" target="_blank" rel="noopener">Hello world</a> です。<br>まず、プログラムを作成する場所ですが今回はディスクトップの直下に <code>Projects</code> というフォルダを作成してその中に配置したいと思います。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-001.png?raw=true" alt="hello 001"></p>
+<p><code>Projects</code> フォルダの中に <code>PowerShell</code> フォルダを作成します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-002.png?raw=true" alt="hello 002"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-003.png?raw=true" alt="hello 003"></p>
+<p>エディタを起動します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-004.png?raw=true" alt="hello 004"></p>
+<p>エディタを起動したらエクスプローラアイコンから <code>フォルダを開く</code> を選択して作成したフォルダを開きます。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-005.png?raw=true" alt="hello 005"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-007.png?raw=true" alt="hello 007"></p>
+<p>フォルダを開いたらファイルアイコンを選択して <code>HelloWorld.ps1</code> ファイルを作成します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-008.png?raw=true" alt="hello 008"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-009.png?raw=true" alt="hello 009"></p>
+<p>まず、以下のコードを入力してキーボードのF5を押します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何か便利なものだ"</span> &#123;</span><br><span class="line">        <span class="variable">$true</span> | Should Be <span class="variable">$false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-010.png?raw=true" alt="hello 010"></p>
+<p>プログラムの実行と一緒にテストの実行結果が表示されます。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-011.png?raw=true" alt="hello 011"></p>
+<p>テストが通るように修正します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何か便利なものだ"</span> &#123;</span><br><span class="line">        <span class="variable">$true</span> | Should Be <span class="variable">$true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-012.png?raw=true" alt="hello 012"></p>
+<p>テスティングフレームワークの動作が確認できたのでプログラム作成に入ります。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何か便利なものだ"</span> &#123;</span><br><span class="line">        <span class="variable">$true</span> | Should Be <span class="variable">$true</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"簡単な挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld | Should Be <span class="string">"Hello from PowerShell"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-013.png?raw=true" alt="hello 013"></p>
+<p><code>HelloWorld</code> 関数を追加します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何か便利なものだ"</span> &#123;</span><br><span class="line">        <span class="variable">$true</span> | Should Be <span class="variable">$true</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"簡単な挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld | Should Be <span class="string">"Hello from PowerShell"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">HelloWorld</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello from PowerShell"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-014.png?raw=true" alt="hello
+014"></p>
+<p>F5キーを押してテストが通ったことを確認したらテストケースを追加します。もしテストが失敗するようなら保存のタイミングあっていない場合があるので再度F5キーを押して実行してみてください。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何か便利なものだ"</span> &#123;</span><br><span class="line">        <span class="variable">$true</span> | Should Be <span class="variable">$true</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"簡単な挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld | Should Be <span class="string">"Hello from PowerShell"</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"指定された名前で挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld <span class="string">"VSCode"</span> | Should Be <span class="string">"Hello from VSCode"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">HelloWorld</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello from PowerShell"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-015.png?raw=true" alt="hello 015"></p>
+<p><code>HelloWorld</code> 関数は既定の挨拶しか返さないのでテストが失敗します。</p>
+<pre><code>...
+Describing HelloWorld
+ [+] 何か便利なものだ 41ms
+ [+] 簡単な挨拶を返す 12ms
+ [-] 指定された名前で挨拶を返す 56ms
+   Expected string length 17 but was 21. Strings differ at index 11.
+   Expected: {Hello from VSCode}
+   But was:  {Hello from PowerShell}
+   ----------------------^
+...</code></pre><p><code>HelloWorld</code> 関数に引数を追加して表示できるように変更します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何か便利なものだ"</span> &#123;</span><br><span class="line">        <span class="variable">$true</span> | Should Be <span class="variable">$true</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"簡単な挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld | Should Be <span class="string">"Hello from PowerShell"</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"指定された名前で挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld <span class="string">"VSCode"</span> | Should Be <span class="string">"Hello from VSCode"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">HelloWorld</span><span class="params">(<span class="variable">$name</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello from <span class="variable">$name</span>"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>F5を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-016.png?raw=true" alt="hello 016"></p>
+<p><code>指定された名前で挨拶を返す</code> テストは通りましたが今度は <code>簡単な挨拶を返す</code> テストが失敗してしまいました。</p>
+<pre><code>Describing HelloWorld
+ [+] 何か便利なものだ 39ms
+ [-] 簡単な挨拶を返す 23ms
+   Expected string length 21 but was 11. Strings differ at index 11.
+   Expected: {Hello from PowerShell}
+   But was:  {Hello from }
+   ----------------------^
+...
+ [+] 指定された名前で挨拶を返す 29ms
+...</code></pre><p><code>HelloWorld</code> 関数にデフォルト引数を設定してテストを通るようにします。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何か便利なものだ"</span> &#123;</span><br><span class="line">        <span class="variable">$true</span> | Should Be <span class="variable">$true</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"簡単な挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld | Should Be <span class="string">"Hello from PowerShell"</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"指定された名前で挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld <span class="string">"VSCode"</span> | Should Be <span class="string">"Hello from VSCode"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">HelloWorld</span><span class="params">(<span class="variable">$name</span> = "PowerShell")</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello from <span class="variable">$name</span>"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>F5を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-017.png?raw=true" alt="hello 017"></p>
+<p>仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Describe <span class="string">"HelloWorld"</span> &#123;</span><br><span class="line">    It <span class="string">"何も指定されていない場合は既定の挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld | Should Be <span class="string">"Hello from PowerShell"</span></span><br><span class="line">    &#125;</span><br><span class="line">    It <span class="string">"指定された名前で挨拶を返す"</span> &#123;</span><br><span class="line">        HelloWorld <span class="string">"VSCode"</span> | Should Be <span class="string">"Hello from VSCode"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">HelloWorld</span><span class="params">(<span class="variable">$name</span> = "PowerShell")</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello from <span class="variable">$name</span>"</span></span><br><span class="line">&#125;</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-018.png?raw=true" alt="hello 018"></p>
+<p><code>HelloWorld</code> プログラムの完成です。</p>
+<h4 id="プログラムをデバッグする"><a href="#プログラムをデバッグする" class="headerlink" title="プログラムをデバッグする"></a>プログラムをデバッグする</h4><p>プログラムを作成していると思った通りに動かないことが多々あります。そのようなときにプログラムの動作を確認するにはエディタのデバッグ機能を使います。</p>
+<p>まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-019.png?raw=true" alt="hello
+019"></p>
+<p>ブレークポイントを設定したらF5を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-020.png?raw=true" alt="hello 020"></p>
+<p>画面上の実行ボタンを押すと次のブレークポイントに移動します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-021.png?raw=true" alt="hello 021"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-022.png?raw=true" alt="hello 022"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-023.png?raw=true" alt="hello 023"></p>
+<p>デバッガを終了するには終了ボタンを押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-024.png?raw=true" alt="hello 024"></p>
+<p>ブレークポイントを再度押すことで解除ができます。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-025.png?raw=true" alt="hello 025"></p>
+<h4 id="プログラムをレポジトリに保存する"><a href="#プログラムをレポジトリに保存する" class="headerlink" title="プログラムをレポジトリに保存する"></a>プログラムをレポジトリに保存する</h4><p>作成したプログラムをレポジトリに保存します。まずソース管理アイコンを選択して <code>リポジトリを初期化する</code> を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-026.png?raw=true" alt="hello 026"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-027.png?raw=true" alt="hello 027"></p>
+<p><code>変更をステージ</code> を選択します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-028.png?raw=true" alt="hello 028"></p>
+<p>変更内容を入力します。ここでは <code>feat: HelloWorld</code> を入力しておきます。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-029.png?raw=true" alt="hello 029"></p>
+<p><code>コミット</code> を押します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-030.png?raw=true" alt="hello 030"></p>
+<p>初回登録時は以下の警告が表示されるので追加作業が必要になります。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-031-1.png?raw=true" alt="hello 031 1"></p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-031-2.png?raw=true" alt="hello 031 2"></p>
+<p>以下のコマンドをターミナルに入力します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config -<span class="literal">-global</span> user.name <span class="string">"newbie4649"</span></span><br><span class="line">git config -<span class="literal">-global</span> user.email newbie4649@outlook.jp</span><br></pre></td></tr></table></figure>
+
+<p>user.nameとuser.emailには自分のアカウント情報を登録すること。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-032.png?raw=true" alt="hello 032"></p>
+<p>再度 <code>コミット</code> を押してレポジトリに保存します。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-033.png?raw=true" alt="hello 033"></p>
+<p>レポジトリの記録内容は <code>ソース管理</code> から確認することが出来ます。</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/hello-035.png?raw=true" alt="hello 035"></p>
+<h2 id="開発言語のセットアップ"><a href="#開発言語のセットアップ" class="headerlink" title="開発言語のセットアップ"></a>開発言語のセットアップ</h2><h3 id="Ruby-環境のセットアップ"><a href="#Ruby-環境のセットアップ" class="headerlink" title="Ruby 環境のセットアップ"></a><a href="https://k2works.github.io/2020/04/07/2020-04-08-2/">Ruby 環境のセットアップ</a></h3><h3 id="Ruby-環境のセットアップ-WSL-版"><a href="#Ruby-環境のセットアップ-WSL-版" class="headerlink" title="Ruby 環境のセットアップ(WSL 版)"></a><a href="https://k2works.github.io/2020/04/07/2020-04-08-3/">Ruby 環境のセットアップ(WSL 版)</a></h3><h2 id="参照"><a href="#参照" class="headerlink" title="参照"></a>参照</h2><ul>
+<li><p><a href="https://roadmap.sh/" target="_blank" rel="noopener">Developer Roadmaps</a></p>
+</li>
+<li><p><a href="https://github.com/kamranahmedse/developer-roadmap" target="_blank" rel="noopener">WEB DEVELOPER ROADMAP 2020</a></p>
+</li>
+<li><p><a href="https://note.com/yukionoguchi/n/n6fa36e6aff86" target="_blank" rel="noopener">「超」整理法の思想</a></p>
+</li>
+<li><p><a href="https://at-jinji.jp/work/007" target="_blank" rel="noopener">効率的な文書管理方法とは。保管方法、運用ルール作りの 3 ステップを紹介</a></p>
+</li>
+<li><p><a href="https://at-jinji.jp/blog/11259/" target="_blank" rel="noopener">書類整理の基本は書類をためないこと！ 「『超』整理術」を簡単解説</a></p>
+</li>
+<li><p><a href="https://www.oreilly.com/library/view/the-pragmatic-programmer/9780135956977/" target="_blank" rel="noopener">The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition, 2nd Edition</a></p>
+</li>
+<li><p><a href="https://www.itmedia.co.jp/pcuser/articles/1808/09/news035.html" target="_blank" rel="noopener">子どもを守る IT リテラシー学</a></p>
+</li>
+<li><p><a href="https://jaminlifelog.com/notes/work/clean-desktop-files" target="_blank" rel="noopener">フォルダ管理の基本ルール 5 選！整理されていないデスクトップにさよならバイバイ！</a></p>
+</li>
+<li><p><a href="https://support.microsoft.com/ja-jp/help/4026324/microsoft-account-how-to-create" target="_blank" rel="noopener">新しい Microsoft アカウントを作成する方法</a></p>
+</li>
+<li><p><a href="https://qiita.com/kikutaro/items/0e5deb36047d0137a767" target="_blank" rel="noopener">Java 開発環境がすぐに作れる「Visual Studio Code Installer for Java」を試してみた</a></p>
+</li>
+<li><p><a href="https://code.visualstudio.com/docs/languages/java" target="_blank" rel="noopener">Java in Visual Studio Code</a></p>
+</li>
+<li><p><a href="https://qiita.com/rubytomato@github/items/fdfc0a76e848442f374e" target="_blank" rel="noopener">WSL (Windows Subsystem for Linux)の基本メモ</a></p>
+</li>
+<li><p><a href="https://www.red-gate.com/simple-talk/sysadmin/powershell/practical-powershell-unit-testing-getting-started/" target="_blank" rel="noopener">Practical PowerShell Unit-Testing: Getting Started</a></p>
+</li>
+<li><p><a href="https://qiita.com/sensuikan1973/items/74cf5383c02dbcd82234" target="_blank" rel="noopener">VSCode のオススメ拡張機能 24 選 (と Tips をいくつか)</a></p>
+</li>
+<li><p><a href="https://qiita.com/n_oshiumi/items/1ad3f55d58f2d9d48d1e" target="_blank" rel="noopener">VScode で保存時に自動で空白を削除しよう！</a></p>
+</li>
+<li><p><a href="https://qiita.com/mitashun/items/e2f118a9ca7b96b97840" target="_blank" rel="noopener">Visual Studio Code で保存時自動整形の設定方法</a></p>
+</li>
+<li><p><a href="https://qiita.com/code2545Light/items/ca61673c42fb26fc2d28" target="_blank" rel="noopener">VisualStudioCode で Ruby の開発環境を作る</a></p>
+</li>
+</ul>
+<h2 id="参考図書"><a href="#参考図書" class="headerlink" title="参考図書"></a>参考図書</h2><ul>
+<li><p>The Pragmatic Programmer: your journey to mastery, 20th Anniversary Edition David Thomas (著), Andrew Hunt (著): Addison-Wesley Professional; 2 版 (2019/7/30)</p>
+</li>
+<li><p>達人プログラマー 熟達に向けたあなたの旅（第2版）Andrew Hunt (著), David Thomas (著), 村上雅章 (翻訳): オーム社; 新装版 (2020/11/21)</p>
+</li>
+<li><p>テスト駆動開発 Kent Beck (著), 和田 卓人 (翻訳): オーム社; 新訳版 (2017/10/14)</p>
+</li>
+<li><p>新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他: オーム社; 新装版(2014/7/26)</p>
+</li>
+<li><p>リファクタリング(第 2 版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES) Martin Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他: オーム社; 第 2 版(2019/12/1)</p>
+</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">k2works</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://k2works.github.io/2020/04/07/2020-04-08-1/">https://k2works.github.io/2020/04/07/2020-04-08-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E3%83%86%E3%82%B9%E3%83%88%E9%A7%86%E5%8B%95%E9%96%8B%E7%99%BA/">テスト駆動開発</a><a class="post-meta__tags" href="/tags/VisualStudioCode/">VisualStudioCode</a></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e9e7853f8eb0c4e" async></script><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/04/07/2020-04-08-2/"><i class="fa fa-chevron-left">  </i><span>環境構築から始めるテスト駆動開発 ~Ruby開発環境を構築する~</span></a></div><div class="next-post pull-right"><a href="/2020/02/28/2020-04-08/"><span>TDD Boot Camp in 愛媛 ふりかえり</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2021 By k2works</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
