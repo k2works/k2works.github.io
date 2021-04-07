@@ -11,6 +11,9 @@
     "blog:new": "cd blog && npx hexo new $(date \"+%s\")",
     "blog:local": "cd blog && npm start",
     "blog:deploy": "cd blog && npx hexo build && npx hexo deploy && npx hexo clean",
+    "docs:setup": "cd docs && npm install",
+    "docs:local": "cd docs && npm start",
+    "docs:build": "cd docs/scripts && pwsh -File ConvertMarkdownFromAsciidoc.ps1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
