@@ -1,0 +1,492 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="環境構築から始めるプログラミング入門の準備 ~健全なプログラミングは健全な環境に宿る~"><meta name="keywords" content="テスト駆動開発,ガイド"><meta name="author" content="k2works"><meta name="copyright" content="k2works"><title>環境構築から始めるプログラミング入門の準備 ~健全なプログラミングは健全な環境に宿る~ | １つの価値３つの領域 思想と技術</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://www.google-analytics.com"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-48713941-1', 'auto');
+ga('send', 'pageview');</script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#はじめに"><span class="toc-number">1.</span> <span class="toc-text">はじめに</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#対象となる読者"><span class="toc-number">1.1.</span> <span class="toc-text">対象となる読者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#構成"><span class="toc-number">1.2.</span> <span class="toc-text">構成</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二つのメタファー（例え）"><span class="toc-number">2.</span> <span class="toc-text">二つのメタファー（例え）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#登山のメタファー"><span class="toc-number">2.1.</span> <span class="toc-text">登山のメタファー</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#投資のメタファー"><span class="toc-number">2.2.</span> <span class="toc-text">投資のメタファー</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#リターン"><span class="toc-number">2.3.</span> <span class="toc-text">リターン</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#リスク"><span class="toc-number">2.4.</span> <span class="toc-text">リスク</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#コスト"><span class="toc-number">2.5.</span> <span class="toc-text">コスト</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#筆者のポートフォリオ"><span class="toc-number">2.6.</span> <span class="toc-text">筆者のポートフォリオ</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#健全なプログラミングは健全な環境に宿る"><span class="toc-number">3.</span> <span class="toc-text">健全なプログラミングは健全な環境に宿る</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア"><span class="toc-number">4.</span> <span class="toc-text">動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#動作するきれいなコード"><span class="toc-number">4.1.</span> <span class="toc-text">動作するきれいなコード</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#変更を楽で安全にできる"><span class="toc-number">4.2.</span> <span class="toc-text">変更を楽で安全にできる</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十分によいソフトウェア"><span class="toc-number">4.3.</span> <span class="toc-text">十分によいソフトウェア</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#熟練に向けた旅の始まり"><span class="toc-number">5.</span> <span class="toc-text">熟練に向けた旅の始まり</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#原則とプラクティス"><span class="toc-number">5.1.</span> <span class="toc-text">原則とプラクティス</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#達人のスターターキット"><span class="toc-number">5.2.</span> <span class="toc-text">達人のスターターキット</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#バージョン管理"><span class="toc-number">5.2.1.</span> <span class="toc-text">バージョン管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#テスティング"><span class="toc-number">5.2.2.</span> <span class="toc-text">テスティング</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自動化"><span class="toc-number">5.2.3.</span> <span class="toc-text">自動化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ソフトウェア開発の三種の神器"><span class="toc-number">5.2.4.</span> <span class="toc-text">ソフトウェア開発の三種の神器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最後に"><span class="toc-number">6.</span> <span class="toc-text">最後に</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#論理的思考と批判的思考"><span class="toc-number">6.1.</span> <span class="toc-text">論理的思考と批判的思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#論理的思考"><span class="toc-number">6.2.</span> <span class="toc-text">論理的思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#批判的思考"><span class="toc-number">6.3.</span> <span class="toc-text">批判的思考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#まとめ"><span class="toc-number">7.</span> <span class="toc-text">まとめ</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#守破離"><span class="toc-number">7.1.</span> <span class="toc-text">守破離</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#良い旅を"><span class="toc-number">7.2.</span> <span class="toc-text">良い旅を</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参照"><span class="toc-number">8.</span> <span class="toc-text">参照</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://avatars1.githubusercontent.com/u/3236312?s=400&amp;u=e1bde5f87a640284db5e7bde55b7ecb2aa0f1eac&amp;v=4"></div><div class="author-info__name text-center">k2works</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">28</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">17</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">6</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">１つの価値３つの領域 思想と技術</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">環境構築から始めるプログラミング入門の準備 ~健全なプログラミングは健全な環境に宿る~</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-04-27</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E8%A1%93/">技術</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%8A%80%E8%A1%93/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/">プログラミング</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="はじめに"><a href="#はじめに" class="headerlink" title="はじめに"></a>はじめに</h1><h2 id="対象となる読者"><a href="#対象となる読者" class="headerlink" title="対象となる読者"></a>対象となる読者</h2><ul>
+<li>プログラミングに興味がある人</li>
+<li>プログラマになりたい人</li>
+<li>プログラムを作る手順を知りたい人</li>
+<li>テスト駆動開発入門の準備をしたい人</li>
+</ul>
+<h2 id="構成"><a href="#構成" class="headerlink" title="構成"></a>構成</h2><p>まず、<code>二つのメタファー（例え）</code> で押さえておきたい概念と進め方を例え話を用いて解説します。</p>
+<p>次に本記事の主題である <code>健全なプログラミングは健全な環境に宿る</code> ことについて解説します。</p>
+<p>環境の準備ができたら <code>健全なプログラミング</code> が目指す <code>動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア</code> について解説します。</p>
+<p>最後に <code>十分によいソフトウェア</code> へ向けた <code>熟練に向けた旅の始まり</code> で発展的トピックについて解説します。</p>
+<p>なお、本記事では引用を多用していますが興味のある人はいますぐでなくていいのでぜひとも原典を読んでみてください。</p>
+<a id="more"></a>
+
+<h1 id="二つのメタファー（例え）"><a href="#二つのメタファー（例え）" class="headerlink" title="二つのメタファー（例え）"></a>二つのメタファー（例え）</h1><p>プログラミングをする以上何かしら目的があります。</p>
+<p>ここではプログラミングの目的達成までの手順を <code>登山のメタファー</code> で、どのような構成で進めるかを <code>投資のメタファー</code> で解説したいと思います。</p>
+<h2 id="登山のメタファー"><a href="#登山のメタファー" class="headerlink" title="登山のメタファー"></a>登山のメタファー</h2><p>唐突ですが、あなたは登山を始めたいと思いました。</p>
+<p>まず、最初に何からすればいいでしょうか？</p>
+<p><a href="http://fujisantozan.sblo.jp/article/181007666.html" target="_blank" rel="noopener">何の準備もしないでいfきなり富士山に登ろうとする人</a> はあまりいないと思います。</p>
+<p>まずは <code>TODOリスト</code> を書き出してやることを洗い出しましょう。</p>
+<blockquote>
+<p>TODOリスト</p>
+<p>何をテストすべきだろうか — 着手する前に、必要になりそうなテストをリストに書き出しておこう。</p>
+<p>— テスト駆動開発</p>
+</blockquote>
+<p>登山の <code>TODOリスト</code>　だと以下のようなものになります。</p>
+<ol>
+<li>目標を決める</li>
+<li>目標の達成に必要な情報を収集する</li>
+<li>目標の達成に必要な装備を準備する</li>
+<li>計画を立てる</li>
+<li>計画を実現するために必要な行動をする</li>
+<li>計画を実行する</li>
+<li>実行の結果からフィードバックを得る</li>
+<li>次の目標を決める</li>
+</ol>
+<p>最初に目標を決めます。どの山に登りたいか、登りたい山はあるかですね。<br>プログラミングで言えば、どの言語を学びたいかとか、どのドメイン（専門領域）に取り組みたいかとかです。<br>ドメインとは、例えば販売管理など業務アプリケーションやゲームなどエンターテインメント、または人工知能などの分野といったところでしょうか。</p>
+<p>目標を決めたら目標を実現するために必要な情報を取集します。<br>富士山に登りたいならば必要な装備は何か？現地へのアプローチはどのようにすればよいか？頂上までのルートはどう設定すればよいかなどです。</p>
+<p>目標を実現するために必要な情報の収集が終わったら次は必要な装備を準備します。<br>通信販売でそろえることも可能ですが登山用品店などの専門店で経験豊富な店員のアドバイスをもらいながら予算の範囲で装備をそろえるのが一番手堅い方法でしょう。</p>
+<p>必要な情報と装備が揃ったら実行のための計画を立てます。<br>富士山に登れる時間と予算は確保できましたか？頂上まで登れる体力に自信はありますか？<br>もし計画の前提条件が満たされていないならいったん計画を見直す必要があります。<br>具体的には、西日本在住で夏休みやGWまでまとまった休みが取れない、装備と交通費など金銭的な負担が大きすぎる、運動経験がない、山に登ったことがないなど。<br>いきなり富士山は難しいのであれば、とりあえず近場の山で経験と体力をつけましょう。<br>とりあえず富士山は先の目標にして近場の山に登る計画を立てましょう。</p>
+<p>計画を実行します。<br>実行結果からのフィードバックをもとに装備や体の使い方を改善します。<br>足りない装備はなかったか？不要な装備はなかったか？不足している知識はなかったかを振り返り必要な装備・知識を獲得するための行動をします。<br>経験者と同行できる機会があれば活用して知識と経験を学習する時間を圧縮しましょう。</p>
+<p>近場の山で経験を積んで自信がついたらもう少し難易度の高い山に登る計画を立てます。<br>このフィードバックループを回し続ければそのうち富士山にも登頂できる日が来るはずです。<br>実際、私はこのアプローチで富士山に登頂しました（１０年も前の話ですが・・・）</p>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/blog/source/_posts/1618045280/fuji.jpg?raw=true" alt=""><br>富士山山頂から</p>
+<h2 id="投資のメタファー"><a href="#投資のメタファー" class="headerlink" title="投資のメタファー"></a>投資のメタファー</h2><p>目標を設定し計画を立て実行してフィードバックループを回す一方で自分がどの程度目標に近づいているか評価をする必要があります。</p>
+<p><a href="https://news.1242.com/article/129516" target="_blank" rel="noopener">なぜ山に登る</a>のでしょう？</p>
+<p>なぜプログラムを書くのでしょう？</p>
+<p>その問いに答えるために <code>知識ポートフォリオ</code> を構築しましょう</p>
+<blockquote>
+<p>あなたの知識ポートフォリオ</p>
+<p>プログラマーが持っているコンピューティング関連の知識や、仕事の業務知識、あらゆる経験は「知識ポートフォリオ」として考えるのがよいでしょう。知識ポートフォリオの管理は金融ポートフォリオの管理とよく似ています。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<blockquote>
+<p>ポートフォリオとは、金融商品の組み合わせのことで、特に具体的な運用商品の詳細な組み合わせを指します。「ポートフォリオを組む」ということは、どのような投資信託を購入しようか、株はどの銘柄で何株ほど持つか、などの検討をするという意味です。</p>
+<p>—  <a href="https://www.smbcnikko.co.jp/terms/japan/ho/J0122.html" target="_blank" rel="noopener">初めてでもわかりやすい用語集</a></p>
+</blockquote>
+<p>構築した知識ポートフォリオを評価しましょう。<br>評価項目としてリターン・リスク・コストの3点があります。<br>リターン・リスク・コストの3点で総合評価をしてポートフォリオの調整を行いながら目標達成を目指します。</p>
+<h2 id="リターン"><a href="#リターン" class="headerlink" title="リターン"></a>リターン</h2><p>リターンは目標の達成によって得られる何らかの利益です。<br>株式なら売却利益や配当金などです。<br>山登りをするリターンは人それぞれですが、健康とか人間関係とか経験によって人生が豊かになることでしょうか。<br>プログラミングであれば、就職や自分の仕事を効率化して自由な時間を得ることでしょう。</p>
+<h2 id="リスク"><a href="#リスク" class="headerlink" title="リスク"></a>リスク</h2><p>リスクとは一般的に <code>将来のいずれかの時において何か悪い事象が起こる可能性</code> のことを指します。<br>山登りであれば遭難などのリスクがあります。<br>プログラミングであれば習得した言語のニーズがなくなる、サポートしているプラットフォームが廃止されたなどでしょうか。</p>
+<h2 id="コスト"><a href="#コスト" class="headerlink" title="コスト"></a>コスト</h2><p>コストにはお金以外にも時間やモチベーションもあります。<br>山登りであれば遠方の山に遠征するのであればお金だけでなく準備に時間もかかりますし実現までモチベーションを維持していかなければなりません。<br>プログラミングであれば新しい言語を習得するまでの時間と学習を継続するモチベーションを維持していかなければなりません。時間とモチベーションを節約するためにお金を使ってスクールを受講するのも一つの手段です。<br>お金を使って時間を節約してリターンを短期的に得るか、お金を使わず時間をかけてリターンを長期的に得るかは人それぞれだと思います。</p>
+<p>金融の分野では一般的に短期的ハイリターンを望めばハイリスクをになる傾向があり長期投資は低いリスクで確実にリターンを得ることができます。また、<a href="https://ja.wikipedia.org/wiki/%E7%8F%BE%E4%BB%A3%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA%E7%90%86%E8%AB%96" target="_blank" rel="noopener">リスクは投資を分散することで減らす</a> ことができます。</p>
+<h2 id="筆者のポートフォリオ"><a href="#筆者のポートフォリオ" class="headerlink" title="筆者のポートフォリオ"></a>筆者のポートフォリオ</h2><p>参考までに筆者のポートフォリオの変遷を簡単に解説します。</p>
+<p>2000年 - 2010年</p>
+<ul>
+<li>Java (Jakarta Struts)</li>
+<li>Visual Basic for Applications(VBA)</li>
+<li>RDMS (Oracle)</li>
+</ul>
+<p>学校を卒業していわゆるSIerという業界で働いていたころのポートフォリオです。といっても割り当てられた案件で必要な技術構成であり、私自身あまりパッとしないプログラマでした。</p>
+<p>2010年 - 2015年</p>
+<ul>
+<li>Ruby (Ruby on Rails)</li>
+<li>Visual Basic for Applications(VBA)</li>
+<li>RDBMS (My SQL)</li>
+</ul>
+<p>小売業に転職して３年ほどシステム開発を離れて業務に従事した後、自分の業務を効率化するために再びプログラマに戻ったころのポートフォリオです。いわゆる自社開発で要件も自分が決めていたので技術構成に制約はありませんでした。<br>最初はMicrosoft Accseccで作っていた販売管理プログラムをベースに当時流行っていたRubyをメインにAWSに構築しました。開発に際しては言語は異なりましたが前職での経験がなければ構築はできなかったと思います。</p>
+<p>2015年 - 現在</p>
+<ul>
+<li>Java (Spring Boot)</li>
+<li>JavaScript (TypeScript)</li>
+<li>Python</li>
+<li>RDBMS (My SQL)</li>
+</ul>
+<p>現在のポートフォリオです。基幹業務システムも７年目に入りずいぶん老朽化がすすみ次世代システムへのリプレースを通常業務の合間に継続中です。</p>
+<h1 id="健全なプログラミングは健全な環境に宿る"><a href="#健全なプログラミングは健全な環境に宿る" class="headerlink" title="健全なプログラミングは健全な環境に宿る"></a>健全なプログラミングは健全な環境に宿る</h1><p>前置きが長くなってしましましたが本題に入りたいと思います。<br>プログラミング入門の最初の難関は環境の構築です。言語とプラットフォームの組み合わせによって簡単にセットアップできるものから手間のかかるものまでいろいろあります。<br>環境がうまく構築できずプログラミング入門に挫折する場合もあります。<br>もしくは不安定な環境で拡張が難しいため発展的な内容が扱えなかったり、PCが壊れた時に同じ環境を再現できなくなったりすることもあります。</p>
+<p>以下はWindowsプラットフォームで <code>HelloWorld</code> プログラムを書くまでの手順をまとめた記事です。<br>無料で入手できるツールでプログラムの作成・デバッグ・公開までの手順をまとめています。</p>
+<ul>
+<li><a href="https://k2works.github.io/2020/04/07/2020-04-08-1/">環境構築から始めるテスト駆動開発 <del>プログラミング環境の共通基盤を構築する</del></a></li>
+</ul>
+<p>共通基盤の構築ができたら開発言語ごと環境構築します。</p>
+<p>言語はそれぞれ自分のやりたい言語を選択すれば良いと思いますが、記事の前提であるWindows10, VSCodeの環境においてはPythonが手順若干少ない分取り組みやすいかと思います。<br>一方でJavaや.NET環境は初心者にとっては若干手間がかかる印象があるかもしれません。<br>実際やってみれば導入部分はそれほど大差はないと思いますので一通りチャレンジしてみてください。</p>
+<ul>
+<li><a href="https://k2works.github.io/2020/04/07/2020-04-08-2/">環境構築から始めるテスト駆動開発 <del>Ruby開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/08/1617851456/">環境構築から始めるテスト駆動開発 <del>JavaScript開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/08/1617866474/">環境構築から始めるテスト駆動開発 <del>Python開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/08/1617875568/">環境構築から始めるテスト駆動開発 <del>Java開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/09/1617957275/">環境構築から始めるテスト駆動開発 <del>.NET開発環境を構築する</del></a></li>
+</ul>
+<p>言語ごとの環境構築ができればプログラミング入門の準備は完了です。<br>実は長期的にもっともリターンの大きい言語があります。それは母国語（日本語）です。</p>
+<blockquote>
+<p>日本語をもうひとつのプログラミング言語として考えること</p>
+<p>仕事にけるコミュニケーションのうちで最も難しいのが、言いたいことを明確にするという作業です。<br>…<br>まず、言いたいことを練り上げてください。そしてその概要を書き出すのです。<br>…<br>人に対してよい聞き手になってもらいたいのであれば、あなた自身も聞き手にならなければなりません。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>もしあなたが文章を書くことが得意であればそれは大きな強みになります。<br>実際、優れたエンジニアには文章の上手な人が多くいます。<br>もちろん、文章の苦手な優れたエンジニアもいますが言いたいことを明確に文章化できる技術は強力な武器になることは間違いありません。ですのでコード・文章を書くための道具の使い方にも習熟しましょう。</p>
+<blockquote>
+<p>道具はあなたの能力を増幅します。道具のできが優れており、簡単に使いこなせるようになっていれば、より生産的になれるのです。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>まずは、道具の使い方に習熟することそして自分の手になじむように改良し健全な環境を継続的に維持・発展させることがプログラミング技術向上をより効率的にしてくれます。</p>
+<blockquote>
+<p>エディターに熟達すること</p>
+<p>真のメリットは、エディターに熟達することで、編集の方法について意識しなくても済むようになることです。頭の中で何かを考えることと、エディターのバッファー上に何かを表示させることには隔たりがあります。頭の中の思考を淀みなく流れるようにすれば、プログラミングにメリットがもたらされます。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>まずは、どれか一つエディタの使い方に習熟しましょう。</p>
+<blockquote>
+<p>熟達するとはどういったことでしょうか？以下は、その目標です。</p>
+<ul>
+<li>テキストを編集する際、文字や単語、行、段落で移動や選択が行える。</li>
+<li>コードを編集する際、さまざまな構文単位（対応する区切り文字や、関数、モジュール）で移動ができる。</li>
+<li>変更作業以降にコードのインデントを付け直せる。</li>
+<li>単一コマンドで、コードブロックにコメントを付けたり外したりできる。</li>
+<li>変更のアンドゥとリドゥができる。</li>
+<li>エディターのウィンドウを複数のパネルに分割し、それらの間で移動できる。</li>
+<li>特定の行番号に移動する</li>
+<li>選択した範囲の行を並び替える。</li>
+<li>文字列と正規表現の双方で検索し、以前の検索を繰り返す。</li>
+<li>選択範囲やマッチしたパターンに基づいてカーソルを複数生成し、それぞれをまとめて編集する。</li>
+<li>現在のプロジェクトで発生しているコンパイルエラーを表示させる。</li>
+<li>現在のプロジェクトにおけるテストを実行する。</li>
+</ul>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>本記事では <code>VSCode</code> を紹介していますが、別にどのエディタでも上記の要件を満たしているのであれば問題ないと思います。むしろ、継続的な使用と学習が重要です。</p>
+<h1 id="動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア"><a href="#動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア" class="headerlink" title="動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア"></a>動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア</h1><p>ここからは、プログラミング入門の先にあることに関する内容なのでいますぐに読む必要のない内容かもしれません。もし、<code>Hello World</code> したのはいいけど次に何を目標にすればいいのか？そう疑問に思ったなら読み進めてください。</p>
+<p>よいコードとはどのようなものでしょうか？</p>
+<p>優れたソフトウェアはどのようなものでしょうか？</p>
+<p>その答えはいろいろあると思いますがここは先達の考えを参考にさせてもらいましょう。</p>
+<blockquote>
+<p>しかし私は、単なる好みを超えて、よいコードはどれだけ変更が容易なのかで決まると思っています。コードは誰にとっても明白であるべきです。変更する必要があるときには、どこを変えればよいかが容易に判別でき、誤りを紛れ込ませることなくすばやく変更を実施できなければなりません。</p>
+<p>— リファクタリング(第 2 版): 既存のコードを安全に改善する </p>
+</blockquote>
+<blockquote>
+<p>設計の良し悪しは、ソフトウェアを変更するときにはっきりします。構造が入り組んだわかりずらいプログラムは内容の理解に時間がかかります。重複したコードをあちこちで修正する作業が増え、変更の副作用に悩まされます。一方、うまく設計されたプログラムは変更が楽で安全です。変更すべき箇所がかんたんにわかり、変更するコード量が少なく、変更の影響を狭い範囲に限定できます。プログラムの修正に3日かかるか、それとも半日で済むか。その違いを生むのが「設計」なのです。</p>
+<p>— 現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法</p>
+</blockquote>
+<blockquote>
+<p>よい設計は悪い設計よりも変更しやすい</p>
+<p>まず、どういった形に変更するか分からない場合、常に「簡単に変更できる」という究極の選択肢を採用するようにします。記述するコードを交換可能なものにしようとしてください。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>どうやらよいコードは明白で変更が容易なソフトウェアであると言えそうです。</p>
+<p>そこで、よいコードとは <code>動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア</code> であり、「<code>動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア</code> は優れたソフトウェアである」ということを検証していきたいと思います。</p>
+<h2 id="動作するきれいなコード"><a href="#動作するきれいなコード" class="headerlink" title="動作するきれいなコード"></a>動作するきれいなコード</h2><p><code>動作するきれいなコード</code>とはいったいどういったものでしょうか？</p>
+<blockquote>
+<p>「動作するきれいなコード」。RonJeffriesのこの簡潔な言葉が、テスト駆動開発（TDD）のゴールだ。動作するきれいなコードはあらゆる意味で価値がある。</p>
+<p>— テスト駆動開発</p>
+</blockquote>
+<blockquote>
+<p>コードは理解しやすくなければいけない。</p>
+<p>— リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice)</p>
+</blockquote>
+<blockquote>
+<p>優れたソースコードは「目に優しい」ものでなければいけない。</p>
+<p>— リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice)</p>
+</blockquote>
+<p>テスト駆動開発を通した<code>動作するきれいなコード</code>に関する実装と考察に関しては以下の記事を参照ください。</p>
+<ul>
+<li><a href="https://k2works.github.io/2020/04/16/1587009564/">テスト駆動開発から始めるRuby入門 <del>2時間でTDDとリファクタリングのエッセンスを体験する</del></a></li>
+</ul>
+<h2 id="変更を楽で安全にできる"><a href="#変更を楽で安全にできる" class="headerlink" title="変更を楽で安全にできる"></a>変更を楽で安全にできる</h2><p><code>動作するきれいなコード</code>で書かれたプログラムであれば十分なソフトウェアなのでしょうか？</p>
+<p>読みやすいコードであれば、そのプログラムは変更を楽で安全にできるソフトウェアになるのでしょうか？</p>
+<p>テストを書きさえすれば、そのプログラムは変更を楽で安全にできるソフトウェアになるのでしょうか？</p>
+<p>ここでキーワードである変更の容易さについて留意する必要があります。</p>
+<blockquote>
+<p>どこに何が書いてあるかをわかりやすくし、変更の影響を狭い範囲に閉じ込め、安定して動作する部品を柔軟に組み合わせながらソフトウェアを構築する技法がオブジェクト指向設計です。</p>
+<p>— 現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法</p>
+</blockquote>
+<blockquote>
+<p>設計とは、ソフトウェア全体をすっきりした形に整えることです。どこに何が書いてあるかわかりやすくし、修正や拡張が楽で安全になるコードを生み出すのが設計です。</p>
+<p>— 現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法</p>
+</blockquote>
+<blockquote>
+<p>よい設計は悪い設計よりも変更しやすい</p>
+<p>まず、どういった形に変更するか分からない場合、常に「簡単に変更できる」という究極の選択肢を採用するようにします。記述するコードを交換可能なものにしようとしてください。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>設計という言葉がキーワードのようです。</p>
+<p>どうやら、単に <code>動作するきれいなコード</code> というだけでは優れたソフトウェアにとって必要ではあるが十分とは言い切れないようです。</p>
+<p>オブジェクト指向に関する実装と考察に関しては以下の記事を参照ください。</p>
+<ul>
+<li><a href="https://k2works.github.io/2020/04/19/1587440874/">テスト駆動開発から始めるRuby入門 <del>6時間でオブジェクト指向のエッセンスを体験する</del></a></li>
+</ul>
+<h2 id="十分によいソフトウェア"><a href="#十分によいソフトウェア" class="headerlink" title="十分によいソフトウェア"></a>十分によいソフトウェア</h2><p><code>動作するきれいなコード</code>で書かれた<code>変更を楽で安全にできる</code>ソフトウェアであれば十分なのでしょうか？</p>
+<blockquote>
+<p>ユーザーにとって、あるいは保守担当にとって、あるいはあなた自身の気持ちにとって、十分によい(good enough)ソフトウェアを書くようにすればよいのです。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<blockquote>
+<p>今日の素晴らしいソフトウェアは、明日の完璧なソフトウェアよりも好まれるのです。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<blockquote>
+<p>開発者としての我々の目標は、「ユーザーを喜ばせる」ことです。それこそが我々の存在理由なのです。<br>…<br>我々の経験では、業務領域の知識が増えるとともに、根本となる業務上の問題に取り組めるような示唆ができるようになっていきます。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<blockquote>
+<p>ソフトウェアの目的は、人間の役に立つことです。</p>
+<p>— 現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法</p>
+</blockquote>
+<p>人の役に立つがキーワードのようです。</p>
+<p><code>動作するきれいなコード</code> で書かれた <code>変更を楽で安全にできる</code> ソフトウェアというだけではかならずしも <code>十分によいソフトウェア</code> になりうるとはいいきれないようです。</p>
+<blockquote>
+<p>オブジェクト指向は、人間のモノゴトのとらえ方と、プログラムの設計単位とを一致させる技法です。オブジェクト指向のスキルを持つ技術者とは、業務の活動や構造を理解することに興味がある技術者なのです。</p>
+<p>— 現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法</p>
+</blockquote>
+<p>いくら <code>動作するきれいなコード</code> で書かれた <code>変更を楽で安全にできる</code> ソフトウェアでも人の役に立たなければ <code>十分によいソフトウェア</code> と言えないようです。そして、 <code>十分によいソフトウェア</code> をつくるには対象となる問題領域（ドメイン）に関する知識が必要となります。</p>
+<h1 id="熟練に向けた旅の始まり"><a href="#熟練に向けた旅の始まり" class="headerlink" title="熟練に向けた旅の始まり"></a>熟練に向けた旅の始まり</h1><p>以上のことから 「<code>動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア</code> は優れたソフトウェアである」ことは完全に間違っているとは言えないようです。プログラミング入門の最初の目標が <code>動作するきれいなコード</code> を書くことであるならば、その先にある最終目標は優れたソフトウェアを作ることであると言えます。</p>
+<p>優れたソフトウェアを作るための熟練に向けた旅の始まりです。</p>
+<p>そもそもソフトウェアとはどのようなものなのでしょか？</p>
+<blockquote>
+<p>達人プログラマーが取り扱う素材は木でも鉄でもありません — 知識です。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<blockquote>
+<p>ソフトウェアは建築というよりもガーデニング（つまりコンクリートではなく、より有機的なもの）に近いのです。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>そのソフトウェアを開発するという行為はどのようなものなのでしょうか？</p>
+<blockquote>
+<p>ソフトウェア開発という職業は、今やっとものごとを理解し始めたところだ。数百年前の医学界と同じである。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<blockquote>
+<p>産業革命で学んだことの多くはソフトウェアに関しては無意味だ。まったく異なる生き物なのた。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<p>どうにもこの業界はたの産業分野とは異なった特性をもつ発展段階の状況のようです。</p>
+<h2 id="原則とプラクティス"><a href="#原則とプラクティス" class="headerlink" title="原則とプラクティス"></a>原則とプラクティス</h2><p>そんな業界でどうやって熟練していけばいいのでしょうか？</p>
+<blockquote>
+<p>そこでわかったのは、生まれついてすごい開発者というのはいないということだ。ほかの人との違いはあとからできたのだ。もしかしたら普通でないプラクティスに従っていたのかもしれないが、それらはすべて習得可能なスキルである。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<blockquote>
+<p>原則によって、プラクティスの効果を最大限に高める方法がわかる。原則は誘導灯のようなものだ。正しくプラクティスを使う方法を教えてくれる。<br>…<br>原則はドライブの目的地で、プラクティスはその道筋である。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<blockquote>
+<p>原則は重要だが、原則だけでは十分ではない。実際の状況において原則を実現する方法が必要だ。それがプラクティスの存在する理由だ。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<blockquote>
+<p>ソフトウェアを作ることは規律であり、うまく書くには幅広いスキルと鍛錬を必要とする。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<blockquote>
+<p>私がかつて発見した、そして多くの人に気づいてもらいたい効果とは、反復可能な振る舞いを規則にまで還元することで、規則の適用は機械的に反復可能になるということだ。</p>
+<p>— テスト駆動開発</p>
+</blockquote>
+<blockquote>
+<p>経験を積んだ開発者は、テストコードの書き方や量、書くタイミングに関して、自分の間合いを持っています。</p>
+<p>— テスト駆動開発 付録C</p>
+</blockquote>
+<p>原則と実践方法（プラクティス）がキーワードのようです。<br>原則とプラクティスを学ぶにはどうすればいいのでしょうか？以下は、筆者の勧める書籍です。</p>
+<p>原則を学ぶには</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/%E3%83%AA%E3%83%BC%E3%83%80%E3%83%96%E3%83%AB%E3%82%B3%E3%83%BC%E3%83%89-%E2%80%95%E3%82%88%E3%82%8A%E8%89%AF%E3%81%84%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E6%9B%B8%E3%81%8F%E3%81%9F%E3%82%81%E3%81%AE%E3%82%B7%E3%83%B3%E3%83%97%E3%83%AB%E3%81%A7%E5%AE%9F%E8%B7%B5%E7%9A%84%E3%81%AA%E3%83%86%E3%82%AF%E3%83%8B%E3%83%83%E3%82%AF-Theory-practice-Boswell/dp/4873115655/ref=sr_1_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&dchild=1&keywords=%E3%83%AA%E3%83%BC%E3%83%80%E3%83%96%E3%83%AB%E3%82%B3%E3%83%BC%E3%83%89&qid=1619404078&s=books&sr=1-1" target="_blank" rel="noopener">リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice)</a></li>
+</ul>
+<p>いきなり分厚い本を読んでも頭に入らないと思います。ボリューム的に手ごろなサイズですのでまずはこの本を手元に置いて何度か読み直してみてください。</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/%E9%81%94%E4%BA%BA%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9E%E3%83%BC-%E7%AC%AC2%E7%89%88-%E7%86%9F%E9%81%94%E3%81%AB%E5%90%91%E3%81%91%E3%81%9F%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AE%E6%97%85-David-Thomas/dp/4274226298/ref=pd_sbs_1?pd_rd_w=dGuvs&pf_rd_p=e0138d67-9e5b-487b-a2c3-be9ff3010069&pf_rd_r=FQTQBJZRDASV3DCJPQJB&pd_rd_r=400067c3-dc6c-4e86-966e-79474f3ab44f&pd_rd_wg=oB0uI&pd_rd_i=4274226298&psc=1" target="_blank" rel="noopener">達人プログラマー(第2版): 熟達に向けたあなたの旅</a></li>
+</ul>
+<p>そこそこボリュームがあります。全部読もうとせずまずは興味のあるトピックから読み進めるのがいいと思います。</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/477419087X" target="_blank" rel="noopener">現場で役立つシステム設計の原則 ~変更を楽で安全にするオブジェクト指向の実践技法</a></li>
+</ul>
+<p>ソフトウェアの設計に興味を持たれたらまず最初に読むことをお勧めします。</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/4797347783" target="_blank" rel="noopener">アジャイルソフトウェア開発の奥義 第2版 オブジェクト指向開発の神髄と匠の技</a></li>
+</ul>
+<p>かなり分厚いので読むのにはそれなりの気合が必要になりますが原則とプラクティスをどのように適用していくのかが具体的に解説されています。</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B7%E3%83%97%E3%83%AB-%E3%82%AA%E3%83%96-%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-3%E5%B9%B4%E7%9B%AE%E3%81%BE%E3%81%A7%E3%81%AB%E8%BA%AB%E3%81%AB%E3%81%A4%E3%81%91%E3%81%9F%E3%81%84-%E4%B8%80%E7%94%9F%E5%BD%B9%E7%AB%8B%E3%81%A4101%E3%81%AE%E5%8E%9F%E7%90%86%E5%8E%9F%E5%89%87-ebook/dp/B071V7MY82/ref=sr_1_3?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&dchild=1&keywords=%E3%83%AA%E3%83%BC%E3%83%80%E3%83%96%E3%83%AB%E3%82%B3%E3%83%BC%E3%83%89&qid=1619404078&s=books&sr=1-3" target="_blank" rel="noopener">プリンシプル オブ プログラミング 3年目までに身につけたい 一生役立つ101の原理原則</a></li>
+</ul>
+<p>こちらは読書ガイドとして活用できます。</p>
+<p>プラクティスを学ぶには</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/4274217884" target="_blank" rel="noopener">テスト駆動開発</a></li>
+</ul>
+<p><code>動作するきれいなコード</code> を体感したいと思ったら写経してみてください。言語はJavaですので他の言語で書くのは初心者では難しいかもしれません。ただし、ネット上に他の言語での実装例があるのでそちらを参考にチャレンジしてみてください。</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/427405019X" target="_blank" rel="noopener">新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES) </a></li>
+</ul>
+<p>こちらもJavaですが最初の例はリファクタリングを体感したいと思ったら一度は写経してほしい部分です。</p>
+<ul>
+<li><a href="https://www.amazon.co.jp/%E3%83%AA%E3%83%95%E3%82%A1%E3%82%AF%E3%82%BF%E3%83%AA%E3%83%B3%E3%82%B0-%E7%AC%AC2%E7%89%88-%E6%97%A2%E5%AD%98%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E5%AE%89%E5%85%A8%E3%81%AB%E6%94%B9%E5%96%84%E3%81%99%E3%82%8B-OBJECT-TECHNOLOGY/dp/4274224546/ref=pd_sbs_1?pd_rd_w=qBTHw&pf_rd_p=e0138d67-9e5b-487b-a2c3-be9ff3010069&pf_rd_r=2VJHXWJD7TSS188SARGF&pd_rd_r=a1112a39-0361-44e5-8c91-47445bd2ba94&pd_rd_wg=WAbBF&pd_rd_i=4274224546&psc=1" target="_blank" rel="noopener">リファクタリング(第2版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES)</a></li>
+</ul>
+<p>こちらはJavaScriptです、やはり最初の例は一度は写経してほしいです。</p>
+<p>ちなみに上記の書籍で使われている言語はほとんどがJavaです。Javaや.NET(C#)はよく言及される書籍のサンプルコードで使わることが多いので学習の効率をあげるためにもポートフォリオに追加して長期的に学習することは決して損にはならない投資だと思います。</p>
+<ul>
+<li><a href="https://k2works.github.io/2021/04/08/1617875568/">環境構築から始めるテスト駆動開発 <del>Java開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/09/1617957275/">環境構築から始めるテスト駆動開発 <del>.NET開発環境を構築する</del></a></li>
+</ul>
+<p>あなたの知識のポートフォリオを充実させていきましょう。</p>
+<h2 id="達人のスターターキット"><a href="#達人のスターターキット" class="headerlink" title="達人のスターターキット"></a>達人のスターターキット</h2><p>最初に習熟すべきプラクティスは何でしょうか？</p>
+<p>オブジェクト指向プログラミング？</p>
+<p>ドメイン駆動開発?</p>
+<p>データモデリング？</p>
+<p>自分が興味のあるものや習得したいものから取り組むのも良いのですが基本がおろそかだと応用を習得するのは難しいと思います。</p>
+<p>まずは、 <code>達人のスターターキット</code> の教えに従って３つのプラクティスに習熟することをお勧めします。</p>
+<blockquote>
+<p>達人のスターターキット</p>
+<p>方法論や言語、テクノロジーといったスタックに関係なく「すべてのチーム」が必要とする最も基本的で、最も重要なものからまず始めるべきだということを見出しました。その結果、「達人のスターターキット」というアイデアが生まれました。これは次の3つの重要かつ関連し合うトピックを網羅しています。</p>
+<ul>
+<li>バージョン管理</li>
+<li>回帰テスト</li>
+<li>完全な自動化<br>これらがあらゆるプロジェクトを支える3本柱です。</li>
+</ul>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<h3 id="バージョン管理"><a href="#バージョン管理" class="headerlink" title="バージョン管理"></a>バージョン管理</h3><blockquote>
+<p>バージョン管理によってビルド／テスト／リリースを駆動すること</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<h3 id="テスティング"><a href="#テスティング" class="headerlink" title="テスティング"></a>テスティング</h3><blockquote>
+<p>早めにテスト、何度もテスト、自動でテスト</p>
+<p>実際のところ、優れたプロジェクトでは「成果物のコードよりも多くのテストコード」が存在します。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<h3 id="自動化"><a href="#自動化" class="headerlink" title="自動化"></a>自動化</h3><blockquote>
+<p>手作業を排除する</p>
+<p>人間はコンピュータのような繰り返し作業が得意ではありません。それが得意だと期待することも間違っています。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<h3 id="ソフトウェア開発の三種の神器"><a href="#ソフトウェア開発の三種の神器" class="headerlink" title="ソフトウェア開発の三種の神器"></a>ソフトウェア開発の三種の神器</h3><blockquote>
+<p>バージョン管理と容赦ないテスト、完全な自動化という3本柱を活用することで、あなたのプロジェクトは必要となる土台を手に入れることができるため、あなた自身はユーザーを喜ばせるという難しい仕事に注力できるようになるのです。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>バージョン管理とテスティングに関しては以下の入門トピックで扱っています。</p>
+<ul>
+<li><a href="https://k2works.github.io/2020/04/07/2020-04-08-1/">環境構築から始めるテスト駆動開発 <del>プログラミング環境の共通基盤を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2020/04/07/2020-04-08-2/">環境構築から始めるテスト駆動開発 <del>Ruby開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/08/1617851456/">環境構築から始めるテスト駆動開発 <del>JavaScript開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/08/1617866474/">環境構築から始めるテスト駆動開発 <del>Python開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/08/1617875568/">環境構築から始めるテスト駆動開発 <del>Java開発環境を構築する</del></a></li>
+<li><a href="https://k2works.github.io/2021/04/09/1617957275/">環境構築から始めるテスト駆動開発 <del>.NET開発環境を構築する</del></a></li>
+</ul>
+<p>ソフトウェア開発の三種の神器と自動化に関する考察と実装は以下の記事で扱っています。</p>
+<ul>
+<li><a href="https://k2works.github.io/2020/04/17/1587440287/">テスト駆動開発から始めるRuby入門 <del>ソフトウェア開発の三種の神器を準備する</del></a></li>
+<li><a href="https://k2works.github.io/2020/04/18/1587440576/">テスト駆動開発から始めるRuby入門 <del>アルゴリズムのパフォーマンスチューニングとベンチマークを実践する</del></a></li>
+</ul>
+<p>達人スターターキットの適用と各種プラクティスの実践に関しては、仕掛ですが以下のレポジトリを見て頂ければイメージできると思います。</p>
+<ul>
+<li><a href="https://github.com/k2works/mrs" target="_blank" rel="noopener">Spring 徹底入門 Spring Framework による Java アプリケーション開発 チュートリアルの実装例</a></li>
+</ul>
+<h1 id="最後に"><a href="#最後に" class="headerlink" title="最後に"></a>最後に</h1><p>以上がプログラミング入門準備の解説です。登山のメタファーで言えば富士山に登るための最初の目標として近場の山に登るのに必要な装備を準備して計画を立てて後は実行といったところでしょうか。最後にプログラミングに限らず汎用的で長く使える便利な道具について解説したいと思います。</p>
+<h2 id="論理的思考と批判的思考"><a href="#論理的思考と批判的思考" class="headerlink" title="論理的思考と批判的思考"></a>論理的思考と批判的思考</h2><p>プログラミングでは論理的思考が大切とよく言われます。</p>
+<h2 id="論理的思考"><a href="#論理的思考" class="headerlink" title="論理的思考"></a>論理的思考</h2><blockquote>
+<p>論理的な思考とは、秩序だった思考です。秩序立てて考えねばなりません。考えを示す際にも、秩序だっていなければなりません。思いつくままに書き並べるのではだめです。「理詰めに考えている」ということを示すためには、帰納と同じで、根拠に量がなければなりません。いろいろな角度からの考察も必要です。いろいろな角度から、結論を支えるのです。「いろいろな角度から」の言葉で誤解して「あれこれ余分なものを混ぜる」のはだめです。</p>
+<p>— 論理的に考える方法 小野田博一（著）日本実業出版社</p>
+</blockquote>
+<p>コードが論理的に記述されていなければプログラムは実行されずエラーを出します。<br>では、コードを論理的に記述すれば役に立つプログラムができるのでしょうか？</p>
+<blockquote>
+<p>英語では、現実かどうかとは関係のない「論理の正しさ」をvalidと言います。そして、現実的に正しいことまで含めた「論理の正しさ」をsoundと言います。</p>
+<p>— 論理的に考える方法 小野田博一（著）日本実業出版社</p>
+</blockquote>
+<p>人の役に立つプログラムであるためには問題領域（ドメイン）の知識が正しく反映されていなければなりません。</p>
+<blockquote>
+<p>論理は「知識」とは関係がありません。論理は容器（のようなもの）であって知識は中身の一部です。論理の正しさは推論の形式の正しさであり、実体はありません。</p>
+<p>— 論理的に考える方法 小野田博一（著）日本実業出版社</p>
+</blockquote>
+<p>論理的思考は役に立つプログラムを作るのに必要ではあるが十分ではありません。<br>では、どうすればいいのでしょう？そこで役に立つのが批判的思考です。</p>
+<h2 id="批判的思考"><a href="#批判的思考" class="headerlink" title="批判的思考"></a>批判的思考</h2><blockquote>
+<p>「読み・聞き」するときの基本原理としては、批判的に考えること（クリティカル・シンキング=critical thinking）が大切です。<br>批判的に考えることとは、読み・聞きしたことを「無批判に正しいこととして受け入れないこと」を意味します。</p>
+<p>「批判的に考える」とは、よりくわしく言えば、ほんとうにそうなのだろうかから始まって、ほんとうか否かをあなた自信で判断することです。</p>
+<p>そして、疑問を持ったら、その疑問に答える記述を探し、発言を求めるのが、その後にとるべき行動です。</p>
+<p>— 論理的に考える方法 小野田博一（著）日本実業出版社</p>
+</blockquote>
+<p>プログラムがエラーを出さず動いていれば良いのではなく、このプログラムは役に立つのだろうか？変更を楽で安全にできるだろうか？問題解決に貢献するだろうか？と常に考え続ける姿勢が重要になってくるのです。</p>
+<p>ちなみに、論理的・批判的思考と分けて明記しましたが両者の違いはあまりありません。</p>
+<blockquote>
+<p>クリティカル・シンキングとロジカル・シンキングの違い</p>
+<p>論理的に考えることと批判的に考えることは、基本的に同じで、ただ若干の違いは「クリティカル・シンキングの話題は日常生活のみで、ロジカル・シンキングのほうはそのような限定はない」くらいのものと言ってよいでしょう。</p>
+<p>— 論理的に考える方法 小野田博一（著）日本実業出版社</p>
+</blockquote>
+<p>常に批判的に考える習慣を身につけてください。</p>
+<blockquote>
+<p>あなたは完璧なソフトウェアを作ることができない</p>
+<p>彼らは自分自身も含めて信頼しないのです。自分も含めた誰もが完璧なコーディングを行うことができないという事実を知ることで、達人プログラマーのコードは彼ら自身の過ちに対しても防衛的になるわけです。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<blockquote>
+<p>常に批判的な目でコードを見る習慣をつけてください。コードの構造と直行性を向上させるため、どんな機会も逃さないように。こういったプロセスのことを「リファクタリング」と呼びます。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<blockquote>
+<p>常に一歩下がって「このコードは理解しやすいだろうか？」と自問自答してみることが大切だ。</p>
+<p>— リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice)</p>
+</blockquote>
+<p>１点注意してほしいことがあります。それは、他者の意見に対して批判的に考えることは大切ですが相手に対する発言には注意を払いましょう。批判と非難は違います。相手にとって気付きを与えるような建設的な発言を心掛けてください。</p>
+<blockquote>
+<p>人を非難したり、煽ったりするのは、後々、自分に返ってくるのでやめましょう。面と向かって言わないようなことを、オンラインで表現してはいけません。</p>
+<p>— 達人プログラマー 熟達に向けたあなたの旅（第2版）</p>
+</blockquote>
+<p>もし、考えが違うと思ったら実際にコードを書いて文章にまとめて自分の意見を表明して他者からの批判に耳を傾けましょう。行動することが論理的であることだからです。</p>
+<blockquote>
+<p>したがって、この場合、「論理的に考える」とは「考えたことと行動を直結させること」と同じようなものです。</p>
+<p>— 論理的に考える方法 小野田博一（著）日本実業出版社</p>
+</blockquote>
+<p>この記事も批判的に読まれることを前提に書いていますが、一点だけ対象読者以外の経験豊富な方に向けて補足説明をさせてください。</p>
+<p>この記事では <code>動作するきれいなコード</code> を優れたソフトウェアの十分条件を満たしていないように記述していますが原典であるテスト駆動開発を読めば決してそのような意図でないことがお分かりいただけると思います。私の解釈としてはテストを取り掛かりにした継続的な活動の中に優れたソフトウェアを作るために必要な活動がすべて内包されていると考えています。そしてそこに至るため日々実践を継続中です（まあ、ぶっちゃけ到達できるかわかりませんが・・・） </p>
+<blockquote>
+<p>TDD は分析技法であり、設計技法であり、実際には開発のすべてのアクティビティを構造化する技法なのだ。</p>
+<p>— テスト駆動開発</p>
+</blockquote>
+<p>この記事で使っている <code>動作するきれいなコード</code> は原典で使われている文脈と違う意図で使っているのですが最終的に原典と同じ文脈まで到達してほしいことを意図しています。（ちょっと何言ってるのかわからないですね・・・）</p>
+<blockquote>
+<p>このような「当然正しい」と考えられている事柄をー明言されていようといまいとー英語ではアサンプション(assumption)と言います。</p>
+<p>— 論理的に考える方法 小野田博一（著）日本実業出版社</p>
+</blockquote>
+<h1 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h1><h2 id="守破離"><a href="#守破離" class="headerlink" title="守破離"></a>守破離</h2><p>本記事は <code>健全なプログラミングは健全な環境に宿る</code> という考えに基づいたプログラミング入門環境の準備に始まり、健全なプログラミングの目的である <code>動作するきれいなコードで書かれた変更を楽で安全にできる十分によいソフトウェア</code> に有用な知識と心構えを伝えることを意図して執筆しました。あくまでここで書かれていることは取り掛かりにすぎません、後は実践あるのみです。</p>
+<blockquote>
+<p>守破離<br>守から始める理由は、プラクティスの背後にある理論が簡単には理解しにくいからだ。<br>…<br>破をルールとして処方箋的に学ぶことはできない。破は自らの経験から得るもので、他人の経験から学ぶことはできない。<br>…<br>離である。継続的な学習によってのみこの領域に到達できる。<br>…<br>複雑な活動に本当に熟練するには10,000時間が必要だ。ソフトウェア開発も例外ではない。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<p>原則を学びプラクティスを実践しましょう。</p>
+<blockquote>
+<p>原則は正しいことをやれるようにガイドする包括的な知恵であると認識したほうがよい。</p>
+<p>— レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス </p>
+</blockquote>
+<p>原則とプラクティスを自らの経験のなかで積み重ねることで自らのものにしましょう。</p>
+<blockquote>
+<p>オブジェクト指向の良さを実感するには、ある程度の規模のプログラムが必要です。そして、オブジェクト指向で設計したプログラムを、何度も修正や拡張を繰り返す機会が必要です。</p>
+<p>— 現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法 </p>
+</blockquote>
+<h2 id="良い旅を"><a href="#良い旅を" class="headerlink" title="良い旅を"></a>良い旅を</h2><p>継続は力なりです。かくいう私も旅の途中ですが少しましなプログラマを目指すものとして今知っていることは全部伝えました。</p>
+<blockquote>
+<p>ここで、Kent Beck が自ら語ったセリフを思い出しました。「僕は、偉大なプログラマなんかじゃない。偉大な習慣を身につけた少しましなプログラマなんだ」。</p>
+<p>— リファクタリング(第 2 版): 既存のコードを安全に改善する </p>
+</blockquote>
+<p><img src="https://github.com/k2works/k2works.github.io/blob/source/blog/source/_posts/1618045280/kujyu.jpg?raw=true" alt=""><br>日本百名山 九重山より</p>
+<h1 id="参照"><a href="#参照" class="headerlink" title="参照"></a>参照</h1><ul>
+<li><p>リーダブルコード ―より良いコードを書くためのシンプルで実践的なテクニック (Theory in practice)<br>Dustin Boswell (著), Trevor Foucher (著), 須藤 功平 (解説), 角 征典 (翻訳):<br>オライリージャパン; 初版八刷版 (2012/6/23)</p>
+</li>
+<li><p>達人プログラマー 熟達に向けたあなたの旅（第2版）Andrew Hunt (著), David Thomas (著), 村上雅章 (翻訳): オーム社; 新装版 (2020/11/21)</p>
+</li>
+<li><p>テスト駆動開発 Kent Beck (著), 和田 卓人 (翻訳): オーム社; 新訳版 (2017/10/14)</p>
+</li>
+<li><p>新装版 リファクタリング―既存のコードを安全に改善する― (OBJECT TECHNOLOGY SERIES) Martin<br>Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他: オーム社; 新装版<br>(2014/7/26)</p>
+</li>
+<li><p>リファクタリング(第 2 版): 既存のコードを安全に改善する (OBJECT TECHNOLOGY SERIES) Martin<br>Fowler (著), 児玉 公信 (翻訳), 友野 晶夫 (翻訳), 平澤 章 (翻訳), その他: オーム社; 第 2 版<br>(2019/12/1)</p>
+</li>
+<li><p>現場で役立つシステム設計の原則 〜変更を楽で安全にするオブジェクト指向の実践技法 増田 亨 (著) 技術評論社<br>(2017/7/5)</p>
+</li>
+<li><p>レガシーコードからの脱却 ――ソフトウェアの寿命を延ばし価値を高める9つのプラクティス David Scott Bernstein　著、吉羽 龍太郎、永瀬 美穂、原田 騎郎、有野 雅士　訳<br>オライリージャパン; 2019年09月 発行</p>
+</li>
+<li><p>論理的に考える方法 小野田博一（著）日本実業出版社 (1998/7/10)</p>
+</li>
+<li><p><a href="https://www.altpaper.net/b/102" target="_blank" rel="noopener">「健全な精神は健全な肉体に宿る」……それ、本当ですか？</a></p>
+</li>
+<li><p><a href="https://www.smbcnikko.co.jp/terms/japan/ho/J0122.html" target="_blank" rel="noopener">初めてでもわかりやすい用語集</a></p>
+</li>
+<li><p><a href="http://fujisantozan.sblo.jp/article/181007666.html" target="_blank" rel="noopener">スーツ姿で富士山登山</a></p>
+</li>
+<li><p><a href="https://news.1242.com/article/129516" target="_blank" rel="noopener">「そこに山があるからだ」の本来の意味は？　誤解されて伝わっている名言・格言</a></p>
+</li>
+<li><p><a href="https://ja.wikipedia.org/wiki/%E3%83%AA%E3%82%B9%E3%82%AF" target="_blank" rel="noopener">リスク</a></p>
+</li>
+<li><p><a href="https://ja.wikipedia.org/wiki/%E6%89%B9%E5%88%A4%E7%9A%84%E6%80%9D%E8%80%83" target="_blank" rel="noopener">批判的思考</a></p>
+</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">k2works</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://k2works.github.io/2021/04/27/1618045280/">https://k2works.github.io/2021/04/27/1618045280/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E3%83%86%E3%82%B9%E3%83%88%E9%A7%86%E5%8B%95%E9%96%8B%E7%99%BA/">テスト駆動開発</a><a class="post-meta__tags" href="/tags/%E3%82%AC%E3%82%A4%E3%83%89/">ガイド</a></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e9e7853f8eb0c4e" async></script><nav id="pagination"><div class="next-post pull-right"><a href="/2021/04/09/1617957275/"><span>環境構築から始めるテスト駆動開発 ~.NET開発環境を構築する~</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2021 By k2works</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
