@@ -15,3 +15,5 @@ node_modules
 
 .fake
 .ionide
+.vscode
+__pycache__
