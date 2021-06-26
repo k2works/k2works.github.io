@@ -37,15 +37,15 @@
   "homepage": "https://github.com/hiroshima-arc/tdd_rb#readme",
   "devDependencies": {
     "@marp-team/marp-cli": "^0.16.2",
-    "browser-sync": "^2.26.7",
+    "browser-sync": "^2.27.1",
     "connect-browser-sync": "^2.1.0",
     "cpx": "^1.5.0",
     "cross-env": "^6.0.3",
     "foreman": "^3.0.1",
     "markdown-to-html": "0.0.13",
-    "nodemon": "^2.0.2",
+    "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^3.0.0",
+    "rimraf": "^3.0.2",
     "watch": "^1.0.2"
   },
   "dependencies": {
