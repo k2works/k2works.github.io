@@ -15,7 +15,7 @@ class Money:
            return f'{self.__amount}'
 
     def __eq__(self, other: object) -> bool:
-        return(self.__amount == other.__amount)
+        return(self.__amount == other.__amount and self.__currency == other.__currency)
 
 class TestMoney(unittest.TestCase):
     def test_金額を表示する(self):
