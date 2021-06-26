@@ -53,6 +53,9 @@ class TestMoney(unittest.TestCase):
     def test_金額を合計する(self):
         二千円 = self.千円.add(Money(1000, 'JPY'))
         self.assertEqual(str(二千円), '¥2000')
+        with self.assertRaises(ValueError, msg='異なる通貨では計算できません'):
+            self.千ドル.add(Money(1000, 'JPY'))
+
 
 
 unittest.main(argv=[''], verbosity=2, exit=False)
