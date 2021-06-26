@@ -34,6 +34,10 @@ class TestMoney(unittest.TestCase):
         self.assertEqual(self.千円, Money(1000, 'JPY'))
         self.assertNotEqual(self.千円, self.千ドル)
 
+    def test_ハッシュ値は等しい(self):
+        財布 = { self.千円 } 
+        self.assertTrue(self.千円 in 財布)
+
 
 
 
