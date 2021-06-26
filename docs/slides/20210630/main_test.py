@@ -2,6 +2,7 @@
 import unittest
 import hashlib
 
+
 class Money:
     def __init__(self, amount, currency) -> None:
         self.__amount = amount
@@ -9,11 +10,11 @@ class Money:
 
     def __str__(self) -> str:
         if self.__currency == 'JPY':
-           return f'¥{self.__amount}'
+            return f'¥{self.__amount}'
         elif self.__currency == 'USD':
-           return f'${self.__amount}'
+            return f'${self.__amount}'
         else:
-           return f'{self.__amount}'
+            return f'{self.__amount}'
 
     def __eq__(self, other: object) -> bool:
         return(self.__amount == other.__amount and self.__currency == other.__currency)
@@ -22,6 +23,10 @@ class Money:
         encoded_currency = int(hashlib.sha256(
             self.__currency.encode("utf-8")).hexdigest(), 16) % (10 ** 8)
         return hash(self.__amount + encoded_currency)
+
+    def add(self, other: object) -> object:
+        return Money(self.__amount + other.__amount, self.__currency)
+
 
 class TestMoney(unittest.TestCase):
     def setUp(self) -> None:
@@ -41,15 +46,13 @@ class TestMoney(unittest.TestCase):
         self.assertNotEqual(self.千円, self.千ドル)
 
     def test_通貨を保持している(self):
-        財布 = { self.千円 } 
+        財布 = {self.千円}
         self.assertTrue(self.千円 in 財布)
         self.assertFalse(self.千ドル in 財布)
 
     def test_金額を合計する(self):
         二千円 = self.千円.add(Money(1000, 'JPY'))
         self.assertEqual(str(二千円), '¥2000')
-
-
 
 
 unittest.main(argv=[''], verbosity=2, exit=False)
