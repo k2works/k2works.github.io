@@ -7,7 +7,12 @@ class Money:
         self.__currency = currency
 
     def __str__(self) -> str:
-        return f'¥{self.__amount}'
+        if self.__currency == 'JPY':
+           return f'¥{self.__amount}'
+        elif self.__currency == 'USD':
+           return f'${self.__amount}'
+        else:
+           return f'{self.__amount}'
 
 class TestMoney(unittest.TestCase):
     def test_金額を表示する(self):
