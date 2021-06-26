@@ -45,6 +45,10 @@ class TestMoney(unittest.TestCase):
         self.assertTrue(self.千円 in 財布)
         self.assertFalse(self.千ドル in 財布)
 
+    def test_金額を合計する(self):
+        二千円 = self.千円.add(Money(1000, 'JPY'))
+        self.assertEqual(str(二千円), '¥2000')
+
 
 
 
