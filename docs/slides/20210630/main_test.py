@@ -1,5 +1,6 @@
 
 import unittest
+import hashlib
 
 class Money:
     def __init__(self, amount, currency) -> None:
@@ -18,7 +19,9 @@ class Money:
         return(self.__amount == other.__amount and self.__currency == other.__currency)
 
     def __hash__(self) -> int:
-        return 1234
+        encoded_currency = int(hashlib.sha256(
+            self.__currency.encode("utf-8")).hexdigest(), 16) % (10 ** 8)
+        return hash(self.__amount + encoded_currency)
 
 class TestMoney(unittest.TestCase):
     def setUp(self) -> None:
@@ -37,7 +40,7 @@ class TestMoney(unittest.TestCase):
         self.assertEqual(self.千円, Money(1000, 'JPY'))
         self.assertNotEqual(self.千円, self.千ドル)
 
-    def test_ハッシュ値は等しい(self):
+    def test_通貨を保持している(self):
         財布 = { self.千円 } 
         self.assertTrue(self.千円 in 財布)
         self.assertFalse(self.千ドル in 財布)
