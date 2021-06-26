@@ -25,6 +25,8 @@ class Money:
         return hash(self.__amount + encoded_currency)
 
     def add(self, other: object) -> object:
+        if self.__currency != other.__currency:
+            raise ValueError('異なる通貨では計算できません')
         return Money(self.__amount + other.__amount, self.__currency)
 
 
