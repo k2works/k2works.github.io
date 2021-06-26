@@ -14,6 +14,9 @@ class Money:
         else:
            return f'{self.__amount}'
 
+    def __eq__(self, other: object) -> bool:
+        return(self.__amount == other.__amount)
+
 class TestMoney(unittest.TestCase):
     def test_金額を表示する(self):
         千円 = Money(1000, 'JPY')
