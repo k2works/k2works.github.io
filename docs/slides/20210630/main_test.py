@@ -18,21 +18,23 @@ class Money:
         return(self.__amount == other.__amount and self.__currency == other.__currency)
 
 class TestMoney(unittest.TestCase):
+    def setUp(self) -> None:
+        self.千円 = Money(1000, 'JPY')
+        self.一万円 = Money(10000, 'JPY')
+        self.千ドル = Money(1000, 'USD')
+
     def test_金額を表示する(self):
-        千円 = Money(1000, 'JPY')
-        一万円 = Money(10000, 'JPY')
-        self.assertEqual(str(千円), '¥1000')
-        self.assertEqual(str(一万円), '¥10000')
+        self.assertEqual(str(self.千円), '¥1000')
+        self.assertEqual(str(self.一万円), '¥10000')
 
     def test_外貨金額を表示する(self):
-        千ドル = Money(1000, 'USD')
-        self.assertEqual(str(千ドル), '$1000')
+        self.assertEqual(str(self.千ドル), '$1000')
 
     def test_金額は等しい(self):
-        千円 = Money(1000, 'JPY')
-        千ドル = Money(1000, 'USD')
-        self.assertEqual(千円, Money(1000, 'JPY'))
-        self.assertNotEqual(千円, 千ドル)
+        self.assertEqual(self.千円, Money(1000, 'JPY'))
+        self.assertNotEqual(self.千円, self.千ドル)
+
+
 
 
 unittest.main(argv=[''], verbosity=2, exit=False)
