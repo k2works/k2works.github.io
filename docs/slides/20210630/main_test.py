@@ -7,7 +7,7 @@ class Money:
         self.__currency = currency
 
     def __str__(self) -> str:
-        return '¥1000'
+        return f'¥{self.__amount}'
 
 class TestMoney(unittest.TestCase):
     def test_金額を表示する(self):
