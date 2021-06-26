@@ -25,4 +25,10 @@ class TestMoney(unittest.TestCase):
         千ドル = Money(1000, 'USD')
         self.assertEqual(str(千ドル), '$1000')
 
+    def test_金額は等しい(self):
+        千円 = Money(1000, 'JPY')
+        千ドル = Money(1000, 'USD')
+        self.assertEqual(千円, Money(1000, 'JPY'))
+
+
 unittest.main(argv=[''], verbosity=2, exit=False)
