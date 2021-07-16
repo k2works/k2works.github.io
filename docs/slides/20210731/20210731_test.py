@@ -6,6 +6,7 @@ from sqlalchemy import Column, Integer, String, Float
 
 Base = declarative_base()
 
+
 class TestUser(unittest.TestCase):
     def test_名前を登録できる(self):
         user = User(name='ユーザ名')
@@ -25,30 +26,20 @@ class TestRepository(unittest.TestCase):
         result = repo.find()
         self.assertEqual(result.name, 'ユーザ名')
 
+    def test_ユーザを検索できる(self):
+        user = User(name='ユーザ名', zip='123-4567', address='住所')
+        repo = Repository()
+        repo.save(user)
+        result = repo.find_by_name('ユーザ名')
+        self.assertEqual(result.name, 'ユーザ名')
+
 
 class User(Base):
+    __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String)
     zip = Column(String)
     address = Column(String)
-    __tablename__ = 'users'
-
-    def __init__(self, name, zip=None, address=None) -> None:
-        self.__name = name
-        self.__zip = zip
-        self.__address = address
-
-    @property
-    def name(self):
-        return self.__name
-
-    @property
-    def zip(self):
-        return self.__zip
-
-    @property
-    def address(self):
-        return self.__address
 
 
 class Repository:
@@ -63,6 +54,9 @@ class Repository:
 
     def find(self):
         return self.session.query(User).first()
+
+    def find_by_name(self, name):
+        return self.session.query(User).filter_by(name=name).first()
 
 
 unittest.main(argv=[''], verbosity=2, exit=False)
