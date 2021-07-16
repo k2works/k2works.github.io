@@ -31,6 +31,8 @@ class TestRepository(unittest.TestCase):
         repo.save(user)
         result = repo.find()
         self.assertEqual(result.name, '高木 ブー')
+        self.assertEqual(result.first_name, '高木')
+        self.assertEqual(result.last_name, 'ブー')
 
     def test_ユーザを検索できる(self):
         user = User(self.name, zip='123-4567', address='住所')
@@ -62,12 +64,16 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
     zip = Column(String)
     address = Column(String)
 
     def __init__(self, name, zip=None, address=None) -> None:
         super().__init__()
         self.name = str(name)
+        self.first_name = name.first
+        self.last_name = name.last
         self.zip = zip
         self.address = address
 
