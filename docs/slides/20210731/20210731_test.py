@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy.sql.sqltypes import Enum
 
 Base = declarative_base()
 
@@ -23,8 +24,8 @@ class TestUser(unittest.TestCase):
         self.assertEqual(str(user.address), '都道府県 市町村 番地')
 
     def test_役割を登録できる(self):
-        user = User(self.name, self.address, '管理者')
-        self.assertEqual(user.role, '管理者')
+        user = User(self.name, self.address, Role.ADMIN)
+        self.assertEqual(user.role, Role.ADMIN)
 
 
 class TestRepository(unittest.TestCase):
@@ -94,6 +95,11 @@ class Adress:
         return '{} {} {}'.format(self.__prefecture, self.__city, self.__house_number)
 
 
+class Role(Enum):
+    ADMIN = '管理者'
+    USER = '利用者'
+
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -105,7 +111,7 @@ class User(Base):
     house_number = Column(String)
     role = Column(String)
 
-    def __init__(self, name, address=None, role=None) -> None:
+    def __init__(self, name, address=None, role=Role.USER) -> None:
         super().__init__()
         self.first_name = name.first
         self.last_name = name.last
@@ -114,8 +120,7 @@ class User(Base):
             self.prefecture = address.prefecture
             self.city = address.city
             self.house_number = address.house_number
-        if not role == None:
-            self.role = role
+        self.role = role
 
     @property
     def name(self):
