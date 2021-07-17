@@ -11,7 +11,7 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
         self.name = Name(first='ルー', last='大柴')
-        self.address = Adress(zip='123-4567',
+        self.address = Adress(zip=Zip('123-4567'),
                               prefecture='都道府県', city='市町村', house_number='番地')
 
     def test_名前を登録できる(self):
@@ -32,7 +32,7 @@ class TestRepository(unittest.TestCase):
     def setUp(self) -> None:
         self.repo = Repository()
         self.name = Name(first='高木', last='ブー')
-        self.address = Adress(zip='123-4567',
+        self.address = Adress(zip=Zip('123-4567'),
                               prefecture='都道府県', city='市町村', house_number='番地')
     
     def tearDown(self) -> None:
@@ -72,6 +72,20 @@ class Name:
     def __str__(self):
         return '{} {}'.format(self.__first, self.__last)
 
+
+class Zip:
+    def __init__(self, value) -> None:
+        self.__value = value
+
+    @property
+    def value(self):
+        return self.__value
+
+    def __str__(self) -> str:
+        return '{}'.format(self.__value)
+
+    def __eq__(self, other):
+        return self.__value == other.__value
 
 class Adress:
     def __init__(self, zip, prefecture=None, city=None, house_number=None):
@@ -122,7 +136,7 @@ class User(Base):
         self.first_name = name.first
         self.last_name = name.last
         if not address == None:
-            self.zip = address.zip
+            self.zip = address.zip.value
             self.prefecture = address.prefecture
             self.city = address.city
             self.house_number = address.house_number
@@ -143,7 +157,7 @@ class User(Base):
 
 class Repository:
     def __init__(self) -> None:
-        self.engine = create_engine('sqlite:///db.sqlite')
+        self.engine = create_engine('sqlite:///db.sqlite3')
         self.session = sessionmaker(bind=self.engine)()
         self.conn = self.engine.connect()
         Base.metadata.create_all(self.engine)

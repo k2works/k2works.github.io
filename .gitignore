@@ -17,3 +17,5 @@ node_modules
 .ionide
 .vscode
 __pycache__
+
+db.sqlite3
