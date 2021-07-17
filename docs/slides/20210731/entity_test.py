@@ -10,13 +10,16 @@ Base = declarative_base()
 
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
-        self.user = User(name="高木 ブー", address="733-0000 広島県広島市西区横川町1-2-3")
+        self.user = User(name="高木 ブー", address="733-0000 広島県広島市西区横川町1-2-3", role="管理者")
 
     def test_名前を登録できる(self):
         self.assertEqual(self.user.name, "高木 ブー")
 
     def test_住所を登録できる(self):
         self.assertEqual(self.user.address, "733-0000 広島県広島市西区横川町1-2-3")
+
+    def test_役割を登録できる(self):
+        self.assertEqual(self.user.role, "管理者")
 
 
 class TestRepository(unittest.TestCase):
@@ -32,6 +35,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     address = Column(String)
+    role = Column(String)
 
 
 class Repository(metaclass = ABCMeta):
