@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from abc import ABCMeta, abstractmethod
+from enum import Enum
 
 Base = declarative_base()
 
@@ -11,7 +12,7 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
         self.user = User(name=Name(first="高木", last="ブー"),
-                         address=Address(postal_code="733-0000", prefecture="広島県", city="広島市西区", town="横川町1-2-3"), role="管理者")
+                         address=Address(postal_code="733-0000", prefecture="広島県", city="広島市西区", town="横川町1-2-3"), role=Role.管理者)
 
     def test_名前を登録できる(self):
         self.assertEqual(str(self.user.name), "高木 ブー")
@@ -20,7 +21,7 @@ class TestUser(unittest.TestCase):
         self.assertEqual(str(self.user.address), "733-0000 広島県広島市西区横川町1-2-3")
 
     def test_役割を登録できる(self):
-        self.assertEqual(self.user.role, "管理者")
+        self.assertEqual(self.user.role, Role.管理者)
 
 
 class TestRepository(unittest.TestCase):
@@ -47,6 +48,10 @@ class Name:
     @property
     def last(self):
         return self.__last
+
+class Role(Enum):
+    管理者 = 1
+    利用者 = 2
 
 
 class Address:
@@ -84,9 +89,9 @@ class User(Base):
     prefecture = Column(String)
     city = Column(String)
     town = Column(String)
-    role = Column(String)
+    role_no = Column(Integer)
 
-    def __init__(self, name: Name, address: str, role: str = 'ユーザ'):
+    def __init__(self, name: Name, address: str, role: str = Role.利用者):
         super().__init__()
         self.first_name = name.first
         self.last_name = name.last
@@ -94,7 +99,7 @@ class User(Base):
         self.prefecture = address.prefecture
         self.city = address.city
         self.town = address.town
-        self.role = role
+        self.role_no = role.value
 
     @property
     def name(self) -> Name:
@@ -103,6 +108,10 @@ class User(Base):
     @property
     def address(self) -> Address:
         return Address(self.postal_code, self.prefecture, self.city, self.town)
+
+    @property
+    def role(self) -> Role:
+        return Role(self.role_no)
 
 
 class Repository(metaclass = ABCMeta):
