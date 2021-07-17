@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
+from abc import ABCMeta, abstractmethod
 
 Base = declarative_base()
 
@@ -33,19 +34,18 @@ class User(Base):
     address = Column(String)
 
 
-class Repository:
-    def __init__(self):
-        self.__users = {}
-
+class Repository(metaclass = ABCMeta):
+    @abstractmethod
     def add(self, user):
-        self.__users[user.name] = user
-
+        pass
+    @abstractmethod
     def get(self, name):
-        return self.__users[name]
+        pass 
 
 
-class SQLiteRepositry:
-    def __init__(self):
+class SQLiteRepositry(Repository):
+    def __init__(self):        
+        super().__init__()
         self.engine = create_engine('sqlite:///:memory:')
         self.session = sessionmaker(bind=self.engine)()
         self.conn = self.engine.connect()
