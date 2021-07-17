@@ -10,13 +10,14 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
         self.name = Name(first='ルー', last='大柴')
+        self.address = Adress(zip='123-4567', address='住所')
 
     def test_名前を登録できる(self):
         user = User(self.name)
-        self.assertEqual(user.name, 'ルー 大柴')
+        self.assertEqual(str(user.name), 'ルー 大柴')
 
     def test_住所を登録できる(self):
-        user = User(self.name, zip='123-4567', address='住所')
+        user = User(self.name, self.address)
         self.assertEqual(user.zip, '123-4567')
         self.assertEqual(user.address, '住所')
 
@@ -24,9 +25,10 @@ class TestUser(unittest.TestCase):
 class TestRepository(unittest.TestCase):
     def setUp(self) -> None:
         self.name = Name(first='高木', last='ブー')
+        self.address = Adress(zip='123-4567', address='住所')
 
     def test_ユーザを登録できる(self):
-        user = User(self.name, zip='123-4567', address='住所')
+        user = User(self.name, self.address)
         repo = Repository()
         repo.save(user)
         result = repo.find()
@@ -35,7 +37,7 @@ class TestRepository(unittest.TestCase):
         self.assertEqual(result.last_name, 'ブー')
 
     def test_ユーザを検索できる(self):
-        user = User(self.name, zip='123-4567', address='住所')
+        user = User(self.name, self.address)
         repo = Repository()
         repo.save(user)
         result = repo.find_by_name(self.name)
@@ -59,6 +61,19 @@ class Name:
         return '{} {}'.format(self.__first, self.__last)
 
 
+class Adress:
+    def __init__(self, zip, address):
+        self.__zip = zip
+        self.__address = address
+
+    @property
+    def zip(self):
+        return self.__zip
+
+    @property
+    def address(self):
+        return self.__address
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -68,12 +83,14 @@ class User(Base):
     zip = Column(String)
     address = Column(String)
 
-    def __init__(self, name, zip=None, address=None) -> None:
+    def __init__(self, name, address=None) -> None:
         super().__init__()
         self.first_name = name.first
         self.last_name = name.last
-        self.zip = zip
-        self.address = address
+        if not address == None:
+            self.zip = address.zip
+        if not address == None:
+            self.address = address.address
 
     @property
     def name(self):
