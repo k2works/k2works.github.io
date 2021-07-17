@@ -10,10 +10,11 @@ Base = declarative_base()
 
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
-        self.user = User(name="高木 ブー", address="733-0000 広島県広島市西区横川町1-2-3", role="管理者")
+        self.user = User(name=Name(first="高木", last="ブー"),
+                         address="733-0000 広島県広島市西区横川町1-2-3", role="管理者")
 
     def test_名前を登録できる(self):
-        self.assertEqual(self.user.name, "高木 ブー")
+        self.assertEqual(str(self.user.name), "高木 ブー")
 
     def test_住所を登録できる(self):
         self.assertEqual(self.user.address, "733-0000 広島県広島市西区横川町1-2-3")
@@ -24,18 +25,48 @@ class TestUser(unittest.TestCase):
 
 class TestRepository(unittest.TestCase):
     def test_ユーザを登録できる(self):
-        user = User(name="高木 ブー", address="733-0000 広島県広島市西区横川町1-2-3")
+        user = User(name=Name(first="高木", last="ブー"),
+                    address="733-0000 広島県広島市西区横川町1-2-3")
         repo = SQLiteRepositry()
         repo.add(user)
         self.assertEqual(repo.get(user.name), user)
 
 
+class Name:
+    def __init__(self, first, last):
+        self.__first = first
+        self.__last = last
+
+    def __str__(self) -> str:
+        return "{} {}".format(self.__first, self.__last)
+
+    @property
+    def first(self):
+        return self.__first
+
+    @property
+    def last(self):
+        return self.__last
+
+
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
     address = Column(String)
     role = Column(String)
+
+    def __init__(self, name: Name, address: str, role: str = 'ユーザ'):
+        super().__init__()
+        self.first_name = name.first
+        self.last_name = name.last
+        self.address = address
+        self.role = role
+
+    @property
+    def name(self) -> Name:
+        return Name(self.first_name, self.last_name)
 
 
 class Repository(metaclass = ABCMeta):
@@ -59,4 +90,4 @@ class SQLiteRepositry(Repository):
         self.session.add(user)
 
     def get(self, name):
-        return self.session.query(User).filter_by(name=name).first()
+        return self.session.query(User).filter_by(first_name=name.first, last_name=name.last).first()
