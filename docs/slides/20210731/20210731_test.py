@@ -30,24 +30,29 @@ class TestUser(unittest.TestCase):
 
 class TestRepository(unittest.TestCase):
     def setUp(self) -> None:
+        self.repo = Repository()
         self.name = Name(first='高木', last='ブー')
         self.address = Adress(zip='123-4567',
                               prefecture='都道府県', city='市町村', house_number='番地')
+    
+    def tearDown(self) -> None:
+        self.repo.close()
+        self.repo.drop()
 
     def test_ユーザを登録できる(self):
         user = User(self.name, self.address)
-        repo = Repository()
-        repo.save(user)
-        result = repo.find()
+        self.repo.save(user)
+        self.repo.commit()
+        result = self.repo.find()
         self.assertEqual(str(result.name), '高木 ブー')
         self.assertEqual(result.first_name, '高木')
         self.assertEqual(result.last_name, 'ブー')
 
     def test_ユーザを検索できる(self):
         user = User(self.name, self.address)
-        repo = Repository()
-        repo.save(user)
-        result = repo.find_by_name(self.name)
+        self.repo.save(user)
+        self.repo.commit()
+        result = self.repo.find_by_name(self.name)
         self.assertEqual(str(result.name), '高木 ブー')
 
 
@@ -138,10 +143,22 @@ class User(Base):
 
 class Repository:
     def __init__(self) -> None:
-        self.engine = create_engine('sqlite:///:memory:')
+        self.engine = create_engine('sqlite:///db.sqlite')
         self.session = sessionmaker(bind=self.engine)()
         self.conn = self.engine.connect()
         Base.metadata.create_all(self.engine)
+
+    def commit(self):
+        self.session.commit()
+
+    def rollback(self):
+        self.session.rollback()
+
+    def close(self):
+        self.session.close()
+
+    def drop(self):
+        User.__table__.drop(self.engine)
 
     def save(self, user):
         self.session.add(user)
