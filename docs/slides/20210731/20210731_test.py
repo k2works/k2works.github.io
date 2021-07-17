@@ -22,6 +22,10 @@ class TestUser(unittest.TestCase):
         self.assertEqual(user.address.zip, '123-4567')
         self.assertEqual(str(user.address), '都道府県 市町村 番地')
 
+    def test_役割を登録できる(self):
+        user = User(self.name, self.address, '管理者')
+        self.assertEqual(user.role, '管理者')
+
 
 class TestRepository(unittest.TestCase):
     def setUp(self) -> None:
@@ -99,8 +103,9 @@ class User(Base):
     prefecture = Column(String)
     city = Column(String)
     house_number = Column(String)
+    role = Column(String)
 
-    def __init__(self, name, address=None) -> None:
+    def __init__(self, name, address=None, role=None) -> None:
         super().__init__()
         self.first_name = name.first
         self.last_name = name.last
@@ -109,6 +114,8 @@ class User(Base):
             self.prefecture = address.prefecture
             self.city = address.city
             self.house_number = address.house_number
+        if not role == None:
+            self.role = role
 
     @property
     def name(self):
