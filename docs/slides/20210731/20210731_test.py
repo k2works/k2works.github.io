@@ -10,7 +10,8 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
         self.name = Name(first='ルー', last='大柴')
-        self.address = Adress(zip='123-4567', address='住所')
+        self.address = Adress(zip='123-4567',
+                              prefecture='都道府県', city='市町村', house_number='番地')
 
     def test_名前を登録できる(self):
         user = User(self.name)
@@ -18,14 +19,15 @@ class TestUser(unittest.TestCase):
 
     def test_住所を登録できる(self):
         user = User(self.name, self.address)
-        self.assertEqual(user.zip, '123-4567')
-        self.assertEqual(user.address, '住所')
+        self.assertEqual(user.address.zip, '123-4567')
+        self.assertEqual(str(user.address), '都道府県 市町村 番地')
 
 
 class TestRepository(unittest.TestCase):
     def setUp(self) -> None:
         self.name = Name(first='高木', last='ブー')
-        self.address = Adress(zip='123-4567', address='住所')
+        self.address = Adress(zip='123-4567',
+                              prefecture='都道府県', city='市町村', house_number='番地')
 
     def test_ユーザを登録できる(self):
         user = User(self.name, self.address)
@@ -62,17 +64,30 @@ class Name:
 
 
 class Adress:
-    def __init__(self, zip, address):
+    def __init__(self, zip, prefecture=None, city=None, house_number=None):
         self.__zip = zip
-        self.__address = address
+        self.__prefecture = prefecture
+        self.__city = city
+        self.__house_number = house_number
 
     @property
     def zip(self):
         return self.__zip
 
     @property
-    def address(self):
-        return self.__address
+    def prefecture(self):
+        return self.__prefecture
+
+    @property
+    def city(self):
+        return self.__city
+
+    @property
+    def house_number(self):
+        return self.__house_number
+
+    def __str__(self):
+        return '{} {} {}'.format(self.__prefecture, self.__city, self.__house_number)
 
 
 class User(Base):
@@ -81,7 +96,9 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     zip = Column(String)
-    address = Column(String)
+    prefecture = Column(String)
+    city = Column(String)
+    house_number = Column(String)
 
     def __init__(self, name, address=None) -> None:
         super().__init__()
@@ -89,12 +106,17 @@ class User(Base):
         self.last_name = name.last
         if not address == None:
             self.zip = address.zip
-        if not address == None:
-            self.address = address.address
+            self.prefecture = address.prefecture
+            self.city = address.city
+            self.house_number = address.house_number
 
     @property
     def name(self):
         return Name(first=self.first_name, last=self.last_name)
+
+    @property
+    def address(self):
+        return Adress(zip=self.zip, prefecture=self.prefecture, city=self.city, house_number=self.house_number)
 
 
 class Repository:
