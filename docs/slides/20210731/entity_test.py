@@ -11,13 +11,13 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
         self.user = User(name=Name(first="高木", last="ブー"),
-                         address="733-0000 広島県広島市西区横川町1-2-3", role="管理者")
+                         address=Address(postal_code="733-0000", prefecture="広島県", city="広島市西区", town="横川町1-2-3"), role="管理者")
 
     def test_名前を登録できる(self):
         self.assertEqual(str(self.user.name), "高木 ブー")
 
     def test_住所を登録できる(self):
-        self.assertEqual(self.user.address, "733-0000 広島県広島市西区横川町1-2-3")
+        self.assertEqual(str(self.user.address), "733-0000 広島県広島市西区横川町1-2-3")
 
     def test_役割を登録できる(self):
         self.assertEqual(self.user.role, "管理者")
@@ -26,7 +26,7 @@ class TestUser(unittest.TestCase):
 class TestRepository(unittest.TestCase):
     def test_ユーザを登録できる(self):
         user = User(name=Name(first="高木", last="ブー"),
-                    address="733-0000 広島県広島市西区横川町1-2-3")
+                    address=Address(postal_code="733-0000", prefecture="広島県", city="広島市西区", town="横川町1-2-3"))
         repo = SQLiteRepositry()
         repo.add(user)
         self.assertEqual(repo.get(user.name), user)
@@ -49,24 +49,60 @@ class Name:
         return self.__last
 
 
+class Address:
+    def __init__(self, postal_code, prefecture, city, town):
+        self.__postal_code = postal_code
+        self.__prefecture = prefecture
+        self.__city = city
+        self.__town = town
+
+    @property
+    def postal_code(self):
+        return self.__postal_code
+
+    @property
+    def prefecture(self):
+        return self.__prefecture
+
+    @property
+    def city(self):
+        return self.__city
+
+    @property
+    def town(self):
+        return self.__town
+
+    def __str__(self) -> str:
+        return "{} {}{}{}".format(self.__postal_code, self.__prefecture, self.__city, self.__town)
+
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     first_name = Column(String)
     last_name = Column(String)
-    address = Column(String)
+    postal_code = Column(String)
+    prefecture = Column(String)
+    city = Column(String)
+    town = Column(String)
     role = Column(String)
 
     def __init__(self, name: Name, address: str, role: str = 'ユーザ'):
         super().__init__()
         self.first_name = name.first
         self.last_name = name.last
-        self.address = address
+        self.postal_code = address.postal_code
+        self.prefecture = address.prefecture
+        self.city = address.city
+        self.town = address.town
         self.role = role
 
     @property
     def name(self) -> Name:
         return Name(self.first_name, self.last_name)
+
+    @property
+    def address(self) -> Address:
+        return Address(self.postal_code, self.prefecture, self.city, self.town)
 
 
 class Repository(metaclass = ABCMeta):
