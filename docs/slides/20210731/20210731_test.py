@@ -30,7 +30,7 @@ class TestRepository(unittest.TestCase):
         repo = Repository()
         repo.save(user)
         result = repo.find()
-        self.assertEqual(result.name, '高木 ブー')
+        self.assertEqual(str(result.name), '高木 ブー')
         self.assertEqual(result.first_name, '高木')
         self.assertEqual(result.last_name, 'ブー')
 
@@ -38,8 +38,8 @@ class TestRepository(unittest.TestCase):
         user = User(self.name, zip='123-4567', address='住所')
         repo = Repository()
         repo.save(user)
-        result = repo.find_by_name(str(self.name))
-        self.assertEqual(result.name, '高木 ブー')
+        result = repo.find_by_name(self.name)
+        self.assertEqual(str(result.name), '高木 ブー')
 
 
 class Name:
@@ -63,7 +63,6 @@ class Name:
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
     first_name = Column(String)
     last_name = Column(String)
     zip = Column(String)
@@ -71,11 +70,14 @@ class User(Base):
 
     def __init__(self, name, zip=None, address=None) -> None:
         super().__init__()
-        self.name = str(name)
         self.first_name = name.first
         self.last_name = name.last
         self.zip = zip
         self.address = address
+
+    @property
+    def name(self):
+        return Name(first=self.first_name, last=self.last_name)
 
 
 class Repository:
@@ -92,7 +94,7 @@ class Repository:
         return self.session.query(User).first()
 
     def find_by_name(self, name):
-        return self.session.query(User).filter_by(name=name).first()
+        return self.session.query(User).filter_by(first_name=name.first, last_name=name.last).first()
 
 
 unittest.main(argv=[''], verbosity=2, exit=False)
