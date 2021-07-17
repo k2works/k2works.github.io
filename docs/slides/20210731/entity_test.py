@@ -49,10 +49,6 @@ class Name:
     def last(self):
         return self.__last
 
-class Role(Enum):
-    管理者 = 1
-    利用者 = 2
-
 
 class Address:
     def __init__(self, postal_code, prefecture, city, town):
@@ -79,6 +75,12 @@ class Address:
 
     def __str__(self) -> str:
         return "{} {}{}{}".format(self.__postal_code, self.__prefecture, self.__city, self.__town)
+
+
+class Role(Enum):
+    管理者 = 1
+    利用者 = 2
+
 
 class User(Base):
     __tablename__ = "users"
@@ -114,17 +116,18 @@ class User(Base):
         return Role(self.role_no)
 
 
-class Repository(metaclass = ABCMeta):
+class Repository(metaclass=ABCMeta):
     @abstractmethod
     def add(self, user):
         pass
+
     @abstractmethod
     def get(self, name):
-        pass 
+        pass
 
 
 class SQLiteRepositry(Repository):
-    def __init__(self):        
+    def __init__(self):
         super().__init__()
         self.engine = create_engine('sqlite:///:memory:')
         self.session = sessionmaker(bind=self.engine)()
