@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float
-from sqlalchemy.sql.sqltypes import Enum
+from enum import Enum
 
 Base = declarative_base()
 
@@ -96,8 +96,8 @@ class Adress:
 
 
 class Role(Enum):
-    ADMIN = '管理者'
-    USER = '利用者'
+    ADMIN = 1
+    USER = 2
 
 
 class User(Base):
@@ -109,7 +109,8 @@ class User(Base):
     prefecture = Column(String)
     city = Column(String)
     house_number = Column(String)
-    role = Column(String)
+    role_code = Column(Integer)
+
 
     def __init__(self, name, address=None, role=Role.USER) -> None:
         super().__init__()
@@ -120,7 +121,7 @@ class User(Base):
             self.prefecture = address.prefecture
             self.city = address.city
             self.house_number = address.house_number
-        self.role = role
+        self.role_code = role.value
 
     @property
     def name(self):
@@ -129,6 +130,10 @@ class User(Base):
     @property
     def address(self):
         return Adress(zip=self.zip, prefecture=self.prefecture, city=self.city, house_number=self.house_number)
+
+    @property
+    def role(self):
+        return Role(self.role_code)
 
 
 class Repository:
