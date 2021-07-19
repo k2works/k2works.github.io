@@ -1,0 +1,14 @@
+class User
+class Name
+class Address
+class PostalCode
+interface Repository
+class SqliteRepository
+
+User *- Name
+User *- Address
+Address *- PostalCode
+
+Repository <|-- SqliteRepository
+
+SqliteRepository <- User

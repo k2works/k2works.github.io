@@ -79,6 +79,9 @@ class PostalCode:
     def __eq__(self, o: object) -> bool:
         return self.value == o.value
 
+    def __hash__(self) -> int:
+        return hash(self.value)
+
 
 class Address:
     def __init__(self, postal_code, prefecture, city, town, room):
