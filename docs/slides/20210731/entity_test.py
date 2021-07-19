@@ -12,22 +12,32 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def test_user(self):
         name = Name(first='柿木', last='勝之')
-        address = Address(postal_code='722-001', prefecture='広島県',
+        address = Address(postal_code=PostalCode('722-001'), prefecture='広島県',
                           city='広島市', town='横川町1-2-3', room='123')
         user = User(name, address)
         self.assertEqual(str(user.name), '柿木 勝之')
         self.assertEqual(str(user.address), '722-001 広島県広島市横川町1-2-3 123')
+        self.assertTrue(user.address.postal_code == PostalCode('722-001'))
 
 
 class TestRepository(unittest.TestCase):
     def test_repository(self):
         name = Name(first='柿木', last='勝之')
-        address = Address(postal_code='722-001', prefecture='広島県',
+        address = Address(postal_code=PostalCode('722-001'), prefecture='広島県',
                           city='広島市', town='横川町1-2-3', room='123')
         user = User(name,address)
         repo = SQLiteRepository()
         repo.add(user)
         self.assertEqual(str(repo.get(1).name), '柿木 勝之')
+        self.assertEqual(repo.get(1).address.postal_code, PostalCode('722-001'))
+
+
+class PostalCode:
+    def __init__(self, value):
+        self.value = value
+
+    def __eq__(self, o: object) -> bool:
+        return self.value == o.value
 
 class Address:
     def __init__(self, postal_code, prefecture, city, town, room):
@@ -38,7 +48,7 @@ class Address:
         self.room = room
 
     def __str__(self) -> str:
-        return '{} {}{}{} {}'.format(self.postal_code, self.prefecture, self.city, self.town, self.room)
+        return '{} {}{}{} {}'.format(self.postal_code.value, self.prefecture, self.city, self.town, self.room)
 
 class Name:
     def __init__(self, first, last):
@@ -63,7 +73,7 @@ class User(Base):
         super().__init__()
         self.first_name = name.first
         self.last_name = name.last
-        self.postal_code = address.postal_code
+        self.postal_code = address.postal_code.value
         self.prefecture = address.prefecture
         self.city = address.city
         self.town = address.town
@@ -75,7 +85,7 @@ class User(Base):
 
     @property
     def address(self):
-        return Address(self.postal_code, self.prefecture, self.city, self.town, self.room)
+        return Address(PostalCode(self.postal_code), self.prefecture, self.city, self.town, self.room)
 
 
 class Repository(metaclass=ABCMeta):
