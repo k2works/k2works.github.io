@@ -51,13 +51,31 @@ class Name:
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    address = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
+    postal_code = Column(String)
+    prefecture = Column(String)
+    city = Column(String)
+    town = Column(String)
+    room = Column(String)
 
     def __init__(self, name, address):
         super().__init__()
-        self.name = str(name)
-        self.address = str(address)
+        self.first_name = name.first
+        self.last_name = name.last
+        self.postal_code = address.postal_code
+        self.prefecture = address.prefecture
+        self.city = address.city
+        self.town = address.town
+        self.room = address.room
+
+    @property
+    def name(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
+    @property
+    def address(self):
+        return '{} {}{}{} {}'.format(self.postal_code, self.prefecture, self.city, self.town, self.room)
 
 
 class Repository(metaclass=ABCMeta):
