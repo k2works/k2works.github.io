@@ -11,28 +11,39 @@ Base = declarative_base()
 
 
 class TestUser(unittest.TestCase):
-    def test_user(self):
+    def setUp(self) -> None:
         name = Name(first='柿木', last='勝之')
         address = Address(postal_code=PostalCode('722-001'), prefecture='広島県',
                           city='広島市', town='横川町1-2-3', room='123')
         role = Role.管理者
-        user = User(name, address, role)
-        self.assertEqual(str(user.name), '柿木 勝之')
-        self.assertEqual(str(user.address), '722-001 広島県広島市横川町1-2-3 123')
-        self.assertTrue(user.address.postal_code == PostalCode('722-001'))
-        self.assertEqual(user.role, Role.管理者)
+        self.user = User(name, address, role)
+
+    def test_名前を登録できる(self):
+        self.assertEqual(str(self.user.name), '柿木 勝之')
+
+    def test_住所を登録できる(self):
+        self.assertEqual(str(self.user.address), '722-001 広島県広島市横川町1-2-3 123')
+    
+    def test_郵便局を登録できる(self):
+        self.assertTrue(self.user.address.postal_code == PostalCode('722-001'))
+
+    def test_権限を登録できる(self):
+        self.assertEqual(self.user.role, Role.管理者)
 
 
 class TestRepository(unittest.TestCase):
-    def test_repository(self):
+    def setUp(self) -> None:
+        self.repo = SQLiteRepository()
+
         name = Name(first='柿木', last='勝之')
         address = Address(postal_code=PostalCode('722-001'), prefecture='広島県',
                           city='広島市', town='横川町1-2-3', room='123')
-        user = User(name,address)
-        repo = SQLiteRepository()
-        repo.add(user)
-        self.assertEqual(str(repo.get(1).name), '柿木 勝之')
-        self.assertEqual(repo.get(1).address.postal_code, PostalCode('722-001'))
+        self.user1 = User(name,address)
+        self.repo.add(self.user1)
+
+    def test_ユーザを登録できる(self):
+        self.assertEqual(str(self.repo.get(1).name), '柿木 勝之')
+        self.assertEqual(self.repo.get(1).address.postal_code, PostalCode('722-001'))
 
 
 class Role(Enum):
