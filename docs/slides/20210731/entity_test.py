@@ -12,23 +12,33 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def test_user(self):
         name = Name(first='柿木', last='勝之')
-        address = Address('722-001 広島県広島市横川町1-2-3 123')
+        address = Address(postal_code='722-001', prefecture='広島県',
+                          city='広島市', town='横川町1-2-3', room='123')
         user = User(name, address)
         self.assertEqual(user.name, '柿木 勝之')
+        self.assertEqual(user.address, '722-001 広島県広島市横川町1-2-3 123')
 
 
 class TestRepository(unittest.TestCase):
     def test_repository(self):
         name = Name(first='柿木', last='勝之')
-        address = Address('722-001 広島県広島市横川町1-2-3 123')
+        address = Address(postal_code='722-001', prefecture='広島県',
+                          city='広島市', town='横川町1-2-3', room='123')
         user = User(name,address)
         repo = SQLiteRepository()
         repo.add(user)
         self.assertEqual(repo.get(1).name, '柿木 勝之')
 
 class Address:
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, postal_code, prefecture, city, town, room):
+        self.postal_code = postal_code
+        self.prefecture = prefecture
+        self.city = city
+        self.town = town
+        self.room = room
+
+    def __str__(self) -> str:
+        return '{} {}{}{} {}'.format(self.postal_code, self.prefecture, self.city, self.town, self.room)
 
 class Name:
     def __init__(self, first, last):
@@ -47,7 +57,7 @@ class User(Base):
     def __init__(self, name, address):
         super().__init__()
         self.name = str(name)
-        self.address = address.value
+        self.address = str(address)
 
 
 class Repository(metaclass=ABCMeta):
