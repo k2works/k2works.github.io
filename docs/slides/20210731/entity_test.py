@@ -11,21 +11,28 @@ Base = declarative_base()
 
 class TestUser(unittest.TestCase):
     def test_user(self):
-        user = User()
-        user.name = '柿木 勝之'
-        user.address = '722-001 広島県広島市横川町1-2-3 123'
+        name = Name('柿木 勝之')
+        address = Address('722-001 広島県広島市横川町1-2-3 123')
+        user = User(name, address)
         self.assertEqual(user.name, '柿木 勝之')
 
 
 class TestRepository(unittest.TestCase):
     def test_repository(self):
-        user = User()
-        user.name = '柿木 勝之'
-        user.address = '722-001 広島県広島市横川町1-2-3 123'
+        name = Name('柿木 勝之')
+        address = Address('722-001 広島県広島市横川町1-2-3 123')
+        user = User(name,address)
         repo = SQLiteRepository()
         repo.add(user)
         self.assertEqual(repo.get(1).name, '柿木 勝之')
 
+class Address:
+    def __init__(self, value):
+        self.value = value
+
+class Name:
+    def __init__(self, value):
+        self.value = value
 
 class User(Base):
     __tablename__ = 'users'
@@ -33,8 +40,10 @@ class User(Base):
     name = Column(String)
     address = Column(String)
 
-    def __init__(self):
+    def __init__(self, name, address):
         super().__init__()
+        self.name = name.value
+        self.address = address.value
 
 
 class Repository(metaclass=ABCMeta):
