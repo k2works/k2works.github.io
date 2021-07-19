@@ -5,6 +5,7 @@ from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey
+from enum import Enum
 
 Base = declarative_base()
 
@@ -14,10 +15,12 @@ class TestUser(unittest.TestCase):
         name = Name(first='柿木', last='勝之')
         address = Address(postal_code=PostalCode('722-001'), prefecture='広島県',
                           city='広島市', town='横川町1-2-3', room='123')
-        user = User(name, address)
+        role = Role.管理者
+        user = User(name, address, role)
         self.assertEqual(str(user.name), '柿木 勝之')
         self.assertEqual(str(user.address), '722-001 広島県広島市横川町1-2-3 123')
         self.assertTrue(user.address.postal_code == PostalCode('722-001'))
+        self.assertEqual(user.role, Role.管理者)
 
 
 class TestRepository(unittest.TestCase):
@@ -31,6 +34,10 @@ class TestRepository(unittest.TestCase):
         self.assertEqual(str(repo.get(1).name), '柿木 勝之')
         self.assertEqual(repo.get(1).address.postal_code, PostalCode('722-001'))
 
+
+class Role(Enum):
+    管理者 = 1
+    利用者 = 2
 
 class PostalCode:
     def __init__(self, value):
@@ -68,8 +75,9 @@ class User(Base):
     city = Column(String)
     town = Column(String)
     room = Column(String)
+    role_type = Column(Integer)
 
-    def __init__(self, name, address):
+    def __init__(self, name, address, role=Role.利用者):
         super().__init__()
         self.first_name = name.first
         self.last_name = name.last
@@ -78,6 +86,7 @@ class User(Base):
         self.city = address.city
         self.town = address.town
         self.room = address.room
+        self.role_type = role.value
 
     @property
     def name(self):
@@ -86,6 +95,10 @@ class User(Base):
     @property
     def address(self):
         return Address(PostalCode(self.postal_code), self.prefecture, self.city, self.town, self.room)
+
+    @property
+    def role(self):
+        return Role(self.role_type)
 
 
 class Repository(metaclass=ABCMeta):
