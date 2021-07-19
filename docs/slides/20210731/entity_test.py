@@ -11,7 +11,7 @@ Base = declarative_base()
 
 class TestUser(unittest.TestCase):
     def test_user(self):
-        name = Name('柿木 勝之')
+        name = Name(first='柿木', last='勝之')
         address = Address('722-001 広島県広島市横川町1-2-3 123')
         user = User(name, address)
         self.assertEqual(user.name, '柿木 勝之')
@@ -19,7 +19,7 @@ class TestUser(unittest.TestCase):
 
 class TestRepository(unittest.TestCase):
     def test_repository(self):
-        name = Name('柿木 勝之')
+        name = Name(first='柿木', last='勝之')
         address = Address('722-001 広島県広島市横川町1-2-3 123')
         user = User(name,address)
         repo = SQLiteRepository()
@@ -31,8 +31,12 @@ class Address:
         self.value = value
 
 class Name:
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, first, last):
+        self.first = first
+        self.last = last
+
+    def __str__(self) -> str:
+        return '{} {}'.format(self.first, self.last)
 
 class User(Base):
     __tablename__ = 'users'
@@ -42,7 +46,7 @@ class User(Base):
 
     def __init__(self, name, address):
         super().__init__()
-        self.name = name.value
+        self.name = str(name)
         self.address = address.value
 
 
