@@ -15,8 +15,8 @@ class TestUser(unittest.TestCase):
         address = Address(postal_code='722-001', prefecture='広島県',
                           city='広島市', town='横川町1-2-3', room='123')
         user = User(name, address)
-        self.assertEqual(user.name, '柿木 勝之')
-        self.assertEqual(user.address, '722-001 広島県広島市横川町1-2-3 123')
+        self.assertEqual(str(user.name), '柿木 勝之')
+        self.assertEqual(str(user.address), '722-001 広島県広島市横川町1-2-3 123')
 
 
 class TestRepository(unittest.TestCase):
@@ -27,7 +27,7 @@ class TestRepository(unittest.TestCase):
         user = User(name,address)
         repo = SQLiteRepository()
         repo.add(user)
-        self.assertEqual(repo.get(1).name, '柿木 勝之')
+        self.assertEqual(str(repo.get(1).name), '柿木 勝之')
 
 class Address:
     def __init__(self, postal_code, prefecture, city, town, room):
@@ -71,11 +71,11 @@ class User(Base):
 
     @property
     def name(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+        return Name(self.first_name, self.last_name)
 
     @property
     def address(self):
-        return '{} {}{}{} {}'.format(self.postal_code, self.prefecture, self.city, self.town, self.room)
+        return Address(self.postal_code, self.prefecture, self.city, self.town, self.room)
 
 
 class Repository(metaclass=ABCMeta):
