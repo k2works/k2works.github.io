@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 import unittest
 from unittest.case import doModuleCleanups
 from sqlalchemy.engine import create_engine
@@ -133,17 +134,16 @@ class User(Base):
         return Role(self.role_type)
 
 
-class Repository:
-    def __init__(self):
-        self.users = []
-
+class Repository(metaclass=ABCMeta):
+    @abstractmethod
     def add_user(self, user):
-        self.users.append(user)
+        pass
 
+    @abstractmethod
     def get_user(self, index):
-        return self.users[index]
+        pass
 
-class SQLiteRepository:
+class SQLiteRepository(Repository):
     def __init__(self):
         self.engine = create_engine("sqlite:///:memory:")
         self.session = sessionmaker(bind=self.engine)()
