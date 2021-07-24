@@ -10,10 +10,9 @@ Base = declarative_base()
 
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
-        self.user = User()
+        self.user = User(role=Role.管理者)
         self.user.name = "柿木 勝之"
         self.user.address = "733-0011 広島県広島市西区横川町1-2-3 123"
-        self.user.role = Role.管理者
 
     def test_名前を登録できる(self):
         self.assertEqual(self.user.name, "柿木 勝之")
@@ -29,13 +28,12 @@ class TestRepository(unittest.TestCase):
         user = User()
         user.name = "柿木 勝之"
         user.address = "733-0011 広島県広島市西区横川町1-2-3 123"
-        user.role = Role.利用者.value
         repo = SQLiteRepository()
         repo.add_user(user)
 
         self.assertEqual(repo.get_user(1).name, "柿木 勝之")
         self.assertEqual(repo.get_user(1).address, "733-0011 広島県広島市西区横川町1-2-3 123")
-        self.assertEqual(repo.get_user(1).role, Role.利用者.value)
+        self.assertEqual(repo.get_user(1).role, Role.利用者)
 
 class Role(Enum):
     管理者 = 1
@@ -46,7 +44,14 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     address = Column(String)
-    role = Column(Integer)
+    role_type = Column(Integer)
+
+    def __init__(self, role=Role.利用者):
+        self.role_type = role.value
+
+    @property
+    def role(self):
+        return Role(self.role_type)
 
 
 class Repository:
