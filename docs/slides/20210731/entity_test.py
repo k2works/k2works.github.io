@@ -13,29 +13,39 @@ Base = declarative_base()
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
         name = Name(first="柿木",last="勝之")
-        address = Address(postal_code="733-0011", prefecture="広島県",city="広島市西区",twon="横川町1-2-3",room="123")
+        postal_code = PostalCode("733-0011")
+        address = Address(postal_code, prefecture="広島県",
+                          city="広島市西区", twon="横川町1-2-3", room="123")
         self.user = User(name, address, role=Role.管理者)
 
     def test_名前を登録できる(self):
         self.assertEqual(str(self.user.name), "柿木 勝之")
 
     def test_住所を登録できる(self):
-        self.assertEqual(str(self.user.address), "733-0011 広島県広島市西区横川町1-2-3 123")
+        self.assertEqual(str(self.user.address),
+                         "733-0011 広島県広島市西区横川町1-2-3 123")
+        self.assertEqual(str(self.user.address.postal_code), "733-0011")
 
     def test_権限を登録できる(self):
         self.assertEqual(self.user.role, Role.管理者)
 
+
 class TestRepository(unittest.TestCase):
     def test_ユーザを登録できる(self):
-        name = Name(first="柿木",last="勝之")
-        address = Address(postal_code="733-0011", prefecture="広島県",city="広島市西区",twon="横川町1-2-3",room="123")
+        name = Name(first="柿木", last="勝之")
+        postal_code = PostalCode("733-0011")
+        address = Address(postal_code, prefecture="広島県",
+                          city="広島市西区", twon="横川町1-2-3", room="123")
         user = User(name, address)
         repo = SQLiteRepository()
         repo.add_user(user)
 
         self.assertEqual(repo.get_user(1).name, name)
         self.assertEqual(repo.get_user(1).address, address)
+        self.assertEqual(repo.get_user(1).address.postal_code, postal_code)
+        self.assertEqual(repo.get_user(1).postal_code, postal_code.value)
         self.assertEqual(repo.get_user(1).role, Role.利用者)
+        self.assertEqual(repo.get_user(1).role_type, Role.利用者.value)
 
 
 class Name:
@@ -53,8 +63,22 @@ class Name:
         return hash(self.first) ^ hash(self.last)
 
 
+class PostalCode:
+    def __init__(self, value: str) -> None:
+        self.value = value
+
+    def __str__(self) -> str:
+        return f"{self.value}"
+
+    def __eq__(self, o: object) -> bool:
+        return self.value == o.value
+
+    def __hash__(self) -> int:
+        return hash(self.value)
+
+
 class Address:
-    def __init__(self, postal_code: str, prefecture: str, city: str, twon: str, room: str) -> None:
+    def __init__(self, postal_code: PostalCode, prefecture: str, city: str, twon: str, room: str) -> None:
         self.postal_code = postal_code
         self.prefecture = prefecture
         self.city = city
@@ -69,6 +93,7 @@ class Address:
 
     def __hash__(self) -> int:
         return hash(self.postal_code) ^ hash(self.prefecture) ^ hash(self.city) ^ hash(self.twon) ^ hash(self.room)
+
 
 class Role(Enum):
     管理者 = 1
@@ -88,7 +113,7 @@ class User(Base):
     def __init__(self, name: Name, address: Address, role=Role.利用者):
         self.last_name = name.last
         self.first_name = name.first
-        self.postal_code = address.postal_code
+        self.postal_code = address.postal_code.value
         self.prefecture = address.prefecture
         self.city = address.city
         self.twon = address.twon
@@ -101,7 +126,7 @@ class User(Base):
 
     @property
     def address(self):
-        return Address(postal_code=self.postal_code, prefecture=self.prefecture, city=self.city, twon=self.twon, room=self.room)
+        return Address(postal_code=PostalCode(self.postal_code), prefecture=self.prefecture, city=self.city, twon=self.twon, room=self.room)
 
     @property
     def role(self):
