@@ -1,0 +1,16 @@
+class User
+Enum Role
+class Name
+class Address
+class PostalCode
+interface Repository
+class SqliteRepository
+
+Role --* User
+User *- Name
+User *-- Address
+Address *- PostalCode
+
+Repository <|-- SqliteRepository
+
+SqliteRepository -> User
