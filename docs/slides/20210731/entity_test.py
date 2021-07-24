@@ -10,12 +10,12 @@ Base = declarative_base()
 
 class TestUser(unittest.TestCase):
     def setUp(self) -> None:
-        self.user = User(role=Role.管理者)
-        self.user.name = "柿木 勝之"
+        name = Name(first="柿木",last="勝之")
+        self.user = User(name, role=Role.管理者)
         self.user.address = "733-0011 広島県広島市西区横川町1-2-3 123"
 
     def test_名前を登録できる(self):
-        self.assertEqual(self.user.name, "柿木 勝之")
+        self.assertEqual(str(self.user.name), "柿木 勝之")
 
     def test_住所を登録できる(self):
         self.assertEqual(self.user.address, "733-0011 広島県広島市西区横川町1-2-3 123")
@@ -25,15 +25,30 @@ class TestUser(unittest.TestCase):
 
 class TestRepository(unittest.TestCase):
     def test_ユーザを登録できる(self):
-        user = User()
-        user.name = "柿木 勝之"
+        name = Name(first="柿木",last="勝之")
+        user = User(name)
         user.address = "733-0011 広島県広島市西区横川町1-2-3 123"
         repo = SQLiteRepository()
         repo.add_user(user)
 
-        self.assertEqual(repo.get_user(1).name, "柿木 勝之")
+        self.assertEqual(repo.get_user(1).name, name)
         self.assertEqual(repo.get_user(1).address, "733-0011 広島県広島市西区横川町1-2-3 123")
         self.assertEqual(repo.get_user(1).role, Role.利用者)
+
+
+class Name:
+    def __init__(self, first: str, last: str) -> None:
+        self.first = first
+        self.last = last
+
+    def __str__(self) -> str:
+        return f"{self.first} {self.last}"
+
+    def __eq__(self, o: object) -> bool:
+        return self.first == o.first and self.last == o.last
+
+    def __hash__(self) -> int:
+        return hash(self.first) ^ hash(self.last)
 
 class Role(Enum):
     管理者 = 1
@@ -42,12 +57,19 @@ class Role(Enum):
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
     address = Column(String)
     role_type = Column(Integer)
 
-    def __init__(self, role=Role.利用者):
+    def __init__(self, name: Name, role=Role.利用者):
+        self.last_name = name.last
         self.role_type = role.value
+        self.first_name = name.first
+
+    @property
+    def name(self):
+        return Name(first=self.first_name, last=self.last_name)
 
     @property
     def role(self):
