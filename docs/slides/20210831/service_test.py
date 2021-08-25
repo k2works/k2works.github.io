@@ -19,18 +19,18 @@ class TestUser(unittest.TestCase):
 class TestService(unittest.TestCase):
     def setUp(self) -> None:
         self.user = User('Alice', 'password')
+        self.applicationService = ApplicationService()
+        self.domainService = DomainService(self.applicationService)
 
     def test_ユーザを登録できる(self):
-        service = Service()
-        service.save(self.user)
-        user = service.get(self.user)
+        self.applicationService.save(self.user)
+        user = self.applicationService.get(self.user)
         self.assertEqual(user.name, 'Alice')
 
     def test_すでにユーザが登録されているか確認できる(self):
-        service = Service()
-        service.save(self.user)
+        self.applicationService.save(self.user)
         with self.assertRaises(ValueError, msg='ユーザはすでに登録されています'):
-            service.save(self.user)
+            self.domainService.check(self.user)
 
 
 class TestRepository(unittest.TestCase):
@@ -53,14 +53,21 @@ class User:
         self.role = role
 
 
-class Service:
+class DomainService:
+    def __init__(self, service) -> None:
+        self.service = service
+
+    def check(self, user: User):
+        check_user = self.service.get(user)
+        if check_user is not None:
+            raise ValueError('ユーザはすでに登録されています')
+
+
+class ApplicationService:
     def __init__(self) -> None:
         self.repository = Repository()
 
     def save(self, user: User):
-        check_user = self.repository.find_by_name(user.name)
-        if check_user is not None:
-            raise ValueError('ユーザはすでに登録されています')
         self.repository.register(user)
 
     def get(self, user: User) -> User:
