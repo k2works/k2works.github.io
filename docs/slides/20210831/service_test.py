@@ -3,61 +3,78 @@ from enum import Enum
 
 
 class TestUser(unittest.TestCase):
-    def test_名前を登録できる(self):
-        user = User(name='test', address='')
-        self.assertEqual(user.name, 'test')
+    def setUp(self) -> None:
+        self.user = User('Alice', 'password', Role.管理者)
 
-    def test_住所を登録できる(self):
-        user = User(name='test', address='test')
-        self.assertEqual(user.address, 'test')
+    def test_名前を登録できる(self):
+        self.assertEqual(self.user.name, 'Alice')
+
+    def test_パスワードを登録できる(self):
+        self.assertEqual(self.user.password, 'password')
 
     def test_権限を登録できる(self):
-        user = User(name='test', address='test', role=Role.管理者)
-        self.assertEqual(user.role, Role.管理者)
+        self.assertEqual(self.user.role, Role.管理者)
+
+
+class TestService(unittest.TestCase):
+    def setUp(self) -> None:
+        self.user = User('Alice', 'password')
+
+    def test_ユーザを登録できる(self):
+        service = Service()
+        service.save(self.user)
+        user = service.get(self.user)
+        self.assertEqual(user.name, 'Alice')
+
+    def test_すでにユーザが登録されているか確認できる(self):
+        service = Service()
+        service.save(self.user)
+        with self.assertRaises(ValueError, msg='ユーザはすでに登録されています'):
+            service.save(self.user)
+
 
 class TestRepository(unittest.TestCase):
     def test_ユーザを登録できる(self):
-        repo = Repository()
-        user = User(name='test', address='test', role=Role.管理者)
-        repo.add(user)
-        self.assertEqual(repo.get(user.name), user)
-
-class TestService(unittest.TestCase):
-    def test_ユーザを登録できる(self):
-        service = Service()
-        user = User(name='test', address='test', role=Role.管理者)
-        service.save(user)
-        self.assertEqual(service.find_by_name(user.name), user)
+        repository = Repository()
+        repository.register(User('Alice', 'password', Role.管理者))
+        user = repository.find_by_name('Alice')
+        self.assertEqual(user.name, 'Alice')
 
 
 class Role(Enum):
     管理者 = 1
     利用者 = 2
 
+
 class User:
-    def __init__(self, name, address, role=Role.利用者):
+    def __init__(self, name: str, password: str, role: Role = Role.利用者) -> None:
         self.name = name
-        self.address = address
+        self.password = password
         self.role = role
 
-class Repository:
-    def __init__(self):
-        self.__data = {}
-
-    def add(self, user):
-        self.__data[user.name] = user
-        return user
-    
-    def get(self, name):
-        return self.__data[name]
 
 class Service:
-    def __init__(self):
+    def __init__(self) -> None:
         self.repository = Repository()
 
-    def save(self, user):
-        self.repository.add(user)
+    def save(self, user: User):
+        check_user = self.repository.find_by_name(user.name)
+        if check_user is not None:
+            raise ValueError('ユーザはすでに登録されています')
+        self.repository.register(user)
 
-    def find_by_name(self, name):
-        return self.repository.get(name)
+    def get(self, user: User) -> User:
+        return self.repository.find_by_name(user.name)
 
+
+class Repository:
+    def __init__(self) -> None:
+        self.users = []
+
+    def register(self, user: User) -> None:
+        self.users.append(user)
+
+    def find_by_name(self, name: str):
+        for user in self.users:
+            if user.name == name:
+                return user
