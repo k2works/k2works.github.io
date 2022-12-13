@@ -28,6 +28,31 @@ function action(event) {
   event.completed();
 }
 
+async function toggleProtection(args) {
+  await Excel.run(async (context) => {
+    // TODO1: Queue commands to reverse the protection status of the current worksheet.
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+
+    // TODO2: Queue command to load the sheet's "protection.protected" property from
+    //        the document and re-synchronize the document and task pane.
+
+    if (sheet.protection.protected) {
+      sheet.protection.unprotect();
+    } else {
+      sheet.protection.protect();
+    }
+
+    await context.sync();
+  }).catch(function (error) {
+    console.log("Error: " + error);
+    if (error instanceof OfficeExtension.Error) {
+      console.log("Debug info: " + JSON.stringify(error.debugInfo));
+    }
+  });
+  args.completed();
+}
+Office.actions.associate("toggleProtection", toggleProtection);
+
 function getGlobal() {
   return typeof self !== "undefined"
     ? self
