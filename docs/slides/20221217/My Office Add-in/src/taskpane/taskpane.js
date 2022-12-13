@@ -17,6 +17,7 @@ Office.onReady((info) => {
 
     // Assign event handlers and other initialization logic.
     document.getElementById("create-table").onclick = createTable;
+    document.getElementById("filter-table").onclick = filterTable;
   }
 });
 
@@ -43,6 +44,24 @@ async function createTable() {
     expensesTable.columns.getItemAt(3).getRange().numberFormat = [["\u20AC#,##0.00"]];
     expensesTable.getRange().format.autofitColumns();
     expensesTable.getRange().format.autofitRows();
+
+    await context.sync();
+  }).catch(function (error) {
+    console.log("Error: " + error);
+    if (error instanceof OfficeExtension.Error) {
+      console.log("Debug info: " + JSON.stringify(error.debugInfo));
+    }
+  });
+}
+
+async function filterTable() {
+  await Excel.run(async (context) => {
+    // TODO1: Queue commands to filter out all expense categories except
+    //        Groceries and Education.
+    const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+    const expensesTable = currentWorksheet.tables.getItem("ExpensesTable");
+    const categoryFilter = expensesTable.columns.getItem("Category").filter;
+    categoryFilter.applyValuesFilter(["Education", "Groceries"]);
 
     await context.sync();
   }).catch(function (error) {
