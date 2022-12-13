@@ -35,6 +35,8 @@ async function toggleProtection(args) {
 
     // TODO2: Queue command to load the sheet's "protection.protected" property from
     //        the document and re-synchronize the document and task pane.
+    sheet.load("protection/protected");
+    await context.sync();
 
     if (sheet.protection.protected) {
       sheet.protection.unprotect();
