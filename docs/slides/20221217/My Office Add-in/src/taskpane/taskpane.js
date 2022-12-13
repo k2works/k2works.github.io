@@ -21,6 +21,7 @@ Office.onReady((info) => {
     document.getElementById("sort-table").onclick = sortTable;
     document.getElementById("create-chart").onclick = createChart;
     document.getElementById("freeze-header").onclick = freezeHeader;
+    document.getElementById("open-dialog").onclick = openDialog;
   }
 });
 
@@ -139,4 +140,25 @@ async function freezeHeader() {
       console.log("Debug info: " + JSON.stringify(error.debugInfo));
     }
   });
+}
+
+let dialog = null;
+
+function openDialog() {
+  // TODO1: Call the Office Common API that opens a dialog
+  Office.context.ui.displayDialogAsync(
+    "https://localhost:3000/popup.html",
+    { height: 45, width: 55 },
+
+    // TODO2: Add callback parameter.
+    function (result) {
+      dialog = result.value;
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
+    }
+  );
+}
+
+function processMessage(arg) {
+  document.getElementById("user-name").innerHTML = arg.message;
+  dialog.close();
 }
