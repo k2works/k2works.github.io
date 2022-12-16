@@ -1,0 +1,1 @@
+!function(){"use strict";function e(){var e=document.getElementById("name-box").value;Office.context.ui.messageParent(e)}Office.onReady().then((function(){document.getElementById("ok-button").onclick=e}))}();
