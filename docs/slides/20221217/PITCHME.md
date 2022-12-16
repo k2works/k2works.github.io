@@ -68,7 +68,11 @@ async function runSql() {
     await context.sync();
   });
 }
+```
 
+---
+
+```JavaScript
 /**
  * 全件選択
  * SELECT * FROM Student;
@@ -138,8 +142,6 @@ async function runDB() {
 https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js
 ```
 
----
-
 ```JavaScript
 type reservableRoom = {
   meetingRoom: {
@@ -179,6 +181,8 @@ https://cdnjs.cloudflare.com/ajax/libs/mocha/2.2.1/mocha.min.js
 https://unpkg.com/expect@%3C21/umd/expect.min.js
 @types/jest
 ```
+
+---
 
 ```HTML
 <div id="mocha">
@@ -310,5 +314,4 @@ async function ヒャッハー() {
 * [Excel JavaScript API overview - Office Add-ins | Microsoft Learn](https://learn.microsoft.com/en-us/office/dev/add-ins/reference/overview/excel-add-ins-reference-overview)
 * [Excel add-ins overview - Office Add-ins | Microsoft Learn](https://learn.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-overview)
 * [script-lab/README.md at master · OfficeDev/script-lab (](https://github.com/OfficeDev/script-lab/blob/master/README.md)[github.com](github.com))
-
----
+* [Excel JavaScript API Demo.EXCEL.yaml](https://gist.github.com/k2works/b41fc6cc166931baf78ffe7df6b0fe8d)
