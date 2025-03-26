@@ -1,8 +1,8 @@
-site_name: Intercept Booster2 Documentation
-site_description: Documentation for the Intercept Booster2 project
+site_name: K2works Documentation
+site_description: Documentation for K2works
 site_author: Project Team
-repo_url: https://github.com/k2works/intercept-booster-2-sample
-repo_name: intercept-booster-2-sample
+repo_url: https://github.com/k2works/k2works.github.io
+repo_name: k2works.github.io
 
 theme:
   name: material
