@@ -1,0 +1,30 @@
+/* Custom styles for diagrams */
+
+/* Mermaid diagrams */
+.mermaid {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* PlantUML diagrams */
+.plantuml {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* General diagram container */
+.diagram-container {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Responsive diagrams */
+@media only screen and (max-width: 600px) {
+    .mermaid, .plantuml {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+}

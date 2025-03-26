@@ -1,0 +1,751 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:stem:
+:source-highlighter: coderay
+
+# 運用
+
+## NPMスクリプトとは
+NPMスクリプトは、Node.jsのパッケージマネージャであるnpmで提供される機能の1つです。NPMスクリプトを使用すると、JavaScriptアプリケーションの開発、テスト、ビルド、デプロイなどのタスクを自動化できます。NPMスクリプトは、package.jsonファイルに定義され、npm runコマンドを使用して実行できます。
+
+開発中のWebアプリケーションを運用するために使用するモジュール群です。以下でそれぞれの役割を説明します。
+
+- npm-run-all: 複数のnpm scriptコマンドを同時に実行したり、シーケンシャルに実行したりすることができるパッケージです。
+- cpx: ファイルのコピーを簡単に実行することができるツールです。
+- rimraf: ファイルやディレクトリを削除するためのパッケージです。通常、rm -rfの代替手段として使用されます。
+
+これらのツールを使用することで、エラーハンドリングやファイル操作などを簡単に処理することができます。特に、npm run scriptにおいて便利な機能を提供します。
+
+[sources, bash]
+----
+npm install --save-dev npm-run-all cpx rimraf
+----
+
+## Gulpとは
+Gulpは、JavaScriptアプリケーションの開発、テスト、ビルド、デプロイなどのタスクを自動化するためのJavaScriptタスクランナーです。Gulpは、プラグインを使用して、JavaScript、CSS、画像などのファイルを処理できます。Gulpは、gulpfile.jsファイルに定義されたタスクを実行することができます。
+
+. Gulpをインストールします
++
+[sources, bash]
+----
+npm install --save-dev gulp
+----
++
+. Gulpタスクを作成します
++
+. `ops/gulp/tasks/core.js`
++
+[sources, javascript]
+----
+const tasks =  {
+    task1: (cb) => {
+        // place code for your default task here
+        cb();
+    }
+}
+
+exports.tasks = tasks;
+----
++
+. `gulpfile.cjs`
++
+[sources, javascript]
+----
+const { series, parallel } = require('gulp');
+const core = require('./ops/gulp/tasks/core');
+
+exports.default = core.tasks;
+----
++
+. Gulpタスクを実行します
++
+[sources, bash]
+----
+npx gulp --tasks
+npx gulp
+----
+
+## Asciidocとは
+Asciidocは、テキストベースのドキュメントフォーマットであり、HTML、PDF、EPUBなどのフォーマットに変換できます。Asciidocは、ドキュメントの構造を定義するためのマークアップ言語であり、テキストエディタで編集できます。Asciidocは、Node.jsのパッケージマネージャであるnpmで提供されています。
+
+. Asciidocをインストールします
++
+[sources, bash]
+----
+npm install --save-dev asciidoctor asciidoctor-kroki
+----
++
+. Asciidocファイルを作成します
++
+`docs` ディレクトリに `index.adoc` と `sample.adoc` ファイルを作成し、`images` ディレクトリを作成し、以下の内容を記述します。
++
+. `index.adoc`
++
+[sources, asciidoc]
+----
+:toc: left
+:toclevels: 5
+:sectnums:
+
+= Asciidoc
+
+== 目的
+
+== 前提
+
+== 構成
+
+=== link:./sample.html[サンプル^][[anchor-1]]
+
+== 参照
+
+* link:/docs/sample.html[サンプル^]
+----
++
+. `sample.adoc`
++
+[sources, asciidoc]
+----
+:toc: left
+:toclevels: 5
+:sectnums:
+:stem:
+:source-highlighter: coderay
+
+= AppTemplate
+
+== 仕様
+
+=== マインドマップ
+[plantuml]
+`----
+@startmindmap
++ root
+++ right
++++ right right
+*** right2
+-- left
+--- left left
+-- left2
+@endmindmap
+`----
+
+=== 数式
+
+https://asciidoctor.org/docs/user-manual/#activating-stem-support[Using Multiple Stem Interpreters^]
+
+stem:[sqrt(4) = 2]
+
+Water (stem:[H_2O]) is a critical component.
+
+[stem]
+++++
+sqrt(4) = 2
+++++
+
+latexmath:[C = \alpha + \beta Y^{\gamma} + \epsilon]
+
+== 設計
+
+=== TODOリスト
+* [ ] TODO
+* [x] [line-through]#TODO DONE#
+
+=== ユースケース図
+[plantuml]
+`----
+left to right direction
+skinparam packageStyle rectangle
+actor customer
+actor clerk
+rectangle checkout {
+  customer -- (checkout)
+  (checkout) .> (payment) : include
+  (help) .> (checkout) : extends
+  (checkout) -- clerk
+}
+`----
+
+=== クラス図
+[plantuml]
+`----
+class Car
+Driver - Car : drives >
+Car *- Wheel : have 4 >
+Car -- Person : < owns
+`----
+
+=== シーケンス図
+[plantuml]
+`----
+participant User
+User -> A: DoWork
+activate A
+A -> B: << createRequest >>
+activate B
+B -> C: DoWork
+activate C
+C --> B: WorkDone
+destroy C
+B --> A: RequestCreated
+deactivate B
+A -> User: Done
+deactivate A
+`----
+
+=== 数式
+
+https://asciidoctor.org/docs/user-manual/#activating-stem-support[Using Multiple Stem Interpreters^]
+
+stem:[sqrt(4) = 2]
+
+Water (stem:[H_2O]) is a critical component.
+
+[stem]
+++++
+sqrt(4) = 2
+++++
+
+latexmath:[C = \alpha + \beta Y^{\gamma} + \epsilon]
+
+== 開発
+
+== 参照
+----
++
+`'----` は `----` に変更してください。
++
+. Gulpタスクを作成します
++
+[sources, javascript]
+----
+const { series, watch, src, dest } = require('gulp');
+const fs = require('fs-extra');
+const kroki = require('asciidoctor-kroki');
+
+const asciidoctor = {
+    clean: async (cb) => {
+        await fs.remove("./public/docs"); // fs-extraでディレクトリを非同期で削除
+        cb(); // コールバック関数を呼び出す
+    },
+    build: (cb) => {
+        const asciidoctor = require("@asciidoctor/core")();
+        const krokiRegister = () => {
+            const registry = asciidoctor.Extensions.create();
+            kroki.register(registry);
+            return registry;
+        };
+
+        const inputRootDir = "./docs";
+        const outputRootDir = "./public/docs";
+        const fileNameList = fs.readdirSync(inputRootDir);
+        const docs = fileNameList.filter(RegExp.prototype.test, /.*\.adoc$/);
+
+        docs.map((input) => {
+            const file = `${inputRootDir}/${input}`;
+            asciidoctor.convertFile(file, {
+                safe: "safe",
+                extension_registry: krokiRegister(),
+                to_dir: outputRootDir,
+                mkdirs: true,
+            });
+        });
+        src(`${inputRootDir}/images/*.*`).pipe(dest(`${outputRootDir}/images`))
+            .on('end', cb); // src.pipeの完了後にcb()を実行
+    },
+}
+
+exports.docs = series(asciidoctor.clean, asciidoctor.build);
+----
++
+. Gulpタスクを実行します
++
+[source, bash]
+----
+npx gulp docs
+----
++
+`public` ディレクトリはgit管理対象外にするため.gitignoreに以下を追加します。
++
+[sources, file]
+----
+/public
+----
+
+## BrowserSyncとは
+BrowserSyncは、ブラウザーの自動リロード、CSSのインジェクション、デバイス同期などの機能を提供するJavaScriptライブラリです。BrowserSyncは、gulpfile.jsファイルに定義されたタスクを実行することができます。
+
+. BrowserSyncをインストールします
++
+[sources, bash]
+----
+npm install --save-dev browser-sync
+----
++
+. Gulpタスクを変更します
++
+[sources, javascript]
+----
+const { series, watch, src, dest } = require('gulp');
+const fs = require('fs-extra');
+const kroki = require('asciidoctor-kroki');
+const browserSync = require('browser-sync').create();
+
+const asciidoctor = {
+    clean: async (cb) => {
+        await fs.remove("./public/docs"); // fs-extraでディレクトリを非同期で削除
+        cb(); // コールバック関数を呼び出す
+    },
+    build: (cb) => {
+        const asciidoctor = require("@asciidoctor/core")();
+        const krokiRegister = () => {
+            const registry = asciidoctor.Extensions.create();
+            kroki.register(registry);
+            return registry;
+        };
+
+        const inputRootDir = "./docs";
+        const outputRootDir = "./public/docs";
+        const fileNameList = fs.readdirSync(inputRootDir);
+        const docs = fileNameList.filter(RegExp.prototype.test, /.*\.adoc$/);
+
+        docs.map((input) => {
+            const file = `${inputRootDir}/${input}`;
+            asciidoctor.convertFile(file, {
+                safe: "safe",
+                extension_registry: krokiRegister(),
+                to_dir: outputRootDir,
+                mkdirs: true,
+            });
+        });
+        src(`${inputRootDir}/images/*.*`).pipe(dest(`${outputRootDir}/images`))
+            .on('end', cb); // src.pipeの完了後にcb()を実行
+    },
+    watch: (cb) => {
+        watch("./docs/**/*.adoc", asciidoctor.build);
+        cb();
+    },
+    server: (cb) => {
+        browserSync.init({
+            server: {
+                baseDir: "./public",
+            },
+        });
+        watch("./public/**/*.html").on("change", browserSync.reload);
+        cb();
+    },
+}
+
+exports.docs = series(asciidoctor.clean, asciidoctor.build, asciidoctor.watch, asciidoctor.server)
+----
++
+. `gulpfile.cjs`
++
+[source, javascript]
+----
+const { series, parallel } = require('gulp');
+const core = require('./gulp/tasks/core');
+
+exports.default = core.tasks.task1;
+exports.docs = core.docs;
+----
++
+. Gulpタスクを実行します
++
+[source, bash]
+----
+npx gulp docs
+----
++
+`http://localhost:3000/docs/` にアクセスします。
++
+これで、adocファイルを編集するたびにドキュメントがビルドされブラウザが自動でリロードされます。
+
+## Marpとは
+
+Marpは、Markdownを使用してスライドを作成するためのJavaScriptアプリケーションです。Marpは、スライドのデザインをカスタマイズするためのテーマを提供し、PDF、HTML、PNGなどのフォーマットにエクスポートできます。Marpは、Node.jsのパッケージマネージャであるnpmで提供されています。
+
+. Marpをインストールします
++
+[sources, bash]
+----
+npm install --save-dev @marp-team/marp-cli
+----
++
+. スライドを作成します、`docs` ディレクトリに `slides` `slides/images` ディレクトリを作成します。
++
+`./docs/slides/PITCHME.md`
++
+[sources, markdown]
+----
+---
+marp: true
+---
+
+### タイトル
+
+---
+
+### 構成
+
+- 自己紹介
+- トピック 1
+- トピック 2
+- トピック 3
+
+---
+
+### 自己紹介
+
+---
+
+### トピック 1
+
+---
+
+### トピック 2
+
+---
+
+### トピック 3
+
+---
+
+### おわり
+
+---
+
+### 参照
+
+---
+----
++
+. スライドをビルドします
++
+[source, bash]
+----
+npx marp --html --pdf ./docs/slides/PITCHME.md
+----
++
+. Gulpタスクを追加します
++
+[sources, javascript]
+----
+const marp = {
+    build: (cb) => {
+        const { marpCli } = require('@marp-team/marp-cli')
+        const inputRootDir = "./docs/slides";
+        const outputRootDir = "./public/docs/slides";
+
+        marpCli([
+            `${inputRootDir}/PITCHME.md`,
+            "--html",
+            "--output",
+            `${outputRootDir}/index.html`,
+        ])
+            .then((exitStatus) => {
+                if (exitStatus > 0) {
+                    console.error(`Failure (Exit status: ${exitStatus})`);
+                } else {
+                    console.log("Success");
+                }
+            })
+            .catch(console.error);
+
+        src(`${inputRootDir}/images/*.*`).pipe(dest(`${outputRootDir}/images`));
+
+        cb();
+    },
+    clean: async (cb) => {
+        await fs.remove("./public/docs/slides");
+        cb();
+    },
+    watch: (cb) => {
+        watch("./docs/slides/**/*.md", marp.build);
+        cb();
+    }
+}
+
+exports.slides = series(marp.build);
+----
++
+. Gulpタスクを実行します
++
+[source, bash]
+----
+npx gulp slides
+----
+
+## 既存のnpmタスクを統合する
+既存のnpmタスクを統合するには、gulpfile.jsファイルにタスクを定義し、npmスクリプトを使用してタスクを実行します。タスクは、JavaScript関数として定義され、gulpプラグインを使用して、JavaScript、CSS、画像などのファイルを処理できます。
+
+. webpackのタスクを追加します
++
+[sources, javascript]
+----
+const webpackConfig = require("../../../webpack.config");
+const webpack = {
+    clean: async (cb) => {
+        await fs.remove("./public");
+        cb();
+    },
+    build: (cb) => {
+        const webpack = require("webpack");
+        webpack(webpackConfig, (err, stats) => {
+            if (err || stats.hasErrors()) {
+                console.error(err);
+            }
+            cb();
+        });
+    },
+    watch: (cb) => {
+        const webpack = require("webpack");
+        const compiler = webpack(webpackConfig);
+        compiler.watch({}, (err, stats) => {
+            if (err || stats.hasErrors()) {
+                console.error(err);
+            }
+        });
+        cb();
+    },
+    server: (cb) => {
+        const webpack = require("webpack");
+        const compiler = webpack(webpackConfig);
+        const WebpackDevServer = require("webpack-dev-server");
+
+        // デフォルトのdevServer設定をクリーンアップする
+        const { _assetEmittingPreviousFiles, ...validDevServerOptions } = webpackConfig.devServer;
+
+        const devServerOptions = Object.assign({}, validDevServerOptions, {
+            open: false,
+        });
+
+        const server = new WebpackDevServer(devServerOptions, compiler);
+        server.start(devServerOptions.port, devServerOptions.host, () => {
+            console.log("Starting server on http://localhost:8080");
+        });
+        cb();
+
+        // 古いバージョン用のオプションがある場合
+        // server.listen(devServerOptions.port, devServerOptions.host, () => {
+        //     console.log("Starting server on http://localhost:8080");
+        // });
+    },
+}
+exports.webpackBuildTasks = () => {
+    return series(webpack.clean, webpack.build);
+}
+
+exports.webpack = webpack;
+----
++
+. 既存タスクを更新します
++
+[sources, javascript]
+----
+const tasks =  {
+    task1: (cb) => {
+        // place code for your default task here
+        cb();
+    }
+}
+
+exports.tasks = tasks;
+
+const { series, watch, src, dest } = require('gulp');
+const fs = require('fs-extra');
+const kroki = require('asciidoctor-kroki');
+const browserSync = require('browser-sync').create();
+
+const asciidoctor = {
+    clean: async (cb) => {
+        await fs.remove("./public/docs"); // fs-extraでディレクトリを非同期で削除
+        cb(); // コールバック関数を呼び出す
+    },
+    build: (cb) => {
+        const asciidoctor = require("@asciidoctor/core")();
+        const krokiRegister = () => {
+            const registry = asciidoctor.Extensions.create();
+            kroki.register(registry);
+            return registry;
+        };
+
+        const inputRootDir = "./docs";
+        const outputRootDir = "./public/docs";
+        const fileNameList = fs.readdirSync(inputRootDir);
+        const docs = fileNameList.filter(RegExp.prototype.test, /.*\.adoc$/);
+
+        docs.map((input) => {
+            const file = `${inputRootDir}/${input}`;
+            asciidoctor.convertFile(file, {
+                safe: "safe",
+                extension_registry: krokiRegister(),
+                to_dir: outputRootDir,
+                mkdirs: true,
+            });
+        });
+        src(`${inputRootDir}/images/*.*`).pipe(dest(`${outputRootDir}/images`))
+            .on('end', cb); // src.pipeの完了後にcb()を実行
+    },
+    watch: (cb) => {
+        watch("./docs/**/*.adoc", asciidoctor.build);
+        cb();
+    },
+    server: (cb) => {
+        browserSync.init({
+            server: {
+                baseDir: "./public",
+            },
+        });
+        watch("./public/**/*.html").on("change", browserSync.reload);
+        cb();
+    },
+}
+
+exports.asciidoctor = asciidoctor;
+exports.asciidoctorBuildTasks = () => {
+    return series(asciidoctor.clean, asciidoctor.build);
+}
+
+const marp = {
+    build: (cb) => {
+        const { marpCli } = require('@marp-team/marp-cli')
+        const inputRootDir = "./docs/slides";
+        const outputRootDir = "./public/docs/slides";
+
+        marpCli([
+            `${inputRootDir}/PITCHME.md`,
+            "--html",
+            "--output",
+            `${outputRootDir}/index.html`,
+        ])
+            .then((exitStatus) => {
+                if (exitStatus > 0) {
+                    console.error(`Failure (Exit status: ${exitStatus})`);
+                } else {
+                    console.log("Success");
+                }
+            })
+            .catch(console.error);
+
+        src(`${inputRootDir}/images/*.*`).pipe(dest(`${outputRootDir}/images`));
+
+        cb();
+    },
+    clean: async (cb) => {
+        await fs.remove("./public/docs/slides");
+        cb();
+    },
+    watch: (cb) => {
+        watch("./docs/slides/**/*.md", marp.build);
+        cb();
+    }
+}
+
+exports.marp = marp;
+exports.marpBuildTasks = () => {
+    return series(marp.clean, marp.build);
+}
+----
++
+. 既存のタスクと統合します
++
+[sources, javascript]
+----
+const { series, parallel } = require('gulp');
+const core = require('./gulp/tasks/core');
+
+exports.default = series(
+    core.webpackBuildTasks(),
+    parallel(
+        core.asciidoctorBuildTasks(),
+        core.marpBuildTasks(),
+    ),
+    series(
+        parallel(core.webpack.server, core.asciidoctor.server),
+        parallel(core.webpack.watch, core.asciidoctor.watch, core.marp.watch),
+    ),
+);
+
+exports.build = series(
+    core.webpackBuildTasks(),
+    parallel(
+        core.asciidoctorBuildTasks(),
+        core.marpBuildTasks(),
+    )
+);
+
+exports.docs = series(
+    parallel(core.asciidoctorBuildTasks(), core.marpBuildTasks()),
+    parallel(core.asciidoctor.server, core.asciidoctor.watch, core.marp.watch),
+);
+exports.slides = series(core.marp.build);
+----
++
+. package.jsonのscriptsを更新します
++
+[sources, json]
+----
+{
+  "scripts": {
+    "start": "npx gulp",
+    "build": "npx gulp build",
+    "slides": "npx gulp slides",
+    "docs": "npx gulp docs"
+  },
+}
+----
++
+. `index.html` を更新します
++
+[sources, html]
+----
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash-fp/0.10.4/lodash-fp.min.js" integrity="sha512-CVmmJBSbtBlLKXTezdj4ZwjIXQpnWr934eJlR6r3sUIwUV/5ZLa4tfI5Ge7Dth/TJD0h79X0PGycINUu1pv/bg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    window.fp = _.noConflict()
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+</head>
+
+<body>
+  <h1>アプリケーション</h1>
+  <h2>
+    <a href="./docs/slides/index.html" target="_blank">ガイド</a>
+  </h2>
+  <h2>
+    <a href="./docs/index.html" target="_blank">ドキュメント</a>
+  </h2>
+  <div id="app"></div>
+  <div class="dev" id="app-dev"></div>
+</body>
+
+</html>
+----
++
+. `webpack.config.js` を修正します
++
+[source, javascript]
+----
+...
+    output: {
+        path: __dirname + '/public',
+        filename: 'bundle.js',
+    },
+...
+----
++
+. npmタスクからgulpのdefaultタスクを実行します。
++
+[sources, bash]
+----
+npm start
+----

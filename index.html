@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash-fp/0.10.4/lodash-fp.min.js" integrity="sha512-CVmmJBSbtBlLKXTezdj4ZwjIXQpnWr934eJlR6r3sUIwUV/5ZLa4tfI5Ge7Dth/TJD0h79X0PGycINUu1pv/bg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    window.fp = _.noConflict()
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+</head>
+
+<body>
+<div id="header">
+  <h1>アプリケーション</h1>
+</div>
+<div id="nav">
+  <ul class="nav-sub-list">
+    <li class="nav-sub-item"><a href="docs/slides" target="_blank">ガイド</a></li>
+    <li class="nav-sub-item"><a href="docs" target="_blank">ドキュメント</a></li>
+    <li class="nav-sub-item"><a href="docs/adr/export.html" target="_blank">ADR</a></li>
+    <li class="nav-sub-item"><a href="https://plantuml.com/ja/" target="_blank">PlantUML</a></li>
+    <li class="nav-sub-item"><a href="https://docs.asciidoctor.org/asciidoc/latest/" target="_blank">AsciiDoc</a></li>
+    <li class="nav-sub-item"><a href="https://mermaid.js.org/intro/" target="_blank">Mermaid</a></li>
+  </ul>
+</div>
+<div id="main">
+  <div id="app"></div>
+  <div class="dev" id="app-dev"></div>
+</div>
+</body>
+
+</html>

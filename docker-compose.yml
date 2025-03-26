@@ -1,0 +1,134 @@
+version: '3'
+
+services:
+  db_mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    hostname: mysql
+    volumes:
+      - mysql8-data:/var/lib/mysql
+      - ./ops/docker/mysql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    command: --sql_mode=""
+
+  db_postgresql:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+      - ./ops/docker/postgres/init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      POSTGRES_DB: mydb
+    hostname: postgres
+    user: root
+
+  db_mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sql-server-2019-express
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+    env_file:
+      - ./ops/docker/mssql/sql-server-2019.env
+    volumes:
+      - ./ops/docker/mssql/data:/var/opt/mssql/data
+      - ./ops/docker/mssql/log:/var/opt/mssql/log
+      - ./ops/docker/mssql/secrets:/var/opt/mssql/sec
+
+  dynamodb-local:
+    image: instructure/dynamo-local-admin
+    container_name: dynamodb
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./ops/docker/dynamodb/data:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+
+  schemaspy_mysql:
+    build:
+      context: ops/docker
+      dockerfile: ./schemaspy/Dockerfile
+    volumes:
+      - ./ops/docker/schemaspy/output/mysql:/output
+      - ./ops/docker/schemaspy/config:/config
+    container_name: "schemaspy_local_mysql"
+    command: [ "-all", "-configFile", "/config/mysql/schemaspy.properties" ]
+    links:
+      - db_mysql
+  schemaspy_postgresql:
+    build:
+      context: ops/docker
+      dockerfile: ./schemaspy/Dockerfile
+    volumes:
+      - ./ops/docker/schemaspy/output/postgresql:/output
+      - ./ops/docker/schemaspy/config:/config
+    container_name: "schemaspy_local_postgresql"
+    command: [ "-all", "-configFile", "/config/postgresql/schemaspy.properties" ]
+    links:
+      - db_postgresql
+
+  wiki_db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wiki
+      MYSQL_PASSWORD: wikijsrocks
+      MYSQL_USER: wikijs
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - wiki-db-data:/var/lib/mysql
+      - ./ops/docker/wiki/dump:/dump
+    ports:
+      - "3306:3306"
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    environment:
+      DB_TYPE: mysql
+      DB_HOST: wiki_db
+      DB_PORT: 3306
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    links:
+      - wiki_db
+      - plantuml
+      - mkdocs
+    ports:
+      - "80:3000"
+
+  plantuml:
+    image: plantuml/plantuml-server:jetty
+    environment:
+      BASE_URL: plantuml
+    ports:
+      - "9999:8080"
+
+  mkdocs:
+    build:
+      context: .
+      dockerfile: ./ops/docker/mkdocs/Dockerfile
+    volumes:
+      - ./docs/wiki:/docs/docs
+      - ./mkdocs.yml:/docs/mkdocs.yml
+    ports:
+      - "9000:8000"
+    command: mkdocs serve --dev-addr=0.0.0.0:8000
+    links:
+      - plantuml
+
+volumes:
+  mysql8-data:
+  postgresql-data:
+  wiki-db-data:

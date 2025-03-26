@@ -1,0 +1,887 @@
+:toc: left
+:toclevels: 5
+:sectnums:
+:stem:
+:source-highlighter: coderay
+
+# 構築
+
+## 開発環境の構築
+
+JavaScript 開発環境を構築するためには、以下の手順を実行してください。
+
+### バージョンマネージャー
+
+バージョンマネージャーを使用することで、異なるバージョンの Node.js を簡単に切り替えることができます。以下の手順でバージョンマネージャーをセットアップしてください。
+
+#### バージョンマネージャーのセットアップ
+
+. NVM をインストールします。NVM は、Node.js のバージョンを管理するためのツールです。以下のコマンドを実行して、NVM をインストールしてください。
++
+[source,bash]
+----
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0...0/install.sh | bash
+----
++
+. npm をインストールします。npm は、Node.js のパッケージマネージャーです。以下のコマンドを実行して、npm をインストールしてください。
++
+[source,bash]
+----
+nvm list
+nvm install lts
+npm -v
+----
++
+. yarn をインストールします。yarn は、npm の代替となるパッケージマネージャーです。以下のコマンドを実行して、yarn をインストールしてください。
++
+[source,bash]
+----
+npm install -g yarn
+yarn -v
+----
++
+. ターミナルを再起動します。
+
+### モジュールバンドラー
+
+モジュールバンドラーを使用することで、複数の JavaScript ファイルを一つのファイルにまとめることができます。以下の手順でモジュールバンドラーをセットアップしてください。
+
+#### モジュールバンドラーのセットアップ
+
+. package.json ファイルを作成します。以下のコマンドを実行して、package.json ファイルを作成してください。
++
+[source,bash]
+----
+npm init -y
+----
++
+-y オプションを指定することで、package.json ファイルの内容をデフォルト値で作成することができます。
++
+. Babel をインストールします。Babel は、トランスパイラの一つです。以下のコマンドを実行して、Babel をインストールしてください。
++
+[source,bash]
+----
+npm install --save-dev @babel/preset-env
+----
++
+--save-dev オプションを指定することで、package.json ファイルの devDependencies にパッケージを追加することができます。
++
+. Webpack をインストールします。Webpack は、モジュールバンドラーの一つです。以下のコマンドを実行して、Webpack をインストールしてください。
++
+[source,bash]
+----
+npm install --save-dev webpack webpack-cli
+npx webpack --version
+----
+npx コマンドは、npm パッケージを実行するためのコマンドです。npx コマンドを使用することで、ローカルにインストールされている npm パッケージを実行することができます。
++
+. webpack.config.js ファイルを作成します。以下のコマンドを実行して、webpack.config.js ファイルを作成してください。
++
+[source,bash]
+----
+touch webpack.config.js
+----
++
+. webpack.config.js ファイルに以下の内容を記述してください。
++
+[source,javascript]
+----
+module.exports = {
+  mode: 'development',
+  entry: './index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js',
+  },
+};
+----
++
+. package.json ファイルに以下の内容に変更してください。
++
+[source,json]
+----
+{
+  "scripts": {
+    "build": "webpack"
+  }
+}
+----
+
+#### モジュールバンドラーの実行
+
+. ./src/sample_es.js ファイルを作成してください。
++
+[source,javascript]
+----
+function greeting(name) {
+  return 'Hello ' + name;
+}
+
+module.exports = greeting;
+----
++
+. ./src/index.js ファイルを変更してください。
++
+[source,javascript]
+----
+var greeting = require('./src/sample_es5.js');
+
+console.log(greeting('ES5'));
+----
++
+. 以下のコマンドを実行して、モジュールバンドラーを実行してください。
++
+[source,bash]
+----
+npm run build
+----
++
+. ./dist/bundle.js ファイルが作成されていることを確認してください。
++
+. ./dist/bundle.js ファイルを実行してください。
++
+[source,bash]
+----
+node ./dist/bundle.js
+----
+
+#### モジュールバンドラーの設定
+
+. ./src/sample_es6.js ファイルを作成してください。
++
+[source,javascript]
+----
+class Greeting {
+  constructor(name) {
+    this.name = name;
+  }
+  say() {
+    console.log(`Hello ${this.name}`);
+  }
+}
+
+export default Greeting;
+----
++
+. ./index.js ファイルを変更してください。
++
+[source,javascript]
+----
+var greeting = require('./sample_es6.js');
+console.log(greeting('ES.));
+
+var greet = require('./src/sample_es6.js');
+var g = new greet.default('ES6');
+g.say();
+----
++
+. 以下のコマンドを実行して、モジュールバンドラーを実行してください。
++
+[source,bash]
+----
+npm run build
+----
++
+. ./dist/bundle.js ファイルが作成されていることを確認してください。
++
+. ./dist/bundle.js ファイルを実行してください。
++
+[source,bash]
+----
+node ./dist/bundle.js
+----
++
+. 現状では ES5のコードをそのまま出力しています。ES6に変換するためには、babel-loader を使用します。 パッケージをインストールして webpack.config.js に以下のコードを変更してください。
++
+[source,bash]
+----
+npm install --save-dev babel-loader
+----
++
+[source,javascript]
+----
+module.exports = {
+  mode: 'development',
+  entry: './index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
+          },
+        ],
+      },
+    ],
+  },
+  target: ['web', 'es5'],
+};
+----
++
+. 以下のコマンドを実行して、モジュールバンドラーを実行してください。
++
+[source,bash]
+----
+npm run build
+----
++
+. ./dist/bundle.js ファイルが作成されていることを確認してください。
++
+. ./dist/bundle.js ファイルを実行してください。
++
+[source,bash]
+----
+node ./dist/bundle.js
+----
+
+### webpack-dev-server のセットアップ
+
+webpack-dev-server を使用することで、開発中に自動的にビルドを実行し、ブラウザをリロードすることができます。以下の手順で webpack-dev-server をセットアップしてください。
+
+#### webpack-dev-server のインストール
+
+. 以下のコマンドを実行して、webpack-dev-server をインストールしてください。
++
+[source, bash]
+----
+npm install --save-dev webpack-dev-server
+----
+
+#### webpack-dev-server の設定
+
+. webpack.config.js ファイルを開き、以下の内容を追加してください。
++
+[source,javascript]
+----
+const path = require('path');
+
+module.exports = {
+  //...
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
+    port: 9000,
+  },
+};
+----
+
+#### webpack-dev-server の実行
+
+. 以下のコマンドを実行して、webpack-dev-server を実行してください。
++
+[source, bash]
+----
+npx webpack serve
+----
++
+終了する場合は、Ctrl + C を押してください。
++
+. HTMLWebpackPlugin プラグインを使用して js ファイルに自動的にバンドルされた script タグを生成し、index.html に挿入できるようにします。
++
+[source, bash]
+----
+npm install --save-dev html-webpack-plugin
+----
++
+. プロジェクト直下に index.html を作成してください。
++
+[source, html]
+----
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>App</title>
+  </head>
+  <body>
+    <h.アプリケーション</h.
+  </body>
+</html>
+----
++
+. webpack.config.js ファイルを開き、以下の内容を追加してください。
++
+[source,javascript]
+----
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  // ...他のWebpack設定
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'index.html',
+    }),
+  ],
+};
+----
++
+. package.json ファイルを開き、以下の内容を追加してください。
++
+[source,json]
+----
+{
+  // ...他の設定
+  "scripts": {
+    "start": "webpack server --config ./webpack.config.js --open"
+  }
+}
+----
++
+. 以下のコマンドを実行して、webpack-dev-server を実行してください。
++
+[source, bash]
+----
+npm start
+----
++
+. ソースマップを有効にすることで、開発中にエラーが発生した場合に、エラーが発生したファイル名と行数を表示することができます。
++
+[source, javascript]
+----
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const env = process.env.NODE_ENV || "development";
+const isDevelopment = env === "development";
+
+module.exports = {
+  mode: env,
+  devtool: isDevelopment ? "source-map" : false,
+...
+----
++
+. CSSサポートを追加します。
++
+[source, bash]
+----
+npm install --save-dev style-loader css-loader
+----
++
+`webpack.config.js`
++
+[source, javascript]
+----
+module.exports = {
+  // ...他のWebpack設定
+
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env'],
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.css/,
+                use: [
+                    "style-loader",
+                    {
+                        loader: "css-loader",
+                        options: {
+                            url: false,
+                            sourceMap: true,
+                        }
+                    }
+                ]
+            },
+        ],
+    },
+};
+----
++
+`style.css`
++
+[srouce, css]
+----
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 10;
+    padding: 10;
+    font-family: -apple-system, "游ゴシック Medium", "Yu Gothic Medium",
+    "游ゴシック体", YuGothic, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic ProN",
+    "メイリオ", Meiryo, sans-serif;
+    font-feature-settings: "palt"; /* プロポーショナルメトリクスを有効に */
+}
+----
++
+`index.js`
++
+[source, javascript]
+----
+import "./style.css";
+----
+
+### 開発ツールのセットアップ
+
+開発ツールを使用することで、開発効率を向上させることができます。以下の手順で開発ツールをセットアップしてください。
+
+#### パッケージのインストール
+
+. 以下のコマンドを実行して、開発ツールをインストールしてください。
++
+[source, bash]
+----
+npm install --save-dev @k2works/full-stack-lab
+----
++
+`./index.html` を以下の内容に変更します。
++
+[source, html]
+----
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>App</title>
+  </head>
+  <body>
+    <h.アプリケーション</h.
+    <div id="app"></div>
+    <div id="app-dev"></div>
+  </body>
+</html>
+----
++
+`./src/app.js` を以下の内容に変更します。
++
+[source, javascript]
+----
+console.log('app.js: loaded');
+export class App {
+  constructor() {
+    console.log('App initialized');
+  }
+}
+
+export function sum(a, b) {
+  return a + b;
+}
+----
++
+`./index.js` をルート直下に移動して以下の内容変更します。
++
+[source, javascript]
+----
+import "./style.css";
+import render from "@k2works/full-stack-lab";
+import {sum} from "./src/app.js";
+
+console.log(sum(1, 2));
+
+const contents = `
+## 機能名
+## 仕様
+## TODOリスト
+`;
+
+const mindmap = `
+@startmindmap
++ root
+++ right
++++ right right
+*** right2
+-- left
+--- left left
+-- left2
+
+@endmindmap
+`;
+
+const usecase = `
+@startuml
+left to right direction
+actor "Actor" as ac
+rectangle Application {
+  usecase "UseCase1" as UC1
+  usecase "UseCase2" as UC2
+  usecase "UseCase3" as UC3
+}
+ac --> UC1
+ac --> UC2
+ac --> UC3
+@enduml
+`;
+
+const ui = `
+@startsalt
+{+
+  コレクション画面
+  {+
+  {
+  生徒
+  教員
+  組
+  部
+  イベント
+  } |
+  {
+    == 生徒
+    { + <&zoom-in> (          )}
+    {T#
+    + 田尻　智裕  | 3年B組    | 野球部 写真部
+    + 山田　太郎  | 3年A組    | 野球部
+    + 鈴木　花子  | 3年A組    | 写真部
+    }
+  }
+  }
+----------------
+  シングル画面
+  {+
+  {
+  生徒
+  教員
+  組
+  部
+  イベント
+  } |
+  {
+    {
+      <&person> <b>田尻 智裕
+    }
+    {
+      名前
+      田尻　智裕
+      組
+      3年B組
+      部
+      野球部 写真部
+      関連する生徒
+      田尻　智裕 山田　太郎　鈴木　花子
+    }
+  }
+  }
+}
+@endsalt
+`;
+
+const uiModel = `
+@startuml
+  class 部 {
+    名称
+    カテゴリー
+    生徒数
+    印刷()
+    新規()
+    削除()
+  }
+  class 生徒 {
+    氏名
+    成績
+    印刷()
+    新規()
+    削除()
+  }
+  class 組 {
+    名称
+    印刷()
+    新規()
+    削除()
+  }
+  class 教員 {
+    氏名
+    電話番号
+    印刷()
+    新規()
+    削除()
+  }
+  class イベント {
+    名称
+    日付
+    印刷()
+    新規()
+    削除()
+  }
+  部 *-* 生徒
+  部 *-- 教員
+  イベント *- 教員
+  生徒 --* 組
+`;
+
+const uiInteraction = `
+@startuml
+  イベント_コレクション --> イベント_シングル
+  イベント_シングル --> 教員_シングル
+  教員_コレクション --> 教員_シングル
+  教員_シングル --> 部_コレクション
+  教員_シングル <-> 組_シングル
+  組_コレクション --> 組_シングル
+  組_シングル --> 生徒_コレクション
+  生徒_コレクション --> 生徒_シングル
+  生徒_シングル -> 組_シングル
+  生徒_シングル --> 部_コレクション
+  部_コレクション --> 部_シングル
+  部_シングル --> 生徒_コレクション
+@enduml
+`;
+
+const uml = `
+@startuml
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+class ArrayList {
+  Object[] elementData
+  size()
+}
+enum TimeUnit {
+  DAYS
+  HOURS
+  MINUTES
+}
+annotation SuppressWarnings
+@enduml
+`;
+
+const erd = `
+@startuml
+' hide the spot
+hide circle
+' avoid problems with angled crows feet
+skinparam linetype ortho
+entity "Entity01" as e01 {
+  *e1_id : number <<generated>>
+  --
+  *name : text
+  description : text
+}
+entity "Entity02" as e02 {
+  *e2_id : number <<generated>>
+  --
+  *e1_id : number <<FK>>
+  other_details : text
+}
+entity "Entity03" as e03 {
+  *e3_id : number <<generated>>
+  --
+  e1_id : number <<FK>>
+  other_details : text
+}
+e01 ||..o{ e02
+e01 |o..o{ e03
+@enduml
+`;
+
+const mode = "APP"; // "UI" or "API" or "DOC"
+render({ mindmap, contents, ui, uiModel, uiInteraction, usecase, uml, erd, mode });
+----
++
+. 最後に不要なファイルを削除します。
+
+#### 開発ツールの設定
+
+. webpack.config.js を以下の内容に変更します。
++
+[source, javascript]
+----
+...
+  entry: './index.js',
+...
+----
+
+#### 開発ツールの実行
+
+. 以下のコマンドを実行して、開発ツールを実行してください。
++
+[source, bash]
+----
+npm start
+----
+
+### 開発ライブラリのセットアップ
+
+#### jQuery
+
+##### jQuery とは
+
+jQuery は、HTML ドキュメントを操作するための JavaScript ライブラリです。以下の手順で jQuery をセットアップしてください。
+
+##### jQuery の設定
+
+. HTMLにタグを追加して、link:https://cdnjs.com/[CDN] からjQueryを読み込む
++
+[source, html]
+----
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+----
++
+. WebpackでローカルにインストールされたjQueryを使わないように指示する
++
+`webpack.config.js`
++
+[source, javascript]
+----
+module.exports = {
+  // 他の設定は省略
+  externals: {
+    jquery: '$',
+  }
+}
+----
++
+. Webpackで$をグローバルであるように全てのファイルに指示する
++
+`webpack.config.js`
++
+[source, javascript]
+----
+const webpack = require("webpack");
+...
+module.exports = {
+  // 他の設定は省略
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+    }),
+  ],
+}
+----
+
+#### Lodash
+
+##### Lodash とは
+
+Lodash は、JavaScript のユーティリティライブラリです。以下の手順で Lodash をセットアップしてください。
+
+##### Lodash の設定
+
+. HTMLにタグを追加して、link:https://cdnjs.com/[CDN] からLodashを読み込む
++
+[source, html]
+----
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" referrerpolicy="no-referrer"></script>
+----
++
+. WebpackでローカルにインストールされたLodashを使わないように指示する
++
+`webpack.config.js`
++
+[source, javascript]
+----
+module.exports = {
+  // 他の設定は省略
+  externals: {
+    jquery: "$",
+    lodash: "_",
+  },
+}
+----
++
+. Webpackで_をグローバルであるように全てのファイルに指示する
++
+`webpack.config.js`
++
+[source, javascript]
+----
+module.exports = {
+  // 他の設定は省略
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.$": "jquery",
+      _: "lodash",
+      "window._": "lodash",
+    }),
+  ],
+}
+----
+
+#### Loadsh/fp
+
+##### Loadsh/fp とは
+
+lodash/fp は、Lodash の関数型プログラミング版です。以下の手順で lodash/fp をセットアップしてください。
+
+##### Loadsh/fpの設定
+
+. HTMLにタグを追加して、link:https://cdnjs.com/[CDN] からlodash/fpを読み込む
++
+[source,html]
+----
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash-fp/0.10.4/lodash-fp.min.js" integrity="sha512-CVmmJBSbtBlLKXTezdj4ZwjIXQpnWr934eJlR6r3sUIwUV/5ZLa4tfI5Ge7Dth/TJD0h79X0PGycINUu1pv/bg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    window.fp = _.noConflict()
+  </script>
+----
+
+#### Moment.js
+
+##### Moment.js とは
+
+Moment.js は、日付と時刻を操作するための JavaScript ライブラリです。以下の手順で Moment.js をセットアップしてください。
+
+##### Moment.js の設定
+
+. HTMLにタグを追加して、link:https://cdnjs.com/[CDN] からMoment.jsを読み込む
++
+[source,html]
+----
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+----
++
+. WebpackでローカルにインストールされたMoment.jsを使わないように指示する
++
+`webpack.config.js`
++
+[source,javascript]
+----
+module.exports = {
+  // 他の設定は省略
+  externals: {
+    jquery: "$",
+    lodash: "_",
+    moment: "moment",
+  },
+}
+----
++
+. Webpackでmomentをグローバルであるように全てのファイルに指示する
++
+`webpack.config.js`
++
+[source,javascript]
+----
+module.exports = {
+  // 他の設定は省略
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.$": "jquery",
+      _: "lodash",
+      "window._": "lodash",
+      moment: "moment",
+      "window.moment": "moment",
+    }),
+  ],
+}
+----

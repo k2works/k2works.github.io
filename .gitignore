@@ -17,3 +17,6 @@ node_modules
 .ionide
 .vscode
 __pycache__
+
+.idea
+WIP

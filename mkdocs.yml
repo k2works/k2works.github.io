@@ -1,0 +1,57 @@
+site_name: Intercept Booster2 Documentation
+site_description: Documentation for the Intercept Booster2 project
+site_author: Project Team
+repo_url: https://github.com/k2works/intercept-booster-2-sample
+repo_name: intercept-booster-2-sample
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+
+extra_css:
+  - ops/docker/mkdocs/assets/css/extra.css
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: plantuml
+          class: plantuml
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed
+  - pymdownx.tasklist
+  - pymdownx.emoji
+  - admonition
+  - toc:
+      permalink: true
+  - plantuml_markdown:
+      server: http://plantuml:8080/plantuml
+      format: svg
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js
+  - ops/docker/mkdocs/assets/js/extra.js
+
+extra:
+  plantuml_url: http://www.plantuml.com/plantuml
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/go-ddd
+      name: GitHub Repository
+
+plugins:
+  - search
+
+nav:
+  - Home: Home.md

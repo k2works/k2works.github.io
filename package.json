@@ -1,47 +1,42 @@
 {
-  "name": "k2works.github.io",
-  "version": "1.0.0",
+  "name": "",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
-    "blog:setup": "cd blog && npm install",
-    "blog:new": "cd blog && npx hexo new $(date \"+%s\")",
-    "blog:draft": "cd blog && npx hexo new draft $(date \"+%s\")",
-    "blog:publish": "cd blog && npx hexo publish post $(date \"+%s\")",
-    "blog:local": "cd blog && npm start",
-    "blog:deploy": "cd blog && npx hexo build && npx hexo deploy && npx hexo clean",
-    "docs:setup": "cd docs && npm install",
-    "docs:local": "cd docs && npm start",
-    "docs:build": "cd docs/scripts && pwsh -File ConvertMarkdownFromAsciidoc.ps1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx gulp",
+    "test": "npm-run-all build slides",
+    "build": "npx gulp build",
+    "dev": "npx gulp dev",
+    "slides": "npx gulp slides",
+    "docs": "npx gulp docs"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/k2works/k2works.github.io.git"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/k2works/k2works.github.io/issues"
-  },
-  "homepage": "https://github.com/k2works/k2works.github.io#readme",
   "devDependencies": {
-    "browser-sync": "^2.26.14",
-    "connect-browser-sync": "^2.1.0",
+    "@babel/preset-env": "^7.25.4",
+    "@marp-team/marp-cli": "^3.4.0",
+    "asciidoctor": "^3.0.4",
+    "asciidoctor-kroki": "^0.18.1",
+    "babel-loader": "^9.2.1",
+    "browser-sync": "^3.0.3",
     "cpx": "^1.5.0",
-    "foreman": "^3.0.1",
-    "markdown-to-html": "0.0.13",
-    "nodemon": "^2.0.7",
+    "css-loader": "^7.1.2",
+    "fs": "^0.0.1-security",
+    "gulp": "^5.0.0",
+    "html-webpack-plugin": "^5.6.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.2.1",
-    "rimraf": "^3.0.2",
-    "watch": "^1.0.2"
+    "rimraf": "^6.0.1",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
-    "hexo-cli": "^4.2.0"
+    "@k2works/adr": "^1.8.0",
+    "@k2works/full-stack-lab": "^1.8.0",
+    "fs-extra": "^11.2.0",
+    "gulp-exec": "^5.0.0",
+    "gulp-rename": "^2.0.0"
   }
 }
