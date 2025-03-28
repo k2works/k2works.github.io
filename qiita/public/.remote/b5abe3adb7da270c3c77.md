@@ -1,0 +1,397 @@
+---
+title: 環境構築から始めるテスト駆動開発 ~Ruby開発環境を構築する~
+tags:
+  - Ruby
+  - TDD
+  - VSCode
+  - 新人プログラマ応援
+private: false
+updated_at: '2021-04-10T11:57:10+09:00'
+id: b5abe3adb7da270c3c77
+organization_url_name: null
+slide: false
+ignorePublish: false
+---
+# 環境構築から始めるテスト駆動開発 ~Ruby開発環境を構築する~
+
+## はじめに
+
+これは [環境構築から始めるテスト駆動開発 ~ プログラミング環境の共通基盤を構築する ~](https://qiita.com/k2works/items/19d037814875b3a03eb3) の開発言語セットアップ記事です。Windows 10 Home で共通基盤が構築されていることを前提としています。
+
+<!-- more -->
+
+## インストール
+
+スタートメニューから `Windows PowerShell` を選択します。
+
+![pkg 001](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/pkg-001.png?raw=true)
+
+以下のコマンドを入力します。
+
+``` powershell
+scoop install ruby
+```
+
+インストール完了後に MSYS2 のインストールを促されるのでインストールします。
+
+``` powershell
+scoop install msys2
+```
+
+続いて、以下のコマンドを入力して `3` を指定して実行します。
+
+``` powershell
+ridk install
+```
+
+![ruby win install 001](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-install-001.png?raw=true)
+
+## 追加パッケージのインストール
+
+[Ruby for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby)
+
+[Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph)
+
+[vscode-endwise](https://marketplace.visualstudio.com/items?itemName=kaiwood.endwise)
+
+[ruby-rubocop](https://marketplace.visualstudio.com/items?itemName=misogi.ruby-rubocop)
+
+[Test Explorer UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer)
+
+[Ruby Test Explorer](https://marketplace.visualstudio.com/items?itemName=connorshea.vscode-ruby-test-adapter)
+
+## 設定
+
+新しいターミナルを開いて以下のコマンドを入力します。
+
+```bash
+gem install rubocop
+gem install ruby-debug-ide
+gem install solargraph
+gem install minitest
+```
+
+![ruby win vscode 003](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-vscode-003.png?raw=true)
+
+![ruby win vscode 004](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-vscode-004.png?raw=true)
+
+## Hello world
+
+### プログラムを作成する
+
+`Projects` フォルダ内に `Ruby` フォルダを作成してエディタからフォルダを開きます。
+
+![ruby win hello 001](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-001.png?raw=true)
+
+![ruby win hello 002](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-002.png?raw=true)
+
+![ruby win hello 003](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-003.png?raw=true)
+
+`新しいファイル` 作成アイコンを押します。
+
+![ruby win hello 004](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-004.png?raw=true)
+
+ファイル名は `main.rb` とします。
+
+![ruby win hello 005](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-005.png?raw=true)
+
+ファイルに以下のコードを入力したら Run アイコンを選択して `create a launch.json file` を押してメニューから Ruby を選択します。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, false)
+  end
+end
+```
+
+![ruby win hello 006](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-006.png?raw=true)
+
+`Debug Local File` を選択します。
+
+![ruby win hello 007](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-007.png?raw=true)
+
+`launch.json` ファイルが作成されたら `main.rb` タブに戻って F5 キーを押します。
+
+![ruby win hello 008](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-008.png?raw=true)
+
+デバッグコンソールに実行結果が表示されれば準備完了です。
+
+![ruby win hello 009](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-009.png?raw=true)
+
+テストをパスするようにコードを修正して F5 キーを押します。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+end
+```
+
+![ruby win hello 010](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-010.png?raw=true)
+
+テスティングフレームワークの動作が確認できたので `hello_world` 関数の作成に入ります。まず以下のコードを追加して F5 キーを押してテストが失敗することを確認します。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+```
+
+![ruby win hello 011](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-011.png?raw=true)
+
+`hello_world` 関数を追加してテストをパスさせます。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+end
+
+def hello_world
+  'Hello from Ruby'
+end
+```
+
+![ruby win hello 012](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-012.png?raw=true)
+
+指定された名前で挨拶を返すようにします。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world
+  "Hello from Ruby"
+end
+```
+
+![ruby win hello 013](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-013.png?raw=true)
+
+関数に引数を追加します。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name)
+  "Hello from #{name}"
+end
+```
+
+![ruby win hello 014](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-014.png?raw=true)
+
+`指定された名前で挨拶を返す` テストはパスしましたが今度は `簡単な挨拶を返す` テストが失敗するようになりましたのでデフォルト引数を設定してテストをパスするようにします。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何か便利なもの
+    assert_equal(true, true)
+  end
+
+  def test_簡単な挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+![ruby win hello 015](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-015.png?raw=true)
+
+仕上げに不要なテストを削除してテストケースの文言をわかりやすくしておきます。
+
+```ruby
+require 'minitest/autorun'
+
+class TestHelloWorld < Minitest::Test
+  def test_何も指定されていない場合は既定の挨拶を返す
+    assert_equal('Hello from Ruby', hello_world)
+  end
+
+  def test_指定された名前で挨拶を返す
+    assert_equal('Hello from VSCode', hello_world('VSCode'))
+  end
+end
+
+def hello_world(name = 'Ruby')
+  "Hello from #{name}"
+end
+```
+
+![ruby win hello 016](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-hello-016.png?raw=true)
+
+### プログラムをデバッグする
+
+まず確認したいプログラムの行を左部分を押してブレークポイント（赤丸）を設定します。
+
+![ruby win debug 001](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-debug-001.png?raw=true)
+
+ブレークポイントを設定したら F5 を押してプログラムの実行します。そうするとブレークポイント部分でプログラムが停止して変数などの情報が確認できるようになります。
+
+![ruby win debug 002](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-debug-002.png?raw=true)
+
+画面上の実行ボタンを押すと次のブレークポイントに移動します。
+
+![ruby win debug 003](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-debug-003.png?raw=true)
+
+デバッガを終了するには終了ボタンを押します。
+
+![ruby win debug 004](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-debug-004.png?raw=true)
+
+ブレークポイントを再度押すことで解除ができます。
+
+![ruby win debug 005](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-debug-005.png?raw=true)
+
+### プログラムをレポジトリに保存する
+
+ソース管理を選択して `リポジトリを初期化する` を押します。
+
+![ruby win git 001](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-git-001.png?raw=true)
+
+`全ての変更をステージ` を選択します。
+
+![ruby win git 002](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-git-002.png?raw=true)
+
+変更内容に `feat: HelloWorld` と入力して `コミット` を押します。
+
+![ruby win git 003](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-git-003.png?raw=true)
+
+変更内容は `ソース管理` から確認できます。
+
+![ruby win git 004](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-git-004.png?raw=true)
+
+## GitHubに公開する
+
+続いて、GitHubを使ってレポジトリを外部に公開できるようにしてみましょう。
+
+まず、GitHubでレポジトリを作成します。
+
+画面右上の+マークから `New repository` を選択します。
+
+![ruby win github 001](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-001.png?raw=true)
+
+レポジトリ名は `hello-ruby` として `Public` で公開します。 公開したくない場合は `Private` を選択します。
+`Add a README file` にもチェックを入れておきます。
+
+最後に `Create repository` を押して公開レポジトリを作成します。
+
+![ruby win github 002](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-002.png?raw=true)
+
+公開レポジトリが作成されたらVSCodeから読み込めるようにするためリンク先の情報を取得します。
+
+![ruby win github 003](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-003.png?raw=true)
+
+クリップボードのアイコンをクリックするとレポジトリのURLがコピーできます。
+
+![ruby win github 004](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-004.png?raw=true)
+
+続いてVSCodeに戻り、`表示` メニューから `コマンドパレット` を選択します。
+
+![ruby win github 005](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-005.png?raw=true)
+
+`clone` と入力して `Git クローン` を選択します。
+
+![ruby win github 006](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-006.png?raw=true)
+
+リポジトリのURLへ先ほどコピーした公開レポジトリのURLを貼り付けます。
+
+![ruby win github 007](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-007.png?raw=true)
+
+公開レポジトリの保存場所を指定する必要があるのでここでは `Projects` フォルダに `GitHub`
+フォルダを追加してそこに保存することにします。
+
+![ruby win github 008](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-008.png?raw=true)
+
+チェックアウトが終わると画面左下に通知が出ますので `開く` を押します。
+
+![ruby win github 009](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-009.png?raw=true)
+
+準備ができましたので先ほどやった `HelloWorld` プログラムをもう一度作成して先ほどと同様にローカルレポジトリに保存します。
+
+![ruby win github 010](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-010.png?raw=true)
+
+ローカルレポジトリの内容をGitHubの公開レポジトリに登録します。`表示` メニューから `コマンドパレット` を選択します。
+
+![ruby win github 011](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-011.png?raw=true)
+
+`push` と入力して `Git プッシュ` を選択します。
+
+![ruby win github 012](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-012.png?raw=true)
+
+以下のGitHub認証画面が表示された場合は `Sign in with your browser` を押します。
+
+![ruby win github 013](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-013.png?raw=true)
+
+`Authorize GitCrendtialManager` を押します。
+
+![ruby win github 014](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-014.png?raw=true)
+
+GitHubアカウントのパスワードを入力します。
+
+![ruby win github 015](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-015.png?raw=true)
+
+![ruby win github 016](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-016.png?raw=true)
+
+認証が完了してローカルレポジトリの内容が公開レポジトリに登録されました。
+
+![ruby win github 017](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-017.png?raw=true)
+
+内容が反映されているかをブラウザ画面から確認します。
+
+![ruby win github 018](https://github.com/k2works/k2works.github.io/blob/source/docs/images/asciidoc/tdd_env/ruby-win-github-018.png?raw=true)
