@@ -1,22 +1,6 @@
 version: '3'
 
 services:
-  db_mysql:
-    image: mysql:8
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      TZ: 'Asia/Tokyo'
-    hostname: mysql
-    volumes:
-      - mysql8-data:/var/lib/mysql
-      - ./ops/docker/mysql:/docker-entrypoint-initdb.d
-    ports:
-      - "3306:3306"
-    command: --sql_mode=""
-
   db_postgresql:
     image: postgres:15
     ports:
@@ -55,17 +39,6 @@ services:
       - "./ops/docker/dynamodb/data:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
 
-  schemaspy_mysql:
-    build:
-      context: ops/docker
-      dockerfile: ./schemaspy/Dockerfile
-    volumes:
-      - ./ops/docker/schemaspy/output/mysql:/output
-      - ./ops/docker/schemaspy/config:/config
-    container_name: "schemaspy_local_mysql"
-    command: [ "-all", "-configFile", "/config/mysql/schemaspy.properties" ]
-    links:
-      - db_mysql
   schemaspy_postgresql:
     build:
       context: ops/docker

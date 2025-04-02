@@ -22,3 +22,6 @@ __pycache__
 WIP
 docs/wiki
 !qiita/public
+
+ops/docker/mssql/log
+ops/docker/mssql/data
