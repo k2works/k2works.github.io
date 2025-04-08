@@ -54,4 +54,6 @@ plugins:
   - search
 
 nav:
-  - Home: Home.md
+  - Home: home.md
+  - 論理的思考: ロジカルシンキングとクリティカルシンキング.md
+  - 開発哲学: ソフトウェアの価値と役に立つソフトウェア開発の実践.md
